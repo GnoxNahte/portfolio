@@ -5,7 +5,7 @@ shortDescription: As a world renown chef, you can sometimes find yourself wander
 releaseDate: 2022-08-28 # format is YYYY-MM-DD
 projectLink: https://team-auboreal.itch.io/sentient-buffet # default is null, put link if possible
 githubLink: https://team-auboreal.itch.io/sentient-buffet # default is null, put link if possible
-thumbnailPath: ../public/images/SentientBuffet/SentientBuffetThumbnail.png
+thumbnailPath: images/SentientBuffet/SentientBuffetThumbnail.png
 tags: Unity, GameJam, Windows
 
 ifShow: true
