@@ -1,0 +1,32 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+
+const cards = await Astro.glob('../projects/*.md');
+---
+
+<Layout title = "Projects">
+	<h1>Projects</h1>
+    <section class="page-content">
+        <div class="container">
+            {cards.map(card => (
+                card.frontmatter.ifShow &&
+                <ProjectCard 
+                    title={card.frontmatter.title} 
+                    description={card.frontmatter.shortDescription} 
+                    thumbnailPath={card.frontmatter.thumbnailPath}
+                    slug={card.frontmatter.slug}
+                    tags={card.frontmatter.tags}
+                />
+            ))}
+        </div> 
+
+        <!-- <ProjectCard title="Test" description="Description" imagePath="../../public/images/SentinetBuffetThumbnail.png"/>
+        <div class="container">
+            {postMessage.map(post => (
+                <ProjectCard>
+                    </ProjectCard>
+            ))}
+        </div> -->
+    </section>
+</Layout>   

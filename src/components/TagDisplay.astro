@@ -1,0 +1,110 @@
+---
+import { Tags } from "../typescript/TagInfo";
+
+export interface Props {
+    tags: string;
+}
+
+const {tags} = Astro.props as Props;
+
+const tagsValue = tags
+    .replaceAll(" ", "") // Remove all whitespaces
+    .split(',');
+
+// const checkedTags = tagsValue.filter(tag => )
+
+// const checkedTags = tagsValue.map(tag => (
+//     Object.values(Tags).includes(tag) ? tag : ''
+// ))
+
+function GetTagTypeClass(tag: string): string
+{
+    const value = Tags[tag as keyof typeof Tags];
+    if (value < 100)
+        return "engineTag";
+    else if (value < 200)
+        return "projectTypeTag";
+    else if (value < 300)
+        return "platformTag";
+    // Unknown tag,
+    // value == undefined
+    else
+        return "unknownTag";
+}
+
+---
+
+<div class="tag card">
+    <p>Tags:</p>
+    <ul>
+        {tagsValue.map(tag => {
+            const tagClass = GetTagTypeClass(tag);
+            // - Explanation of tag.replace(/([A-Z])/g, " $1"):
+            //   Changes "pascal case" to "spaced separated" string
+            //   E.g. PascalCaseExample -> Pascal Case Example
+            // - If the tag class is unknown, add a phrase to tell the user that the tag is unknown
+            return <li class={tagClass}>{tag.replace(/([A-Z])/g, " $1") + (tagClass == "unknownTag" ? " - Unknown Tag, Report Pls" : "")}</li>
+        })}
+    </ul>
+</div>
+  
+
+<style>
+    .tag {
+        background: var(--color-secondary);
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: 5px 20px 5px 20px;
+        margin-bottom: 20px;
+    }
+    
+    .tag p {
+        display: flex;
+        margin-right: 10px;
+        text-align: center;
+        justify-content: center;
+        align-items: center
+    }
+
+    .tag ul {
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        list-style: none;
+    }
+    
+    .tag ul li {    
+        padding: 1px 10px 1px 10px;
+        margin: 10px 10px 10px 0px;
+        
+        border-radius: 20px;
+    }
+    
+    /* Tags Colors */
+    .engineTag {
+        background-color: #008080;
+    }
+
+    .projectTypeTag {
+        background-color: #B33333;
+    }
+
+    .platformTag {
+        background-color: #6B8E23;
+    }
+
+    /* Other colors for future tags: 
+        #416EAF
+        #228B22 (Forest Green)
+        #008080 (teal green)
+        #6B8E23 (olive drab)
+    */
+
+    .unknownTag {
+        background-color: #000000;
+    }
+
+</style>

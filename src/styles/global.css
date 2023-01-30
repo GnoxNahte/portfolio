@@ -1,0 +1,142 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    background: var(--color-primary);
+    color: var(--color-text);
+}
+
+
+h1, h2 {
+    line-height: 1.2;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: #416EAF;
+}
+
+p, li {
+    line-height: 1.75;
+}
+
+/* Cusotm Global Classes */
+
+/* Themes */
+.light {
+    --color-primary: #ffffff;
+    --color-secondary: #fafafa;
+    --color-tertiary: #f5f5f5;
+    --color-text: #212121;
+}
+
+.dark {
+    --color-primary: #424242;
+    --color-secondary: #303030;
+    --color-tertiary: #212121;
+    --color-text: #ffffff;
+}
+
+
+/* Card */
+
+.card {
+    background-color: var(--color-tertiary);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+/* Page Content */
+.page-content {
+    margin: 20px 0;
+}
+
+.page-content h2,
+.page-content h3 {
+    margin: 15px 0;
+}
+
+.page-content h1 {
+    font-size: 45px;
+}
+
+.page-content h2 {
+    font-size: 40px;
+}
+
+.page-content h3 {
+    font-size: 25px;
+}
+
+/* Other Classes */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 30px;
+}
+
+.btn {
+    display: inline-block;
+    display: flex;
+    padding: 0.75rem 1rem;
+    border-radius: 5px;
+    background: #416EAF;
+    color: var(--color-text);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-align: center;
+    text-decoration: none;
+    justify-content: center;
+}
+
+.logos-small {
+    display: none;
+}
+
+/* Markdown / Project posts */
+
+.markdown a {
+    display: inline-block;
+    padding: 0.1rem 0.5rem;
+    border-radius: 5px;
+    background: #416EAF;
+    color: var(--color-text);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-align: center;
+    text-decoration: none;
+    transform: translateY(-0.1rem);
+}
+
+img {
+    width: 100%;
+    max-width: 500px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Media Queries */
+
+@media (max-width: 960px) {
+    .logos-small {
+        display: block;
+        margin: auto;
+    }
+    .logos {
+        display: none;
+    }
+}
+
+@media (max-width: 500px) {  
+    h1,
+    h2 {
+        text-align: center;
+    }
+}

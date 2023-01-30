@@ -1,0 +1,22 @@
+---
+import TagDisplay from './TagDisplay.astro';
+
+export interface Props {
+    title: string;
+    description: string;
+    thumbnailPath?: string;
+    slug: string;
+    tags: string
+};
+
+const {title, description, thumbnailPath = '', slug, tags} = Astro.props as Props;
+
+---
+
+<div class='card projectCard'>
+    {thumbnailPath != '' && <img src = {thumbnailPath} alt={title + " thumbnail"}/>}
+    <h3>{title}</h3>
+    <p>{description}</p>
+    <TagDisplay tags={tags}/>
+    <a class="btn" href={`/${slug}`}>Read More</a>
+</div> 
