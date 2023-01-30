@@ -1,21 +1,35 @@
 ---
-import { Tags } from "../typescript/TagInfo";
-
 export interface Props {
     tags: string;
 }
 
 const {tags} = Astro.props as Props;
 
-const tagsValue = tags
-    .replaceAll(" ", "") // Remove all whitespaces
-    .split(',');
+// ========== ADDING TAGS ==========
+// - Add in "Tags" enum
+// - If in another category:
+//      1. Add it below the last category
+//      2. Set the first element in the new category to {First element in category before + 100}
+//      3. Add the new value to GetTagTypeClass() 
+//      4. CSS classes, at "Tag Colors"
+enum Tags {
+    // Engine
+    Unity = 0,
+    Unreal,
+    Astro, 
+    
+    // Project Type
+    School = 100,
+    GameJam,
+    Personal,
+    Client,
+    
+    // Platform
+    Windows = 200,
+    WebGL,
+    Website,
+}
 
-// const checkedTags = tagsValue.filter(tag => )
-
-// const checkedTags = tagsValue.map(tag => (
-//     Object.values(Tags).includes(tag) ? tag : ''
-// ))
 
 function GetTagTypeClass(tag: string): string
 {
@@ -37,7 +51,12 @@ function GetTagTypeClass(tag: string): string
 <div class="tag card">
     <p>Tags:</p>
     <ul>
-        {tagsValue.map(tag => {
+        {tags
+            .replaceAll(" ", "") // Remove all whitespaces
+            .split(',')
+            // Go through all tags, assign the classes and colors based on the tag categories. 
+            // Also format the tags - Change from PascalCase to spaced text. Also identify unknown tags easily.
+            .map(tag => {
             const tagClass = GetTagTypeClass(tag);
             // - Explanation of tag.replace(/([A-Z])/g, " $1"):
             //   Changes "pascal case" to "spaced separated" string
@@ -47,7 +66,6 @@ function GetTagTypeClass(tag: string): string
         })}
     </ul>
 </div>
-  
 
 <style>
     .tag {
