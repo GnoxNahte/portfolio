@@ -5,7 +5,7 @@ shortDescription: As a world renown chef, you can sometimes find yourself wander
 releaseDate: 2022-08-28 # format is YYYY-MM-DD
 projectLink: https://team-auboreal.itch.io/sentient-buffet # default is null, put link if possible
 githubLink: https://team-auboreal.itch.io/sentient-buffet # default is null, put link if possible
-thumbnailPath: ../assets/images/SentientBuffet/SentientBuffetThumbnail.png
+thumbnailPath: "../SentientBuffet/SentientBuffetThumbnail.png"
 tags: Unity, GameJam, Windows
 
 ifShow: true
@@ -16,7 +16,7 @@ ifShow: true
 * Character Movement script:
     * I did the behaviours and the designer and artist changed the parameters like the speed / jump height
     * Editor:
-    ![Character Movement Editor](../../public/images/SentientBuffet/SentientBuffet_MovementEditor.png)
+    ![Character Movement Editor](../SentientBuffet/SentientBuffet_MovementEditor.png)
 * Dialogue System:
     * Designer gave the script in a design document and I implemented it. 
     * Note: Trying to convert the editor UI to UI toolkit to learn UI Toolkit and make it reusable in the future.
