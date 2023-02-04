@@ -48,7 +48,7 @@ function GetTagTypeClass(tag: string): string
 
 ---
 
-<div class="tag card">
+<div class="tag-container card">
     <p>Tags:</p>
     <ul>
         {tags
@@ -62,14 +62,14 @@ function GetTagTypeClass(tag: string): string
             //   Changes "pascal case" to "spaced separated" string
             //   E.g. PascalCaseExample -> Pascal Case Example
             // - If the tag class is unknown, add a phrase to tell the user that the tag is unknown
-            return <li class={tagClass}>{tag.replace(/([A-Z])/g, " $1") + (tagClass == "unknownTag" ? " - Unknown Tag, Report Pls" : "")}</li>
+            return <li class={tagClass + " tag"}>{tag.replace(/([A-Z])/g, " $1") + (tagClass == "unknownTag" ? " - Unknown Tag, Report Pls" : "")}</li>
         })}
     </ul>
 </div>
 
 <style>
-    .tag {
-        background: var(--color-secondary);
+    .tag-container {
+        background: var(--color-tertiary);
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
@@ -77,27 +77,21 @@ function GetTagTypeClass(tag: string): string
         margin-bottom: 20px;
     }
     
-    .tag p {
-        display: flex;
+    .tag-container p {
         margin-right: 10px;
-        text-align: center;
-        justify-content: center;
-        align-items: center
     }
 
-    .tag ul {
+    .tag-container ul {
         padding: 0;
         margin: 0;
         display: flex;
-        flex-wrap: wrap;
         align-items: center;
         list-style: none;
     }
     
-    .tag ul li {    
-        padding: 1px 10px 1px 10px;
+    .tag-container ul li {    
+        padding: 1px 10px;
         margin: 10px 10px 10px 0px;
-        
         border-radius: 20px;
     }
     

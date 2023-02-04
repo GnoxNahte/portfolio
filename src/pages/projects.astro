@@ -8,7 +8,7 @@ const cards = await Astro.glob('../projects/*.md');
 
 <Layout title = "Projects">
 	<h1>Projects</h1>
-    <section class="page-content">
+    <section>
         <div class="container">
             {cards.map(card => (
                 card.frontmatter.ifShow &&
