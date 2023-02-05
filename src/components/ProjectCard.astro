@@ -13,10 +13,10 @@ const {title, description, thumbnailPath = '', slug, tags} = Astro.props as Prop
 
 ---
 
-<div class='card projectCard' id={title}>
+<div class='card projectCard' id={title} data-tags={tags}>
     {thumbnailPath != '' && <img src = {thumbnailPath} alt={title + " thumbnail"}/>}
     <h3>{title}</h3>
     <p>{description}</p>
-    <TagDisplay tags={tags}/>
+    <TagDisplay tags={tags} project={title}/>
     <a class="btn" href={`/${slug}`}>Read More</a>
 </div> 

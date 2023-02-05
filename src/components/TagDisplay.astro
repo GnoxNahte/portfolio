@@ -1,54 +1,16 @@
 ---
+import Tag, { Tags } from './Tag.astro';
+
 export interface Props {
-    tags: string;
+    tags: string,
+    project: string, // To prevent duplicate ids
 }
 
-const {tags} = Astro.props as Props;
-
-// ========== ADDING TAGS ==========
-// - Add in "Tags" enum
-// - If in another category:
-//      1. Add it below the last category
-//      2. Set the first element in the new category to {First element in category before + 100}
-//      3. Add the new value to GetTagTypeClass() 
-//      4. CSS classes, at "Tag Colors"
-export enum Tags {
-    // Engine
-    Unity = 0,
-    Unreal,
-    Astro, 
-    
-    // Project Type
-    School = 100,
-    GameJam,
-    Personal,
-    Client,
-    
-    // Platform
-    Windows = 200,
-    WebGL,
-    Website,
-}
-
-
-function GetTagTypeClass(tag: string): string
-{
-    const value = Tags[tag as keyof typeof Tags];
-    if (value < 100)
-        return "engineTag";
-    else if (value < 200)
-        return "projectTypeTag";
-    else if (value < 300)
-        return "platformTag";
-    // Unknown tag,
-    // value == undefined
-    else
-        return "unknownTag";
-}
+const {tags, project} = Astro.props as Props;
 
 ---
 
-<div class="tag-container card" id="tags">
+<div class="tag-container card">
     <p>Tags:</p>
     <ul>
         {tags
@@ -57,66 +19,7 @@ function GetTagTypeClass(tag: string): string
             // Go through all tags, assign the classes and colors based on the tag categories. 
             // Also format the tags - Change from PascalCase to spaced text. Also identify unknown tags easily.
             .map(tag => {
-            const tagClass = GetTagTypeClass(tag);
-            // - Explanation of tag.replace(/([A-Z])/g, " $1"):
-            //   Changes "pascal case" to "spaced separated" string
-            //   E.g. PascalCaseExample -> Pascal Case Example
-            // - If the tag class is unknown, add a phrase to tell the user that the tag is unknown
-            return <li class={tagClass + " tag"}>{tag.replace(/([A-Z])/g, " $1") + (tagClass == "unknownTag" ? " - Unknown Tag, Report Pls" : "")}</li>
+                return <Tag tag={tag} project={project}/>
         })}
     </ul>
 </div>
-
-<style>
-    .tag-container.card {
-        background: var(--color-tertiary) ;
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        padding: 5px 20px 5px 20px;
-        margin-bottom: 20px;
-    }
-    
-    .tag-container p {
-        margin-right: 10px;
-    }
-
-    .tag-container ul {
-        padding: 0;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        list-style: none;
-    }
-    
-    .tag-container ul li {    
-        padding: 1px 10px;
-        margin: 10px 10px 10px 0px;
-        border-radius: 20px;
-    }
-    
-    /* Tags Colors */
-    .engineTag {
-        background-color: #008080;
-    }
-
-    .projectTypeTag {
-        background-color: #B33333;
-    }
-
-    .platformTag {
-        background-color: #6B8E23;
-    }
-
-    /* Other colors for future tags: 
-        #416EAF
-        #228B22 (Forest Green)
-        #008080 (teal green)
-        #6B8E23 (olive drab)
-    */
-
-    .unknownTag {
-        background-color: #000000;
-    }
-
-</style>

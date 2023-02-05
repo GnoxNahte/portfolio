@@ -1,0 +1,70 @@
+---
+
+export interface Props {
+    tag: string,
+    project: string, // To prevent duplicate ids
+}
+
+const {tag, project} = Astro.props as Props;
+
+// 
+// ========== How to Add Tags ==========
+// - Add in "Tags" enum
+// - If in another category:
+//      1. Add it below the last category
+//      2. Set the first element in the new category to {First element in category before + 100}
+//      3. Add the new value to GetTagTypeClass() 
+//      4. CSS classes, at "Tag Colors"
+export enum Tags {
+    // Engine
+    Engine = 0,
+    Unity,
+    Unreal,
+    Astro, 
+    React,
+    
+    // Project Type
+    ProjectType = 100,
+    School,
+    GameJam,
+    Personal,
+    Client,
+    
+    // Platform
+    Platform = 200,
+    Windows,
+    WebGL,
+    Website,
+}
+
+export function GetTagTypeClass(tag: string, project?: string): string
+{
+    const value = Tags[tag as keyof typeof Tags];
+
+    if (value == undefined)
+        return "unknownTag";
+
+    if (value % 100 == 0 && project!==undefined)
+        console.error("ERROR: Tag is the catergory name");
+
+    const category = Tags[Math.floor(value / 100) * 100]
+    return category.replace(/(?<!^)(?<![A-Z])[A-Z]/g, "-$&").toLowerCase() + "-tag";
+}
+
+const tagClass = GetTagTypeClass(tag, project);
+
+// - Explanation of tag.replace(/(?<![A-Z])([A-Z])/g, " $1"):
+//   Regex - Search for any uppercase letters but exclude it if the previous character is an uppercase (Exclude abbrevations, e.g. WebGL)
+//   Changes "pascal case" to "spaced separated" string
+//   E.g. PascalCaseExample -> Pascal Case Example
+// - If the tag class is unknown, add a phrase to tell the user to report
+---
+<li class={tagClass + " tag"} id={tag + "-" + project}>
+    <i class="fa-solid fa-plus"></i>
+    <i class="fa-solid fa-minus"></i>
+        {tag.replace(/(?<![A-Z])([A-Z])/g, " $1") + (tagClass == "unknownTag" ? " - Unknown Tag, Report Pls" : "")}
+</li>
+
+<style>
+
+</style>
