@@ -12,7 +12,7 @@ const {tags} = Astro.props as Props;
 //      2. Set the first element in the new category to {First element in category before + 100}
 //      3. Add the new value to GetTagTypeClass() 
 //      4. CSS classes, at "Tag Colors"
-enum Tags {
+export enum Tags {
     // Engine
     Unity = 0,
     Unreal,
@@ -48,7 +48,7 @@ function GetTagTypeClass(tag: string): string
 
 ---
 
-<div class="tag-container card">
+<div class="tag-container card" id="tags">
     <p>Tags:</p>
     <ul>
         {tags
@@ -68,8 +68,8 @@ function GetTagTypeClass(tag: string): string
 </div>
 
 <style>
-    .tag-container {
-        background: var(--color-tertiary);
+    .tag-container.card {
+        background: var(--color-tertiary) ;
         display: flex;
         flex-direction: row;
         justify-content: flex-start;

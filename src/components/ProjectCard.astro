@@ -13,7 +13,7 @@ const {title, description, thumbnailPath = '', slug, tags} = Astro.props as Prop
 
 ---
 
-<div class='card projectCard'>
+<div class='card projectCard' id={title}>
     {thumbnailPath != '' && <img src = {thumbnailPath} alt={title + " thumbnail"}/>}
     <h3>{title}</h3>
     <p>{description}</p>
