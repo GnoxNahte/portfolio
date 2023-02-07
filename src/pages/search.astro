@@ -1,10 +1,10 @@
 ---
 import ProjectCard from "../components/ProjectCard.astro";
-import Tag, { GetTagTypeClass, Tags } from "../components/Tag.astro";
+import Tag, { GetTagTypeClass, PascalCaseToSpaceSeperated, Tags } from "../components/Tag.astro";
 import Layout from "../layouts/Layout.astro";
 const cards = await Astro.glob('../projects/*.md');
 
-let tagArray: string[] = []; // Tags without the categories
+let tagArray: string[] = []; // Contains all tags without the categories
 
 // Key - Every 100th element in the enum is the title of the category
 // Value - Array of all elements in the category
@@ -38,7 +38,6 @@ let tagDictionary: { [key: string]: Array<string> }  = {}
 //        ProjectType: [ 'School', 'GameJam', 'Personal', 'Client' ],
 //        Platform: [ 'Windows', 'WebGL', 'Website' ]
 //      }
-
 function SeperateTags()
 {
     const enumValues = Object.keys(Tags).filter(key => isNaN(Number(key)));
@@ -56,6 +55,8 @@ function SeperateTags()
         else {
             // Divide the value by 100, round it, * 100, to get the category
             tagDictionary[Tags[Math.round(value/ 100) * 100]].push(enumValues[i]);
+
+            // Add all non-category tags
             tagArray.push(enumValues[i]);
         }
     }
@@ -82,31 +83,45 @@ SeperateTags();
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
-                <div class="tag-container filterTagPanel">
+                <div class="tag-container" id="filterTagPanel">
                     {
+                        // 1. Loop through each category in tagDictionary, 
+                        // 2.   Display Header for catergory
+                        // 3.   Loop through each tag in category
+                        // 4.       Display the tag
                         Object.keys(tagDictionary).map((category) => {
-                        
-                        return (
-                            <div class="tag-container-filter-panel">
-                                <h3 class={GetTagTypeClass(category)}>{category}</h3> 
-                                <ul>
-                                    {
-                                        tagDictionary[category].map((tag) => {
-                                            return <Tag tag={tag} project="filter-btn"/>
-                                        })
-                                    }
-                                </ul>
-                            </div>
-                        )})
+                            
+                            return (
+                                <div class="tag-container-filter-panel">
+                                    <h3 class={GetTagTypeClass(category)}>{PascalCaseToSpaceSeperated(category)}</h3> 
+                                    <ul>
+                                        {
+                                            tagDictionary[category].map((tag) => {
+                                                return <Tag tag={tag} project="filter-btn"/>
+                                            })
+                                        }
+                                    </ul>
+                                </div>
+                            )})
                     }
                 </div>
-                <div class="includedTagsSummary tag-container">
-                    <h2>Include Tags: </h2>
-                    <ul>
-                    {
-                        tagArray.map((tag) => <Tag tag={tag} project="filter-summary" />)
-                    }
-                    </ul>
+                <div class="tagSummary tag-container">
+                    <div id="includeTagSummary">
+                        <h2>Include Tags: </h2>
+                        <ul>
+                            {
+                                tagArray.map((tag) => <Tag tag={tag} project="filter-summary" />)
+                            }
+                        </ul>
+                    </div>
+                    <div id="excludeTagSummary">
+                        <h2>Exclude Tags: </h2>
+                        <ul>
+                            {
+                                tagArray.map((tag) => <Tag tag={tag} project="filter-summary" />)
+                            }
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -141,13 +156,13 @@ SeperateTags();
     }
 
     input[type="search"]::-webkit-search-cancel-button {
-      -webkit-appearance: none;
-      height: 1em;
-      width: 1em;
-      border-radius: 50%;
-      background: url(https://pro.fontawesome.com/releases/v5.10.0/svgs/solid/times-circle.svg) no-repeat 50% 50%;
-      background-size: contain;
-      background-color: white;
+        -webkit-appearance: none;
+        height: 1em;
+        width: 1em;
+        border-radius: 50%;
+        background: url(https://pro.fontawesome.com/releases/v5.10.0/svgs/solid/times-circle.svg) no-repeat 50% 50%;
+        background-size: contain;
+        background-color: white;
     }
 
     #openFilterPanelBtn {
@@ -208,7 +223,8 @@ SeperateTags();
     .tag-container-filter-panel ul {
         margin: 10px 0px;
     }
-    .includedTagsSummary ul {
+
+    .tagSummary ul {
         display: flex;
         flex-wrap: wrap;
     }
@@ -219,9 +235,10 @@ SeperateTags();
     let excludeTags: string[] = [];
     
     const searchInput = document.getElementById("searchInput") as HTMLInputElement;
-    const filterTagPanel = document.getElementsByClassName("filterTagPanel")[0] as HTMLDivElement;
+    const filterTagPanel = document.getElementById("filterTagPanel") as HTMLDivElement;
 
     function UpdateSearchResults() {
+        // ========== Updating Project card visibility ==========
         const searchInput = document.getElementById("searchInput") as HTMLInputElement;
         let searchText = searchInput.value.toUpperCase();
         // Update the search results
@@ -233,7 +250,7 @@ SeperateTags();
         const searchResults = searchResultContainer.getElementsByClassName("projectCard");
 
         // Loop through all list items, and hide those who don't match the search query
-        for (let i = 0; i < searchResults.length; i++) {
+        for (let i = 0; i < searchResults.length; ++i) {
             const project = searchResults[i] as HTMLDivElement;
             let ifShow = true;
             // If doesn't include the search text
@@ -259,7 +276,30 @@ SeperateTags();
             project.style.display = ifShow ? '' : 'none';
         }
 
-        // Update the url 
+
+        // ========== Tag Summary ========== 
+        function UpdateTagSummaryVisibility(tagID: string, tagArray: string[]) {
+            const tagSummary = document.getElementById(tagID) as HTMLUListElement;
+            const ifNoElementsInArray = tagArray.length === 0;
+            tagSummary.style.display = ifNoElementsInArray ? 'none' : '';
+            
+            if (ifNoElementsInArray) {
+                return;
+            }
+
+            const tagSummaryList = tagSummary.getElementsByTagName("ul")[0];
+            for (let i = 0; i < tagSummaryList.childElementCount; ++i) {
+                const listItem = tagSummaryList.children.item(i) as HTMLLIElement;
+                // Remove any characters after "-"
+                const tagName = listItem.id.split("-")[0];
+                listItem.style.display = tagArray.includes(tagName) ? '' : 'none';
+            }
+        }
+        
+        UpdateTagSummaryVisibility("includeTagSummary", includeTags);
+        UpdateTagSummaryVisibility("excludeTagSummary", excludeTags);
+
+        // ========== Update the url ==========
         const newUrlSearchParams = new URLSearchParams();
         if (searchInput.value !== "") 
             newUrlSearchParams.append("searchText", searchInput.value);
@@ -303,7 +343,7 @@ SeperateTags();
     // Else style.display = displayValue
     function ToggleDivVisibility(id: string, displayValue ="")
     {
-        const divElement = document.getElementsByClassName("filterPanel")[0] as HTMLDivElement;
+        const divElement = document.getElementsByClassName(id)[0] as HTMLDivElement;
         if (displayValue === "") {
             const currDisplay = divElement.style.display;
             divElement.style.display = currDisplay === "none" ? "block" : "none";
@@ -345,6 +385,8 @@ SeperateTags();
         UpdateSearchResults();
     }
     
+    // ========== Initialise this page ==========
+
     // ========== Registering event listeners ==========
     searchInput.addEventListener("input", UpdateSearchResults);
     

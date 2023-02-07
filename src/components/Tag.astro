@@ -53,6 +53,10 @@ export function GetTagTypeClass(tag: string, project?: string): string
 
 const tagClass = GetTagTypeClass(tag, project);
 
+export function PascalCaseToSpaceSeperated(input: string): string {
+    return input.replace(/(?<![A-Z])([A-Z])/g, " $1");
+}
+
 // - Explanation of tag.replace(/(?<![A-Z])([A-Z])/g, " $1"):
 //   Regex - Search for any uppercase letters but exclude it if the previous character is an uppercase (Exclude abbrevations, e.g. WebGL)
 //   Changes "pascal case" to "spaced separated" string
@@ -62,7 +66,7 @@ const tagClass = GetTagTypeClass(tag, project);
 <li class={tagClass + " tag"} id={tag + "-" + project}>
     <i class="fa-solid fa-plus"></i>
     <i class="fa-solid fa-minus"></i>
-        {tag.replace(/(?<![A-Z])([A-Z])/g, " $1") + (tagClass == "unknownTag" ? " - Unknown Tag, Report Pls" : "")}
+        {PascalCaseToSpaceSeperated(tag) + (tagClass == "unknownTag" ? " - Unknown Tag, Report Pls" : "")}
 </li>
 
 <style>
