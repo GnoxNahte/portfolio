@@ -77,6 +77,14 @@ a {
     margin-bottom: 20px;
 }
 
+.card img {
+    width: 100%;
+    max-width: 500px;
+    display: block;
+    margin: 0 auto ;
+    border-radius: 10px;
+}
+
 /* Other Classes */
 
 .container {
@@ -98,30 +106,7 @@ a {
     justify-content: center;
 }
 
-/* Markdown / Project posts */
-
-/* Similar to .btn */
-.markdown a {
-    display: inline-block;
-    padding: 0.1rem 0.5rem;
-    border-radius: 5px;
-    background: var(--color-btn);
-    color: var(--color-text);
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 1px;
-    text-align: center;
-    text-decoration: none;
-    transform: translateY(-0.1rem);
-}
-
-img {
-    width: 100%;
-    max-width: 500px;
-    display: block;
-    margin: 0 auto ;
-    border-radius: 10px;
-}
+/* Tags */
 
 .tag-container.card {
     background: var(--color-tertiary) ;
@@ -151,7 +136,7 @@ img {
 }
 
 /* Tags Colors */
-.engine-tag {
+.tool-tag {
     background-color: #008080;
     border-color: #008080;;
 }
@@ -176,6 +161,7 @@ img {
 
 .tag-container-filter-panel .tag {
     opacity: 0.5;
+    cursor: pointer;
 }
 .fa-plus, .fa-minus {
     display: none;

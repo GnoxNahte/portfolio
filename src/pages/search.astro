@@ -97,7 +97,7 @@ SeperateTags();
                                     <ul>
                                         {
                                             tagDictionary[category].map((tag) => {
-                                                return <Tag tag={tag} project="filter-btn"/>
+                                                return <Tag tag={tag} project="filter-btn" ifAddLink={false}/>
                                             })
                                         }
                                     </ul>

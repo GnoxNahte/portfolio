@@ -3,9 +3,10 @@
 export interface Props {
     tag: string,
     project: string, // To prevent duplicate ids
+    ifAddLink?: boolean,
 }
 
-const {tag, project} = Astro.props as Props;
+const {tag, project, ifAddLink = true} = Astro.props as Props;
 
 // 
 // ========== How to Add Tags ==========
@@ -17,7 +18,7 @@ const {tag, project} = Astro.props as Props;
 //      4. CSS classes, at "Tag Colors"
 export enum Tags {
     // Engine
-    Engine = 0,
+    Tool = 0,
     Unity,
     Unreal,
     Astro, 
@@ -51,11 +52,15 @@ export function GetTagTypeClass(tag: string, project?: string): string
     return category.replace(/(?<!^)(?<![A-Z])[A-Z]/g, "-$&").toLowerCase() + "-tag";
 }
 
-const tagClass = GetTagTypeClass(tag, project);
-
 export function PascalCaseToSpaceSeperated(input: string): string {
     return input.replace(/(?<![A-Z])([A-Z])/g, " $1");
 }
+
+const tagClass = GetTagTypeClass(tag, project);
+const tagResult = PascalCaseToSpaceSeperated(tag) + (tagClass == "unknownTag" ? " - Unknown Tag, Report Pls" : "");
+
+const urlSearchParams = new URLSearchParams();
+urlSearchParams.append("includeTags", JSON.stringify([ tag ]));
 
 // - Explanation of tag.replace(/(?<![A-Z])([A-Z])/g, " $1"):
 //   Regex - Search for any uppercase letters but exclude it if the previous character is an uppercase (Exclude abbrevations, e.g. WebGL)
@@ -66,9 +71,18 @@ export function PascalCaseToSpaceSeperated(input: string): string {
 <li class={tagClass + " tag"} id={tag + "-" + project}>
     <i class="fa-solid fa-plus"></i>
     <i class="fa-solid fa-minus"></i>
-        {PascalCaseToSpaceSeperated(tag) + (tagClass == "unknownTag" ? " - Unknown Tag, Report Pls" : "")}
+        {ifAddLink ? 
+            <a href={"/search?" + urlSearchParams.toString()}>{tagResult}</a> :
+            <span>{tagResult}</span>
+            }
 </li>
 
 <style>
-
+    .tag a {
+        color: inherit;
+        text-decoration: none;
+     display: block;
+     width: 100%;
+     height: 100%;
+    }
 </style>
