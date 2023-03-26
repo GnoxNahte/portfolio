@@ -1,15 +1,15 @@
 ---
-
 import Layout from "../layouts/Layout.astro";
 
 import TagDisplay from "../components/TagDisplay.astro";
+import { CollectionEntry, getCollection } from "astro:content";
 
 export async function getStaticPaths() {
-    const projects = await Astro.glob('../projects/*.md');
+    const projects = await getCollection("projects");
     
     return projects.map(project => ({
         params: {
-            slug: project.frontmatter.slug
+            slug: project.slug
         },
         props: {
             project
@@ -17,7 +17,13 @@ export async function getStaticPaths() {
     }));
 } 
 
-const {Content, frontmatter} = Astro.props.project
+interface Project {
+    project: CollectionEntry<"projects">,
+}
+
+const { project } = Astro.props as Project;
+const { Content } = await project.render();
+const data = project.data;
 const dateOptions: Intl.DateTimeFormatOptions = { day: "numeric", month: "long", year: "numeric" };
 // TODO (LOW): Detect the user's location using window.navigator.language
 // But need to use <script></script>
@@ -25,26 +31,26 @@ const userLocale="en-UK";
 
 ---
 
-<Layout title={frontmatter.title}>
-    <section class="page-content">
+<Layout title={data.title}>
+    <article>
         <div class="container markdown">
             <div class="card">
-                <h1>{frontmatter.title}</h1>
-                <img src={frontmatter.thumbnailPath} alt={frontmatter.title + " image"}>
+                <h1>{data.title}</h1>
+                <img src={data.thumbnailPath} alt={data.title + " image"}>
                 <div style="height: 25px;"></div> <!-- Small block to seperate img and tags -->
-                <TagDisplay tags={frontmatter.tags}/>
-                <h4><strong>Release Date: </strong>{new Date(frontmatter.releaseDate).toLocaleDateString(userLocale, dateOptions)}</h4>
+                <TagDisplay tags={data.tags} project={data.title}/>
+                <h4><strong>Release Date: </strong>{new Date(data.releaseDate).toLocaleDateString(userLocale, dateOptions)}</h4>
                 <ul class="list-of-links">
-                    <li>{frontmatter.projectLink != null && <a href={frontmatter.projectLink}>Project Link</a>}</li>
-                    <li>{frontmatter.githubLink != null && <a href={frontmatter.githubLink}>GitHub Link</a>}</li>
+                    <li>{data.projectLink != null && <a href={data.projectLink}>Project Link</a>}</li>
+                    <li>{data.githubLink != null && <a href={data.githubLink}>GitHub Link</a>}</li>
                 </ul>
                 <h3>Description</h3>
-                <p>{frontmatter.shortDescription}</p>
+                <p>{data.shortDescription}</p>
                 <hr>
                 <Content />
             </div>
         </div>
-    </section>
+    </article>
 </Layout>
 
 <style>
@@ -57,4 +63,22 @@ const userLocale="en-UK";
     .list-of-links li {
         padding-right: 15px;
     }
+    
+    /* Markdown / Project posts */
+
+    /* Similar to .btn */
+    .markdown a {
+        display: inline-block;
+        padding: 0.1rem 0.5rem;
+        border-radius: 5px;
+        background: var(--color-btn);
+        color: var(--color-text);
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        text-align: center;
+        text-decoration: none;
+        transform: translateY(-0.1rem);
+    }
+
 </style>

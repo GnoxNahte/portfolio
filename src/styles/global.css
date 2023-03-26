@@ -1,27 +1,56 @@
-body {
-    font-family: 'Roboto', sans-serif;
+:root {
     font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+
+    /* Colors 
+        - Background & text colors are in .light and .dark classes
+        - Tag Colors are in TagDisplay
+    */
+    --color-btn: #416EAF;
+}
+
+body {
     line-height: 1.5;
     background: var(--color-primary);
     color: var(--color-text);
+    margin: 0;
+    padding: 0;
 }
-
 
 h1, h2 {
     line-height: 1.2;
     text-align: center;
 }
 
-a {
-    text-decoration: none;
-    color: #416EAF;
-}
+h1 { font-size: 2rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.3rem; }
 
 p, li {
     line-height: 1.75;
 }
 
-/* Cusotm Global Classes */
+a {
+    text-decoration: none;
+    color: var(--color-btn);
+}
+
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888888;
+    border-radius: 10px;
+}
+
+/* Custom Global Classes */
 
 /* Themes */
 .light {
@@ -33,110 +62,120 @@ p, li {
 
 .dark {
     --color-primary: #424242;
-    --color-secondary: #303030;
-    --color-tertiary: #212121;
+    --color-secondary: #212121;
+    --color-tertiary: #303030;
     --color-text: #ffffff;
 }
-
 
 /* Card */
 
 .card {
-    background-color: var(--color-tertiary);
-    padding: 20px;
+    background-color: var(--color-secondary);
+    padding: 25px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
 }
 
-/* Page Content */
-.page-content {
-    margin: 20px 0;
-}
-
-.page-content h2,
-.page-content h3 {
-    margin: 15px 0;
-}
-
-.page-content h1 {
-    font-size: 45px;
-}
-
-.page-content h2 {
-    font-size: 40px;
-}
-
-.page-content h3 {
-    font-size: 25px;
+.card img {
+    width: 100%;
+    max-width: 500px;
+    display: block;
+    margin: 0 auto ;
+    border-radius: 10px;
 }
 
 /* Other Classes */
 
 .container {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 20px auto;
     padding: 0 30px;
 }
 
 .btn {
-    display: inline-block;
     display: flex;
     padding: 0.75rem 1rem;
     border-radius: 5px;
-    background: #416EAF;
+    background: var(--color-btn);
     color: var(--color-text);
     text-transform: uppercase;
     font-size: 0.8rem;
     letter-spacing: 1px;
-    text-align: center;
     text-decoration: none;
     justify-content: center;
 }
 
-.logos-small {
+/* Tags */
+
+.tag-container.card {
+    background: var(--color-tertiary) ;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 5px 20px 5px 20px;
+    margin-bottom: 20px;
+}
+
+.tag-container p {
+    margin-right: 10px;
+}
+.tag-container ul {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    list-style: none;
+}
+
+.tag {
+    padding: 1px 10px;
+    margin: 10px 10px 10px 0px;
+    border-radius: 20px;
+    border-style: solid;
+}
+
+/* Tags Colors */
+.tool-tag {
+    background-color: #008080;
+    border-color: #008080;;
+}
+.project-type-tag {
+    background-color: #B33333;
+    border-color: #B33333;
+}
+.platform-tag {
+    background-color: #6B8E23;
+    border-color: #6B8E23;
+}
+/* Other colors for future tags: 
+    #416EAF
+    #228B22 (Forest Green)
+    #008080 (teal green)
+    #6B8E23 (olive drab)
+*/
+.unknownTag {
+    background-color: #000000;
+    border-color: #000000;
+}
+
+.tag-container-filter-panel .tag {
+    opacity: 0.5;
+    cursor: pointer;
+}
+.fa-plus, .fa-minus {
     display: none;
 }
-
-/* Markdown / Project posts */
-
-.markdown a {
-    display: inline-block;
-    padding: 0.1rem 0.5rem;
-    border-radius: 5px;
-    background: #416EAF;
-    color: var(--color-text);
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 1px;
-    text-align: center;
-    text-decoration: none;
-    transform: translateY(-0.1rem);
+.tag.includeTag , .tag.excludeTag{
+    opacity: 1;
+}
+.includeTag .fa-plus,
+.excludeTag .fa-minus {
+    display: inline;
 }
 
-img {
-    width: 100%;
-    max-width: 500px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+.excludeTag {
+    background-color: transparent;
+    border-style: solid;
 }
-
 /* Media Queries */
-
-@media (max-width: 960px) {
-    .logos-small {
-        display: block;
-        margin: auto;
-    }
-    .logos {
-        display: none;
-    }
-}
-
-@media (max-width: 500px) {  
-    h1,
-    h2 {
-        text-align: center;
-    }
-}

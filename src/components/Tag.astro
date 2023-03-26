@@ -1,0 +1,78 @@
+---
+import { Tags } from '../others/tags';
+
+export interface Props {
+    tag: Tags,
+    project: string, // To prevent duplicate ids
+    ifAddLink?: boolean,
+}
+
+const {tag, project, ifAddLink = true} = Astro.props as Props;
+
+// Gets the CSS Tag class type
+// Example:
+// GetTagTypeClass(Tag.ProjectType) returns project-type-tag
+export function GetTagTypeClass(tag?: Tags, project?: string): string
+{
+    if (tag === undefined)
+    {
+        console.error(`Unknown tag: ${tag}`);
+        return "unknownTag";
+    }
+    
+    if (tag % 100 == 0 && project!==undefined)
+        console.error("ERROR: Tag is the catergory name");
+
+    // Round down to nearest 100 (e.g. 123 => 100, 564 => 500)
+    // Then get the catergory of the tag, e.g. ProjectType
+    const category = Tags[Math.floor(tag / 100) * 100]
+
+    if (category === undefined)
+    {
+        console.error(`Unknown tag category: ${category}`);
+        return "unknownTag";
+    }
+
+    // replaces all uppercase letters in a string that are not at the beginning of a word with a dash ("-"),
+    // converts the resulting string to lowercase, and appends the string "-tag" to the end of the string.
+    // Example:
+    // category == ProjectType
+    // returns project-type-tag
+    return category.replace(/(?<!^)(?<![A-Z])[A-Z]/g, "-$&").toLowerCase() + "-tag";
+}
+
+export function PascalCaseToSpaceSeperated(input: string): string {
+    return input.replace(/(?<![A-Z])([A-Z])/g, " $1");
+}
+
+
+const tagClass = GetTagTypeClass(tag, project);
+const tagResult = PascalCaseToSpaceSeperated(Tags[tag]) + (tagClass == "unknownTag" ? " - Unknown Tag, Report Pls" : "");
+
+const urlSearchParams = new URLSearchParams();
+urlSearchParams.append("includeTags", JSON.stringify([ tag ]));
+
+// - Explanation of tag.replace(/(?<![A-Z])([A-Z])/g, " $1"):
+//   Regex - Search for any uppercase letters but exclude it if the previous character is an uppercase (Exclude abbrevations, e.g. WebGL)
+//   Changes "pascal case" to "spaced separated" string
+//   E.g. PascalCaseExample -> Pascal Case Example
+// - If the tag class is unknown, add a phrase to tell the user to report
+---
+<li class={tagClass + " tag"} id={tag + "-" + project}>
+    <i class="fa-solid fa-plus"></i>
+    <i class="fa-solid fa-minus"></i>
+        {ifAddLink ? 
+            <a href={"/search?" + urlSearchParams.toString()}>{tagResult}</a> :
+            <span>{tagResult}</span>
+            }
+</li>
+
+<style>
+    .tag a {
+        color: inherit;
+        text-decoration: none;
+     display: block;
+     width: 100%;
+     height: 100%;
+    }
+</style>

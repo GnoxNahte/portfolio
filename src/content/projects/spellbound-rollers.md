@@ -1,11 +1,10 @@
 ---
 title: Spellbound Rollers
-slug: spellbound-rollers
 shortDescription: "A simple survival game where you have to defend yourself against living dice with your own through utilizing several special powers: Fire, poison, ice etc... Collect the chips, gain XP and unlock more powers!"
 releaseDate: 2022-07-17
 link: "https://team-auboreal.itch.io/sentient-buffet"
 thumbnailPath: "../SpellboundRollers.png"
-tags: Unity, GameJam
+tags: [Unity, GameJam]
 
 ifShow: true
 ---

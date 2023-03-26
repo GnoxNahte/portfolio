@@ -1,4 +1,5 @@
 ---
+import type { Tags } from '../others/tags';
 import TagDisplay from './TagDisplay.astro';
 
 export interface Props {
@@ -6,17 +7,17 @@ export interface Props {
     description: string;
     thumbnailPath?: string;
     slug: string;
-    tags: string
+    tags: Tags[];
 };
 
 const {title, description, thumbnailPath = '', slug, tags} = Astro.props as Props;
 
 ---
 
-<div class='card projectCard'>
+<div class='card projectCard' id={title} data-tags={tags}>
     {thumbnailPath != '' && <img src = {thumbnailPath} alt={title + " thumbnail"}/>}
     <h3>{title}</h3>
     <p>{description}</p>
-    <TagDisplay tags={tags}/>
+    <TagDisplay tags={tags} project={title}/>
     <a class="btn" href={`/${slug}`}>Read More</a>
 </div> 
