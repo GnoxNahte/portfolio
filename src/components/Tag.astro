@@ -1,54 +1,43 @@
 ---
+import { Tags } from '../others/tags';
 
 export interface Props {
-    tag: string,
+    tag: Tags,
     project: string, // To prevent duplicate ids
     ifAddLink?: boolean,
 }
 
 const {tag, project, ifAddLink = true} = Astro.props as Props;
 
-// 
-// ========== How to Add Tags ==========
-// - Add in "Tags" enum
-// - If in another category:
-//      1. Add it below the last category
-//      2. Set the first element in the new category to {First element in category before + 100}
-//      3. Add the new value to GetTagTypeClass() 
-//      4. CSS classes, at "Tag Colors"
-export enum Tags {
-    // Engine
-    Tool = 0,
-    Unity,
-    Unreal,
-    Astro, 
-    React,
-    
-    // Project Type
-    ProjectType = 100,
-    School,
-    GameJam,
-    Personal,
-    Client,
-    
-    // Platform
-    Platform = 200,
-    Windows,
-    WebGL,
-    Website,
-}
-
-export function GetTagTypeClass(tag: string, project?: string): string
+// Gets the CSS Tag class type
+// Example:
+// GetTagTypeClass(Tag.ProjectType) returns project-type-tag
+export function GetTagTypeClass(tag?: Tags, project?: string): string
 {
-    const value = Tags[tag as keyof typeof Tags];
-
-    if (value == undefined)
+    if (tag === undefined)
+    {
+        console.error(`Unknown tag: ${tag}`);
         return "unknownTag";
-
-    if (value % 100 == 0 && project!==undefined)
+    }
+    
+    if (tag % 100 == 0 && project!==undefined)
         console.error("ERROR: Tag is the catergory name");
 
-    const category = Tags[Math.floor(value / 100) * 100]
+    // Round down to nearest 100 (e.g. 123 => 100, 564 => 500)
+    // Then get the catergory of the tag, e.g. ProjectType
+    const category = Tags[Math.floor(tag / 100) * 100]
+
+    if (category === undefined)
+    {
+        console.error(`Unknown tag category: ${category}`);
+        return "unknownTag";
+    }
+
+    // replaces all uppercase letters in a string that are not at the beginning of a word with a dash ("-"),
+    // converts the resulting string to lowercase, and appends the string "-tag" to the end of the string.
+    // Example:
+    // category == ProjectType
+    // returns project-type-tag
     return category.replace(/(?<!^)(?<![A-Z])[A-Z]/g, "-$&").toLowerCase() + "-tag";
 }
 
@@ -56,8 +45,9 @@ export function PascalCaseToSpaceSeperated(input: string): string {
     return input.replace(/(?<![A-Z])([A-Z])/g, " $1");
 }
 
+
 const tagClass = GetTagTypeClass(tag, project);
-const tagResult = PascalCaseToSpaceSeperated(tag) + (tagClass == "unknownTag" ? " - Unknown Tag, Report Pls" : "");
+const tagResult = PascalCaseToSpaceSeperated(Tags[tag]) + (tagClass == "unknownTag" ? " - Unknown Tag, Report Pls" : "");
 
 const urlSearchParams = new URLSearchParams();
 urlSearchParams.append("includeTags", JSON.stringify([ tag ]));

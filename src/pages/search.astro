@@ -1,14 +1,17 @@
 ---
+import { getCollection } from "astro:content";
 import ProjectCard from "../components/ProjectCard.astro";
-import Tag, { GetTagTypeClass, PascalCaseToSpaceSeperated, Tags } from "../components/Tag.astro";
+import Tag, { GetTagTypeClass, PascalCaseToSpaceSeperated } from "../components/Tag.astro";
 import Layout from "../layouts/Layout.astro";
-const cards = await Astro.glob('../projects/*.md');
+import { Tags } from "../others/tags";
+const cards = await getCollection("projects");
 
-let tagArray: string[] = []; // Contains all tags without the categories
+let tagArray: Tags[] = []; // Contains all tags without the categories
 
 // Key - Every 100th element in the enum is the title of the category
 // Value - Array of all elements in the category
-let tagDictionary: { [key: string]: Array<string> }  = {}
+let tagDictionary: { [key: string]: Array<Tags> } = {}
+
 // Seperate Tags into their different catergories
 // Example:
 //      Input:
@@ -38,31 +41,33 @@ let tagDictionary: { [key: string]: Array<string> }  = {}
 //        ProjectType: [ 'School', 'GameJam', 'Personal', 'Client' ],
 //        Platform: [ 'Windows', 'WebGL', 'Website' ]
 //      }
+
 function SeperateTags()
 {
     const enumValues = Object.keys(Tags).filter(key => isNaN(Number(key)));
-
     for (let i = 0; i < enumValues.length; ++i)
     {
         const value = Tags[enumValues[i] as keyof typeof Tags];
         // If new category,
         if (value % 100 == 0) {
-            tagDictionary[enumValues[i]] = [];
+            tagDictionary[Tags[value]] = [];
         }
         // Else, add the enum value to the category
         // Key - Every 100th element in the enum is the title of the category
         // Value - Array of all elements in the category
         else {
             // Divide the value by 100, round it, * 100, to get the category
-            tagDictionary[Tags[Math.round(value/ 100) * 100]].push(enumValues[i]);
-
+            const category = (Math.floor(value / 100) * 100) as Tags;
+            tagDictionary[Tags[category]].push(value);
             // Add all non-category tags
-            tagArray.push(enumValues[i]);
+            tagArray.push(value);
         }
     }
 }
 
+
 SeperateTags();
+
 
 ---
 
@@ -90,10 +95,11 @@ SeperateTags();
                         // 3.   Loop through each tag in category
                         // 4.       Display the tag
                         Object.keys(tagDictionary).map((category) => {
+                            const categoryValue = Tags[category as keyof typeof Tags];
                             
                             return (
                                 <div class="tag-container-filter-panel">
-                                    <h3 class={GetTagTypeClass(category)}>{PascalCaseToSpaceSeperated(category)}</h3> 
+                                    <h3 class={GetTagTypeClass(categoryValue)}>{PascalCaseToSpaceSeperated(category)}</h3> 
                                     <ul>
                                         {
                                             tagDictionary[category].map((tag) => {
@@ -127,13 +133,13 @@ SeperateTags();
         </div>
         <div class="container" id="searchResult">
                 {cards.map(card => (
-                    card.frontmatter.ifShow &&
+                    card.data.ifShow &&
                     <ProjectCard 
-                        title={card.frontmatter.title} 
-                        description={card.frontmatter.shortDescription} 
-                        thumbnailPath={card.frontmatter.thumbnailPath}
-                        slug={card.frontmatter.slug}
-                        tags={card.frontmatter.tags}
+                        title={card.data.title} 
+                        description={card.data.shortDescription} 
+                        thumbnailPath={card.data.thumbnailPath}
+                        slug={card.slug}
+                        tags={card.data.tags}
                     />
                 ))}
         </div>
@@ -244,7 +250,7 @@ SeperateTags();
         // Update the search results
         const searchResultContainer = document.getElementById("searchResult");
         if (searchResultContainer === null) {
-            console.log("Can't find searchResult");
+            console.error("Can't find searchResult");
             return;
         }
         const searchResults = searchResultContainer.getElementsByClassName("projectCard");

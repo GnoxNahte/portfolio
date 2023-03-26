@@ -1,25 +1,20 @@
 ---
-import Tag, { Tags } from './Tag.astro';
+import type { Tags } from '../others/tags';
+import Tag from './Tag.astro';
 
 export interface Props {
-    tags: string,
+    tags: Tags[],
     project: string, // To prevent duplicate ids
 }
 
 const {tags, project} = Astro.props as Props;
-
 ---
 
 <div class="tag-container card">
     <p>Tags:</p>
     <ul>
-        {tags
-            .replaceAll(" ", "") // Remove all whitespaces
-            .split(',')
-            // Go through all tags, assign the classes and colors based on the tag categories. 
-            // Also format the tags - Change from PascalCase to spaced text. Also identify unknown tags easily.
-            .map(tag => {
-                return <Tag tag={tag} project={project}/>
-        })}
+        {tags.map(tag => (
+            <Tag tag={tag} project={project}/>
+          ))}
     </ul>
 </div>

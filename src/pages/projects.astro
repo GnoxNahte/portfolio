@@ -2,8 +2,9 @@
 import Layout from "../layouts/Layout.astro";
 
 import ProjectCard from "../components/ProjectCard.astro";
+import { getCollection } from "astro:content";
 
-const cards = await Astro.glob('../projects/*.md');
+const cards = await getCollection("projects");
 ---
 
 <Layout title = "Projects">
@@ -11,13 +12,13 @@ const cards = await Astro.glob('../projects/*.md');
     <section>
         <div class="container">
             {cards.map(card => (
-                card.frontmatter.ifShow &&
+                card.data.ifShow &&
                 <ProjectCard 
-                    title={card.frontmatter.title} 
-                    description={card.frontmatter.shortDescription} 
-                    thumbnailPath={card.frontmatter.thumbnailPath}
-                    slug={card.frontmatter.slug}
-                    tags={card.frontmatter.tags}
+                    title={card.data.title} 
+                    description={card.data.shortDescription} 
+                    thumbnailPath={card.data.thumbnailPath}
+                    slug={card.slug}
+                    tags={card.data.tags}
                 />
             ))}
         </div> 
