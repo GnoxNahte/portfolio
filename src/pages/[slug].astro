@@ -22,13 +22,14 @@ interface Project {
 }
 
 const { project } = Astro.props as Project;
-const { Content } = await project.render();
+const { Content, headings } = await project.render();
 const data = project.data;
 const dateOptions: Intl.DateTimeFormatOptions = { day: "numeric", month: "long", year: "numeric" };
 // TODO (LOW): Detect the user's location using window.navigator.language
 // But need to use <script></script>
 const userLocale="en-UK";
-
+// TODO (LOW): Table of content with headings? 
+// console.log(headings);
 ---
 
 <Layout title={data.title}>
@@ -64,6 +65,21 @@ const userLocale="en-UK";
 
     .list-of-links li {
         padding-right: 15px;
+    }
+
+    img {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+</style>
+
+<!-- Markdown styling needs to be global: https://github.com/withastro/astro/issues/3045 -->
+<style is:global>
+    
+    .markdown img {
+        width: 100%;
+        max-width: 500px;
     }
 
 </style>

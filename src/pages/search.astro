@@ -258,9 +258,10 @@ SeperateTags();
         // Loop through all list items, and hide those who don't match the search query
         for (let i = 0; i < searchResults.length; ++i) {
             const project = searchResults[i] as HTMLDivElement;
+            const card = project.parentElement as HTMLDivElement;
             let ifShow = true;
             // If doesn't include the search text
-            if (!project.id.toUpperCase().includes(searchText))
+            if (!card.id.toUpperCase().includes(searchText))
                 ifShow = false;
             // Check the tags
             else {
@@ -279,7 +280,7 @@ SeperateTags();
             // console.log("IncludeTags: " + includeTags);
             // console.log("ExcludeTags: " + excludeTags);
             
-            project.style.display = ifShow ? '' : 'none';
+            card.style.display = ifShow ? '' : 'none';
         }
 
 

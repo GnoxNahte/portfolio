@@ -5,12 +5,13 @@ import Tag from './Tag.astro';
 export interface Props {
     tags: Tags[],
     project: string, // To prevent duplicate ids
+    isSmall?: boolean,
 }
 
-const {tags, project} = Astro.props as Props;
+const {tags, project, isSmall} = Astro.props as Props;
 ---
 
-<div class="tag-container card">
+<div class= {(isSmall && "tag-container-small") + " tag-container card"}>
     <p>Tags:</p>
     <ul>
         {tags.map(tag => (
