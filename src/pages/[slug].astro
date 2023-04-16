@@ -3,10 +3,25 @@ import Layout from "../layouts/Layout.astro";
 
 import TagDisplay from "../components/TagDisplay.astro";
 import { CollectionEntry, getCollection } from "astro:content";
+import { Project, addToIndex } from "../typescript/search";
+import { Tags } from "../others/tags";
 
 export async function getStaticPaths() {
     const projects = await getCollection("projects");
     
+    projects.map(project => {
+        const projectObj: Project = {
+            title: project.data.title,
+            shortDescription: project.data.shortDescription,
+            releaseDate: project.data.releaseDate,
+            githubLink: project.data.githubLink,
+            thumbnailPath: project.data.thumbnailPath,
+            tags: project.data.tags.map(tag => tag.toString()),
+            ifShow: project.data.ifShow
+        }
+        addToIndex(projectObj);
+    })
+
     return projects.map(project => ({
         params: {
             slug: project.slug
@@ -17,11 +32,11 @@ export async function getStaticPaths() {
     }));
 } 
 
-interface Project {
+interface ProjectContentCollections {
     project: CollectionEntry<"projects">,
 }
 
-const { project } = Astro.props as Project;
+const { project } = Astro.props as ProjectContentCollections;
 const { Content, headings } = await project.render();
 const data = project.data;
 const dateOptions: Intl.DateTimeFormatOptions = { day: "numeric", month: "long", year: "numeric" };
