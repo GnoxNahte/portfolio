@@ -11,7 +11,7 @@ export enum Tags {
     Unity,
     Unreal,
     Astro, 
-    React,
+    SvelteKit,
     
     // Project Type
     ProjectType = 100,
@@ -25,4 +25,11 @@ export enum Tags {
     Windows,
     WebGL,
     Website,
+
+    // Status
+    Status = 1000,
+    Ongoing,
+    Completed,
+    OnHold, 
+    Dropped,
 }

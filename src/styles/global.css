@@ -168,11 +168,14 @@ a {
     background-color: #6B8E23;
     border-color: #6B8E23;
 }
+.status-tag {
+    background-color: black;
+    border-color: grey;
+    border-style: solid;
+}
 /* Other colors for future tags: 
     #416EAF
     #228B22 (Forest Green)
-    #008080 (teal green)
-    #6B8E23 (olive drab)
 */
 .unknownTag {
     background-color: #000000;

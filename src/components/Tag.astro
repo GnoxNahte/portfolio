@@ -45,12 +45,14 @@ export function PascalCaseToSpaceSeperated(input: string): string {
     return input.replace(/(?<![A-Z])([A-Z])/g, " $1");
 }
 
-
+const tagName = Tags[tag];
 const tagClass = GetTagTypeClass(tag, project);
-const tagResult = PascalCaseToSpaceSeperated(Tags[tag]) + (tagClass == "unknownTag" ? " - Unknown Tag, Report Pls" : "");
+const tagResult = PascalCaseToSpaceSeperated(tagName) + (tagClass == "unknownTag" ? " - Unknown Tag, Report Pls" : "");
 
 const urlSearchParams = new URLSearchParams();
 urlSearchParams.append("includeTags", JSON.stringify([ tag ]));
+
+const isStatusTag = tag > Tags.Status;
 
 // - Explanation of tag.replace(/(?<![A-Z])([A-Z])/g, " $1"):
 //   Regex - Search for any uppercase letters but exclude it if the previous character is an uppercase (Exclude abbrevations, e.g. WebGL)
@@ -62,9 +64,16 @@ urlSearchParams.append("includeTags", JSON.stringify([ tag ]));
     <i class="fa-solid fa-plus"></i>
     <i class="fa-solid fa-minus"></i>
         {ifAddLink ? 
-            <a href={"/search?" + urlSearchParams.toString()}>{tagResult}</a> :
-            <span>{tagResult}</span>
-            }
+            <a href={"/search?" + urlSearchParams.toString()}>
+                {isStatusTag && <span class={`circle status-${tagName.toLowerCase()}`}></span>}
+                {tagResult} 
+            </a> 
+            :
+            <span>
+                {isStatusTag && <span class={`circle status-${tagName.toLowerCase()}`}></span>}
+                {tagResult}
+            </span>
+        }
 </li>
 
 <style>
@@ -75,4 +84,25 @@ urlSearchParams.append("includeTags", JSON.stringify([ tag ]));
         width: 100%;
         height: 100%;
     }
+    
+    .circle {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+    }
+
+    .status-ongoing {
+        background-color: #04d000;
+    }
+    .status-completed {
+        background-color: #00c9f4;
+    }
+    .status-onhold {
+        background-color: orange;
+    }
+    .status-dropped {
+        background-color: red;
+    }
+    
 </style>
