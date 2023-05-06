@@ -15,7 +15,8 @@ const projects = defineCollection({
   schema: z.object({
     title: z.string(),
     shortDescription: z.string(), 
-    releaseDate: z.date(),
+    startDate: z.date().optional(),
+    releaseDate: z.date().optional(),
     projectLink: z.string().url().optional(),
     githubLink: z.string().url().optional(),
     // TODO(MEDIUM): Use astro's image() check. See astro 2.1 update https://astro.build/blog/astro-210/#built-in-image-support
