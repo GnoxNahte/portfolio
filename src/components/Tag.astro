@@ -50,7 +50,7 @@ const tagClass = GetTagTypeClass(tag, project);
 const tagResult = PascalCaseToSpaceSeperated(tagName) + (tagClass == "unknownTag" ? " - Unknown Tag, Report Pls" : "");
 
 const urlSearchParams = new URLSearchParams();
-urlSearchParams.append("includeTags", JSON.stringify([ tag ]));
+urlSearchParams.append("includeTags", JSON.stringify([ tag.toString() ]));
 
 const isStatusTag = tag > Tags.Status;
 

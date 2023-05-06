@@ -18,10 +18,34 @@ const projects = defineCollection({
     releaseDate: z.date(),
     projectLink: z.string().url().optional(),
     githubLink: z.string().url().optional(),
+    // TODO(MEDIUM): Use astro's image() check. See astro 2.1 update https://astro.build/blog/astro-210/#built-in-image-support
     thumbnailPath: imagePathCheck,
     // tags: z.nativeEnum(Tags).array(),
     tags: z.string()
             .array()
+            .superRefine((tagsArray, ctx) => {
+              let statusTagCount = 0;
+              tagsArray.map((tag) => {
+                const tagResult = Tags[tag as keyof typeof Tags];
+                if (tagResult > Tags.Status && tagResult < (Tags.Status + 100))
+                  statusTagCount++;
+              })
+
+              if (statusTagCount === 0)
+              {
+                ctx.addIssue({
+                  code: z.ZodIssueCode.custom,
+                  message: "No status tag",
+                })
+              }
+              else if (statusTagCount > 1)
+              {
+                ctx.addIssue({
+                  code: z.ZodIssueCode.custom,
+                  message: "More than 1 status tag",
+                })
+              }
+            })
             .transform((tagsArray, ctx) => {
               return tagsArray.map((tag) => {
                 const tagResult = Tags[tag as keyof typeof Tags];
