@@ -1,0 +1,23 @@
+---
+import type { HeadingWithSubheadings } from './TableOfContent.astro';
+
+
+export interface Props {
+    headings: HeadingWithSubheadings[];
+}
+
+const { headings } = Astro.props as Props;
+
+
+---
+
+<ul>
+    {headings.map(heading => {
+        return (
+            <li>
+                <a href={`#${heading.text.toLowerCase().replaceAll(" ", "-")}`}>{heading.text}</a>
+                <Astro.self headings={heading.subheadings} />
+            </li>
+        );
+    })}
+</ul> 

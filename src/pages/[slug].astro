@@ -3,6 +3,9 @@ import Layout from "../layouts/Layout.astro";
 
 import TagDisplay from "../components/TagDisplay.astro";
 import { CollectionEntry, getCollection } from "astro:content";
+import { Tags } from "../others/tags";
+import { date } from "astro/zod";
+import TableOfContent from "../components/TableOfContent.astro";
 
 export async function getStaticPaths() {
     const projects = await getCollection("projects");
@@ -30,6 +33,47 @@ const dateOptions: Intl.DateTimeFormatOptions = { day: "numeric", month: "long",
 const userLocale="en-UK";
 // TODO (LOW): Table of content with headings? 
 // console.log(headings);
+
+let duration = "";
+if (data.startDate && data.releaseDate)
+{
+    duration = dateDiff(data.startDate, data.releaseDate);
+}
+
+
+function dateDiff(startDate: Date, endDate: Date) : string {
+    let yearDiff = endDate.getFullYear() - startDate.getFullYear();
+    let monthDiff = endDate.getMonth() - startDate.getMonth();
+    let dayDiff = endDate.getDate() - startDate.getDate();
+    
+    // If the day difference is negative, adjust month and day
+    if (dayDiff < 0) {
+        monthDiff--;
+        // Get the number of days in a month for the month and add it to the negative day
+        dayDiff += new Date(startDate.getFullYear(), endDate.getMonth() + 1, 0).getDate();
+    }
+
+    // If the month difference is negative, adjust the year difference accordingly
+    if (monthDiff < 0) {
+        yearDiff--;
+        monthDiff += 12;
+    }
+
+    let duration = "";
+
+    if (yearDiff > 0)
+        duration += `${yearDiff} year` + (yearDiff > 1 ? "s" : ""); //  to do : add s if plural
+    
+    if (monthDiff > 0) {
+        duration += (duration ? ", " : "") + `${monthDiff} month` + (monthDiff > 1 ? "s" : "");
+    }
+
+    if (dayDiff > 0) {
+        duration += (duration ? ", " : "") + `${dayDiff} day` + (dayDiff > 1 ? "s" : "");
+    }
+
+    return duration;
+}
 ---
 
 <Layout title={data.title} description={data.shortDescription}>
@@ -40,19 +84,24 @@ const userLocale="en-UK";
                 <img src={data.thumbnailPath} alt={data.title + " image"}>
                 <div style="height: 25px;"></div> <!-- Small block to seperate img and tags -->
                 <TagDisplay tags={data.tags} project={data.title}/>
-                {data.startDate &&
-                    <h4><strong>Start Date: </strong>{new Date(data.startDate).toLocaleDateString(userLocale, dateOptions)}</h4>
+                { data.startDate &&
+                    <h4>Start Date: {new Date(data.startDate).toLocaleDateString(userLocale, dateOptions)}</h4>
                 }
-                {data.releaseDate &&
-                    <h4><strong>Release Date: </strong>{new Date(data.releaseDate).toLocaleDateString(userLocale, dateOptions)}</h4>
+                { data.releaseDate &&
+                    <h4>{data.tags.includes(Tags.Dropped) ? "Dropped" : "Release"} Date: {new Date(data.releaseDate).toLocaleDateString(userLocale, dateOptions)}</h4>
                 }
-                <ul class="markdown list-of-links">
-                    <li>{data.projectLink != null && <a href={data.projectLink}>Project Link</a>}</li>
-                    <li>{data.githubLink != null && <a href={data.githubLink}>GitHub Link</a>}</li>
+                { duration &&
+                    <h4>Duration: {duration}</h4>
+                }
+                <ul class="list-of-links">
+                    <li>{data.projectLink != null && <a href={data.projectLink} class="inlineBtn">Project Link</a>}</li>
+                    <li>{data.githubLink != null && <a href={data.githubLink} class="inlineBtn">GitHub Link</a>}</li>
                 </ul>
+                <hr>
+                
+                <TableOfContent headings={headings}/>
                 <h3>Description</h3>
                 <p>{data.shortDescription}</p>
-                <hr>
                 <div class="markdown">
                     <Content />
                 </div>
@@ -85,6 +134,10 @@ const userLocale="en-UK";
     .markdown img {
         width: 100%;
         max-width: 500px;
+    }
+
+    .markdown a {
+        text-decoration: underline;
     }
 
 </style>

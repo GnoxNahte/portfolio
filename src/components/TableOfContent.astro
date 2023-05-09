@@ -1,0 +1,98 @@
+---
+import type { MarkdownHeading } from 'astro'
+import TableOfContentElements from './TableOfContentElements.astro';
+
+export interface Props {
+    headings: MarkdownHeading[];
+}
+
+export type HeadingWithSubheadings = MarkdownHeading & {
+    subheadings: HeadingWithSubheadings[];
+};
+
+const { headings } = Astro.props as Props;
+console.log(headings);
+const tableOfContent = generateTableOfContent(headings);
+
+function generateTableOfContent(headings: MarkdownHeading[]) {
+    console.log("Generating")
+    if (!headings || headings.length === 0)
+        return undefined;
+
+    
+    // Check if first heading is lowest depth
+    let firstHeadingDepth = headings[0].depth;
+    for (let i = 0; i < headings.length; i++) {
+        const depth = headings[i].depth;
+        if (depth < firstHeadingDepth) {
+            console.error(`First Heading isn't the most important heading. First heading: ${firstHeadingDepth}. Lowest Depth: ${depth}`);
+            return undefined;
+        }
+    }
+
+    let tableOfContent: HeadingWithSubheadings[] = [
+        {
+            ...headings[0],
+            subheadings: [],
+        }
+    ];
+    
+    if (headings.length === 1)
+        return tableOfContent;
+
+    let currIndex = 1;
+
+    console.log("Buildings...");
+    buildHeadingsTree(tableOfContent, tableOfContent[0]);
+    return tableOfContent;
+
+    function buildHeadingsTree(prevParentHeading: HeadingWithSubheadings[], prevHeading: HeadingWithSubheadings) {
+        while (currIndex < headings.length) {
+        
+            const heading: HeadingWithSubheadings = {
+                ...headings[currIndex],
+                subheadings: [],
+            };
+
+            const prevDepth = prevHeading.depth;
+
+            if (heading.depth < prevDepth) {
+                console.log("Reached lowest depth, returning: " + heading.depth);
+                return undefined;
+            }
+            else if (heading.depth === prevDepth) {
+                console.log("Depth same: " + heading.depth);
+                prevParentHeading.push(heading);
+                ++currIndex
+                buildHeadingsTree(prevParentHeading, heading);
+            }
+            else if (heading.depth > prevDepth) {
+                console.log("New depth higher, adding to subheading: " + heading.depth);
+                prevHeading.subheadings.push(heading);
+                ++currIndex
+                buildHeadingsTree(prevHeading.subheadings, heading);
+            }
+        }
+    }
+
+    function printTableOfContent(headings: HeadingWithSubheadings[]) {
+        for (let i = 0; i < headings.length; i++)
+        {
+            const heading = headings[i];
+            console.log(`${"\t".repeat(heading.depth)}${heading.depth}: ${heading.text}`);
+            // console.log(heading)
+            printTableOfContent(heading.subheadings);
+        }
+    }
+}
+
+---
+
+<details open>
+    <summary><h3>Table of Content</h3></summary>
+    <!-- {headings.map(heading => <a href={`#${heading.text.toLowerCase().replaceAll(" ", "-")}`}>{heading.text}</a> )} -->
+    <!-- {tableOfContent && GenerateTableOfContentHTML(tableOfContent)} -->
+    <!-- {test()} -->
+    
+    {tableOfContent && <TableOfContentElements headings={tableOfContent}/>}
+</details>
