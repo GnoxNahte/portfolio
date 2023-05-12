@@ -11,19 +11,19 @@ tags: [SvelteKit, Client, Website, Dropped]
 ---
 
 ### Disclaimer
-* This was a prototype so...
-    * Many features are not done
-    * Website is a bit slow
-    * CSS is very basic
-    * and there might be some bugs.
-* Was built on my free time from NS so wasn't full time on the project
+- This was a prototype so...
+    - Many features are not done
+    - Website is a bit slow
+    - CSS is very basic
+    - and there might be some bugs.
+- Was built on my free time from NS so wasn't full time on the project
 
 ### Project Background
-    * Was a request from my father on how to improve his company's event registration process
-    * Previously, they used Excel sheets and EventBrite
-    * Took a long time to check in users, creating a long line during events
-    * Wasn't employed, given any money or signed any contract. Feedback was mostly from my father and not staff from the company.
-    * It was dropped in the end because the company's higher ups wasn't comfortable with a third party handling the database, needing lots of approval
+    - Was a request from my father on how to improve his company's event registration process
+    - Previously, they used Excel sheets and EventBrite
+    - **Problem:** Took a long time to check in users, creating a long line during events
+    - Wasn't employed, given any money or signed any contract. Feedback was mostly from my father and not staff from the company.
+    - Project was dropped in the end because the company's higher ups wasn't comfortable with a third party handling the database, needing lots of approval
 
 ### Overview on how the users and staff will use the app
 1. Staff creates new event
@@ -39,11 +39,11 @@ tags: [SvelteKit, Client, Website, Dropped]
 
 <details>
 <summary>Support multiple events</summary>
-* Creating and editing events
-* Has simple validation for example
-    * Any fields left blank
-    * End time earlier than start time
-    * (Database) Duplicate events
+- Creating and editing events
+- Has simple validation for example
+    - Any fields left blank
+    - End time earlier than start time
+    - (Database) Duplicate events
 
 ![Create Event page](../EventRegistration/EventRegistration_CreateEvent.png)
 <center>Create Event Page</center>
@@ -54,14 +54,14 @@ tags: [SvelteKit, Client, Website, Dropped]
 
 <details>
 <summary>Sending users a regsiter form</summary>
-* Easy to send the user a link to the form. [Sample event register link](https://gnoxnahte-event-registration.netlify.app/events/Sample%20Event%2001/register)
-    * Note: It should send an email to your email address as long as the services are still working (I haven't been maintaining it as I've dropped the project)
-    * Has simple validation like checking if all fields has been filled up or the email was already used
+- Easy to send the user a link to the form. [Sample event register link](https://gnoxnahte-event-registration.netlify.app/events/Sample%20Event%2001/register)
+    - Note: It should send an email to your email address as long as the services are still working (I haven't been maintaining it as I've dropped the project)
+    - Has simple validation like checking if all fields has been filled up or the email was already used
 
 ![Register Form](../EventRegistration/EventRegistration_RegisterForm.png)
 <center>Register Form</center>
 
-* After submitting the form, the user should get a QR Code with the event infomation. (Planned to send a reminder email a few days before the event but didn't do it since project was dropped)
+- After submitting the form, the user should get a QR Code with the event infomation. (Planned to send a reminder email a few days before the event but didn't do it since project was dropped)
 
 ![Email With QR Code](../EventRegistration/EventRegistration_Email.png)
 <center>Email With QR Code</center>
@@ -71,9 +71,9 @@ tags: [SvelteKit, Client, Website, Dropped]
 
 <details>
 <summary>Quick authentication and check in for users</summary>
-* Event staff can easily scan the QR Code.
-* Shows different background depending on the person. E.g. If VIP, show blue
-* Uses [Html5-QRCode](https://www.npmjs.com/package/html5-qrcode) to scan the QR Codes
+- Event staff can easily scan the QR Code.
+- Shows different background depending on the person. E.g. If VIP, show blue
+- Uses [Html5-QRCode](https://www.npmjs.com/package/html5-qrcode) to scan the QR Codes
 
 ![Staff Dashboard to see who checked in](../../../public/EventRegistration/EventRegistration_ScanQRCode.gif)
 <center>Quick scanning of QR Code</center>
@@ -87,7 +87,7 @@ tags: [SvelteKit, Client, Website, Dropped]
 
 <details>
 <summary>Export and import user information</summary>
-* Export and import to Excel using [XLSX](https://www.npmjs.com/package/xlsx)
+- Export and import to Excel using [XLSX](https://www.npmjs.com/package/xlsx)
 
 ![Excel export](../EventRegistration/EventRegistration_ExcelExport.png)
 <center>Export to Excel</center>
@@ -113,25 +113,24 @@ tags: [SvelteKit, Client, Website, Dropped]
 <details>
 <summary>Links</summary>
 
-* [Website](https://gnoxnahte-event-registration.netlify.app/events/) (Not Maintained since 12 April 2023)
-* [Trello](https://trello.com/b/GtjaQjXf/event-registration)
+- [Website](https://gnoxnahte-event-registration.netlify.app/events/) (Not Maintained since 12 April 2023)
+- [Trello](https://trello.com/b/GtjaQjXf/event-registration)
 
 </details>
 ---
 
 ### Software Used
-* Framework: [SvelteKit](https://kit.svelte.dev/)
-* Hosting: [Netlify](https://www.netlify.com/)
-* Database: [Firebase](https://firebase.google.com/)
-* Language: [Svelte](https://svelte.dev/), [TypeScript](https://www.typescriptlang.org/), HTML, CSS
-* Project Management: [Trelo](https://trello.com/home)
-* Packages (On Client):
-    * Easier API interface with Firebase: [SvelteFire](https://github.com/codediodeio/sveltefire)
-    * QR Code scanning: [Html5-QRCode](https://www.npmjs.com/package/html5-qrcode)
-    * Notifications: [svelte-toast](https://github.com/zerodevx/svelte-toast)
-    * Importing and exporting to Excel: [XLSX](https://www.npmjs.com/package/xlsx)
-    * Downloading the exported Excel file: [File-saver](https://www.npmjs.com/package/file-saver)
-* Packages (On Firebase Functions Server): 
-    * Sending Emails: [SendGrid](https://sendgrid.com/), [Firebase Functions](https://firebase.google.com/docs/functions)
-    * QR Code generation: [qrcode](https://www.npmjs.com/package/qrcode)
-    * 
+- Framework: [SvelteKit](https://kit.svelte.dev/)
+- Hosting: [Netlify](https://www.netlify.com/)
+- Database: [Firebase](https://firebase.google.com/)
+- Language: [Svelte](https://svelte.dev/), [TypeScript](https://www.typescriptlang.org/), HTML, CSS
+- Project Management: [Trelo](https://trello.com/home)
+- Packages (On Client):
+    - Easier API interface with Firebase: [SvelteFire](https://github.com/codediodeio/sveltefire)
+    - QR Code scanning: [Html5-QRCode](https://www.npmjs.com/package/html5-qrcode)
+    - Notifications: [svelte-toast](https://github.com/zerodevx/svelte-toast)
+    - Importing and exporting to Excel: [XLSX](https://www.npmjs.com/package/xlsx)
+    - Downloading the exported Excel file: [File-saver](https://www.npmjs.com/package/file-saver)
+- Packages (On Firebase Functions Server): 
+    - Sending Emails: [SendGrid](https://sendgrid.com/), [Firebase Functions](https://firebase.google.com/docs/functions)
+    - QR Code generation: [qrcode](https://www.npmjs.com/package/qrcode)
