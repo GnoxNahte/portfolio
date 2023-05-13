@@ -190,15 +190,9 @@ details summary h3 {
     opacity: 0.5;
     cursor: pointer;
 }
-.fa-plus, .fa-minus {
-    display: none;
-}
+
 .tag.includeTag , .tag.excludeTag{
     opacity: 1;
-}
-.includeTag .fa-plus,
-.excludeTag .fa-minus {
-    display: inline;
 }
 
 .excludeTag {

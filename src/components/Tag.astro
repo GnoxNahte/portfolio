@@ -63,8 +63,6 @@ const isStatusTag = tag > Tags.Status;
 // - If the tag class is unknown, add a phrase to tell the user to report
 ---
 <li class={tagClass + " tag " + additionalClasses} id={tag + "-" + project}>
-    <i class="fa-solid fa-plus"></i>
-    <i class="fa-solid fa-minus"></i>
         {ifAddLink ? 
             <a href={"/search?" + urlSearchParams.toString()}>
                 {isStatusTag && <span class={`circle status-${tagName.toLowerCase()}`}></span>}
