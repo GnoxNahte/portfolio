@@ -1,13 +1,15 @@
 ---
+import type { string } from 'astro/zod';
 import { Tags } from '../others/tags';
 
 export interface Props {
     tag: Tags,
     project: string, // To prevent duplicate ids
     ifAddLink?: boolean,
+    additionalClasses?: string,
 }
 
-const {tag, project, ifAddLink = true} = Astro.props as Props;
+const {tag, project, ifAddLink = true, additionalClasses=""} = Astro.props as Props;
 
 // Gets the CSS Tag class type
 // Example:
@@ -60,7 +62,7 @@ const isStatusTag = tag > Tags.Status;
 //   E.g. PascalCaseExample -> Pascal Case Example
 // - If the tag class is unknown, add a phrase to tell the user to report
 ---
-<li class={tagClass + " tag"} id={tag + "-" + project}>
+<li class={tagClass + " tag " + additionalClasses} id={tag + "-" + project}>
     <i class="fa-solid fa-plus"></i>
     <i class="fa-solid fa-minus"></i>
         {ifAddLink ? 

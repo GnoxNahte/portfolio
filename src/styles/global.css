@@ -186,7 +186,7 @@ details summary h3 {
     border-color: #000000;
 }
 
-.tag-container-filter-panel .tag {
+.filterPanel .tag {
     opacity: 0.5;
     cursor: pointer;
 }
@@ -204,6 +204,16 @@ details summary h3 {
 .excludeTag {
     background-color: transparent;
     border-style: solid;
+}
+
+.includeTag::before {
+    font-weight: bold;
+    content: "+"
+}
+
+.excludeTag::before {
+    font-weight: bold;
+    content: "-"
 }
 
 /* Utility */

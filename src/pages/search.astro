@@ -85,7 +85,8 @@ SeperateTags();
                 <div class="filterPanelHeader">
                     <h2>Filter Tags</h2>
                     <button id="closeFilterPanelBtn"> 
-                        <i class="fa-solid fa-xmark"></i>
+                        <!-- <i class="fa-solid fa-xmark"></i> -->
+                        <p style="color: white; margin: 0;">X</p>
                     </button>
                 </div>
                 <div class="tag-container" id="filterTagPanel">
@@ -115,16 +116,18 @@ SeperateTags();
                     <div id="includeTagSummary">
                         <h2>Include Tags: </h2>
                         <ul>
-                            {
-                                tagArray.map((tag) => <Tag tag={tag} project="filter-summary" />)
-                            }
+                            <!-- Toggle Visibility in <script> -->
+                                {
+                                    tagArray.map((tag) => <Tag tag={tag} project="filter-summary" ifAddLink={false} additionalClasses={"includeTag"}/>)
+                                }
                         </ul>
                     </div>
                     <div id="excludeTagSummary">
                         <h2>Exclude Tags: </h2>
                         <ul>
+                            <!-- Toggle Visibility in <script> -->
                             {
-                                tagArray.map((tag) => <Tag tag={tag} project="filter-summary" />)
+                                tagArray.map((tag) => <Tag tag={tag} project="filter-summary" ifAddLink={false} additionalClasses={"excludeTag"}/>)
                             }
                         </ul>
                     </div>
@@ -209,7 +212,8 @@ SeperateTags();
         border: transparent;
         border-radius: 50%;
         width: 2em;
-        height: 2em;
+        aspect-ratio: 1 / 1;
+        background-color: var(--color-primary);
     }
 
     i.fa-xmark {
