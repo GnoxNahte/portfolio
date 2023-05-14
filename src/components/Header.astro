@@ -3,7 +3,7 @@
             <a href="index.html">Ethan Ong</a>
         <nav>
             <ul>
-                <li><a href="/">Home</a></li>
+                <li><a href="/" id="header-home">Home</a></li>
                 <li><a href="/projects">Projects</a></li>
                 <li><a href="/search">Search</a></li>
                 <li><a href="/about">About</a></li>
@@ -19,7 +19,7 @@
 <style>
     .header {
         height: 70px;
-        background: var(--color-secondary);
+        background-color: var(--color-secondary);
         font-family: 'Calibri', sans-serif;
         font-size: 1.5rem;
         font-weight: bold;
@@ -44,6 +44,29 @@
     }
 
     .header a {
-        color: white;
+        color: var(--color-text);
     }
+    @media screen and (max-width: 650px) {
+    .header {
+        height: 250px;
+    }
+
+    .header .container {
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+    }
+
+    .header nav ul {
+        flex-direction: column;
+        padding: 0;
+        align-items: center;
+        margin: 0;
+    }
+
+    #header-home {
+        display: none;
+    }
+}
+
 </style>
