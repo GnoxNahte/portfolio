@@ -21,10 +21,10 @@ h1 {
     line-height: 1.2;
     text-align: center;
 }
-
+/* 
 h1 { font-size: 2rem; }
 h2 { font-size: 1.5rem; }
-h3 { font-size: 1.3rem; }
+h3 { font-size: 1.3rem; } */
 
 p, li {
     line-height: 1.75;
@@ -35,9 +35,27 @@ a {
     color: var(--color-btn);
 }
 
-details summary h3 {
-    display: inline;
+details summary {
+    cursor: pointer;
 }
+
+details summary > * {
+    display: inline;
+    padding-left: 5px;
+}
+
+a[target="_blank"]:not(.inlineBtn):after {
+    content: "";
+    width: 1em;
+    height: 1em;
+    margin: 0 0.05em 0 0.15em;
+    background: url("/public/General/NewTabIcon.png");
+    background-size: contain;
+    display: inline-block;
+    vertical-align: text-bottom;
+}
+
+/* Scrollbar */
 
 ::-webkit-scrollbar {
     width: 15px;
