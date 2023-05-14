@@ -1,0 +1,67 @@
+---
+import StarRatings from "../components/StarRatings.astro";
+import Tooltip from "../components/Tooltip.astro";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title = "Home" description="Portfolio Home Page">
+	<h1>About</h1> 
+    <div class="container">
+        <div class="card">
+            <p>Hello, I'm a Game Developer, learning some Web Development in my free time.</p>
+            <p>Born in Singapore and currently serving National Service</p>
+
+            <div>
+                <h2>Education & Certificates</h2>
+                <p>Director's List - Academic Year 2019/20 Semester 1</p>
+                <p>Director's List - Academic Year 2021/22 Semester 2</p>
+                <p>Diploma in Game Development & Technology</p>
+                <p>UCAP-720: Unity Certified Associate: Programmer</p>
+            </div>
+            <div>
+                <h2>
+                    Skills
+                    <Tooltip text="?">
+                        <h3>My Personal Evaluation of my skills</h3>
+                        <p>0 Stars - New to skill, cannot do any tasks</p>
+                        <p>5 Stars - Experienced, can do most tasks given</p>
+                        <p>NOTE: While some skills don't have a lot of stars, I'm willing to learn to do the tasks given and improve</p>
+                    </Tooltip>
+                </h2>
+                <h4>Test</h4>
+                <details open>
+                    <summary><h3>Game Development</h3></summary>
+                    <StarRatings starPosition={50} title={"Unity"} activeStars={5}/>
+                    <StarRatings starPosition={50} title={"C#"} activeStars={4.5}/>
+                    <StarRatings starPosition={50} title={"C++"} activeStars={3.5}/>
+                </details>
+                <details open>
+                    <summary><h3>Web Development</h3></summary>
+                    <StarRatings starPosition={90} title={"HTML"} activeStars={4}/>
+                    <StarRatings starPosition={90} title={"Svelte"} activeStars={3.5}/>
+                    <StarRatings starPosition={90} title={"Astro"} activeStars={3.5}/>
+                    <StarRatings starPosition={90} title={"TypeScript"} activeStars={3}/>
+                    <StarRatings starPosition={90} title={"CSS"} activeStars={2.5}/>
+                </details>
+            </div>
+            <div>
+                <h2>Contact</h2>
+                <p>Email: <a href="mailto:gnoxnahte.dev@gmail.com">gnoxnahte.dev@gmail.com</a></p>
+                <p>Twitter: <a href="https://twitter.com/GnoxNahteDev" target="_blank">https://twitter.com/GnoxNahteDev</a></p>
+                <p>GitHub: <a href="https://github.com/GnoxNahte" target="_blank">https://github.com/GnoxNahte</a></p>
+                <p>LinkedIn (Not fully updated): <a href="https://www.linkedin.com/in/ethanongsg/" target="_blank">https://www.linkedin.com/in/ethanongsg/</a></p>
+            </div>
+        </div>
+    </div>
+</Layout>
+
+<style>
+    details {
+        margin: 15px 0;
+    }
+
+    details div  {
+        margin: 0px 100px ;
+    }
+</style>
+

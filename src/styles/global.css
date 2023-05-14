@@ -228,6 +228,13 @@ a[target="_blank"]:not(.inlineBtn):after {
     content: "-"
 }
 
+/* Cross Component Styles */
+
+.tooltip-content p,
+.tooltip-content h3 {
+    margin: 0;
+}
+
 /* Utility */
 .inlineBlock {
     display: inline-block;
