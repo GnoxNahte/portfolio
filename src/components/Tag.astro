@@ -23,10 +23,10 @@ export function GetTagTypeClass(tag?: Tags, project?: string): string
     }
     
     if (tag % 100 == 0 && project!==undefined)
-        console.error("ERROR: Tag is the catergory name");
+        console.error("ERROR: Tag is the category name");
 
     // Round down to nearest 100 (e.g. 123 => 100, 564 => 500)
-    // Then get the catergory of the tag, e.g. ProjectType
+    // Then get the category of the tag, e.g. ProjectType
     const category = Tags[Math.floor(tag / 100) * 100]
 
     if (category === undefined)
@@ -43,13 +43,13 @@ export function GetTagTypeClass(tag?: Tags, project?: string): string
     return category.replace(/(?<!^)(?<![A-Z])[A-Z]/g, "-$&").toLowerCase() + "-tag";
 }
 
-export function PascalCaseToSpaceSeperated(input: string): string {
+export function PascalCaseToSpaceSeparated(input: string): string {
     return input.replace(/(?<![A-Z])([A-Z])/g, " $1");
 }
 
 const tagName = Tags[tag];
 const tagClass = GetTagTypeClass(tag, project);
-const tagResult = PascalCaseToSpaceSeperated(tagName) + (tagClass == "unknownTag" ? " - Unknown Tag, Report Pls" : "");
+const tagResult = PascalCaseToSpaceSeparated(tagName) + (tagClass == "unknownTag" ? " - Unknown Tag, Report Pls" : "");
 
 const urlSearchParams = new URLSearchParams();
 urlSearchParams.append("includeTags", JSON.stringify([ tag.toString() ]));
@@ -57,7 +57,7 @@ urlSearchParams.append("includeTags", JSON.stringify([ tag.toString() ]));
 const isStatusTag = tag > Tags.Status;
 
 // - Explanation of tag.replace(/(?<![A-Z])([A-Z])/g, " $1"):
-//   Regex - Search for any uppercase letters but exclude it if the previous character is an uppercase (Exclude abbrevations, e.g. WebGL)
+//   Regex - Search for any uppercase letters but exclude it if the previous character is an uppercase (Exclude abbreviations, e.g. WebGL)
 //   Changes "pascal case" to "spaced separated" string
 //   E.g. PascalCaseExample -> Pascal Case Example
 // - If the tag class is unknown, add a phrase to tell the user to report

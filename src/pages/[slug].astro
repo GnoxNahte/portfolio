@@ -80,7 +80,7 @@ function dateDiff(startDate: Date, endDate: Date) : string {
             <div class="card">
                 <h1>{data.title}</h1>
                 <img src={data.thumbnailPath} alt={data.title + " image"}>
-                <div style="height: 25px;"></div> <!-- Small block to seperate img and tags -->
+                <div style="height: 25px;"></div> <!-- Small block to separate img and tags -->
                 <TagDisplay tags={data.tags} project={data.title}/>
                 { data.startDate &&
                     <h4>Start Date: {new Date(data.startDate).toLocaleDateString(userLocale, dateOptions)}</h4>

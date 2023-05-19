@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import ProjectCard from "../components/ProjectCard.astro";
-import Tag, { GetTagTypeClass, PascalCaseToSpaceSeperated } from "../components/Tag.astro";
+import Tag, { GetTagTypeClass, PascalCaseToSpaceSeparated } from "../components/Tag.astro";
 import Layout from "../layouts/Layout.astro";
 import { Tags } from "../others/tags";
 const cards = await getCollection("projects");
@@ -12,7 +12,7 @@ let tagArray: Tags[] = []; // Contains all tags without the categories
 // Value - Array of all elements in the category
 let tagDictionary: { [key: string]: Array<Tags> } = {}
 
-// Seperate Tags into their different catergories
+// Separate Tags into their different categories
 // Example:
 //      Input:
 //      enum Tags {
@@ -42,7 +42,7 @@ let tagDictionary: { [key: string]: Array<Tags> } = {}
 //        Platform: [ 'Windows', 'WebGL', 'Website' ]
 //      }
 
-function SeperateTags()
+function SeparateTags()
 {
     const enumValues = Object.keys(Tags).filter(key => isNaN(Number(key)));
     for (let i = 0; i < enumValues.length; ++i)
@@ -66,12 +66,12 @@ function SeperateTags()
 }
 
 
-SeperateTags();
+SeparateTags();
 
 
 ---
 
-<Layout title = "Search" description="Porfolio Projects">
+<Layout title = "Search" description="Portfolio Projects">
 	<h1>Search</h1>
     <section>
         <div class="container searchBar">
@@ -91,7 +91,7 @@ SeperateTags();
                 <div class="tag-container" id="filterTagPanel">
                     {
                         // 1. Loop through each category in tagDictionary, 
-                        // 2.   Display Header for catergory
+                        // 2.   Display Header for category
                         // 3.   Loop through each tag in category
                         // 4.       Display the tag
                         Object.keys(tagDictionary).map((category) => {
@@ -99,7 +99,7 @@ SeperateTags();
                             
                             return (
                                 <div class="tag-container-filter-panel">
-                                    <h3 class={GetTagTypeClass(categoryValue)}>{PascalCaseToSpaceSeperated(category)}</h3> 
+                                    <h3 class={GetTagTypeClass(categoryValue)}>{PascalCaseToSpaceSeparated(category)}</h3> 
                                     <ul>
                                         {
                                             tagDictionary[category].map((tag) => {
@@ -316,8 +316,8 @@ SeperateTags();
         if (excludeTags.length > 0)
             newUrlSearchParams.append("excludeTags", JSON.stringify(excludeTags));
 
-        let newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + newUrlSearchParams.toString();
-        window.history.pushState({path: newurl}, '', newurl);
+        let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + newUrlSearchParams.toString();
+        window.history.pushState({path: newUrl}, '', newUrl);
     }
 
     function UpdateSearchResultsFromUrlParams() {
