@@ -33,7 +33,7 @@ tags: [SvelteKit, Client, Website, Dropped]
 5. Users attend event
 6. Staff quickly scans QR Code, authenticate and checks in users
 
-## Project Scope & Features done to solve it
+## Project Scope & Features 
 
 ---
 
@@ -101,6 +101,12 @@ tags: [SvelteKit, Client, Website, Dropped]
 
 <details>
 <summary>Database Structure</summary>
+
+- Has many events
+- Each event has:
+    - Metadata about the event (Event Name, Start and End time, etc...)
+    - Many users participating in the event
+        - Each user has their own metadata (User name, email, etc...)
 
 ![Firebase Console for events](../EventRegistration/EventRegistration_FirebaseConsole_Events.png)
 <center>Firebase Console for events</center>
