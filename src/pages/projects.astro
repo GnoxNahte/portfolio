@@ -84,7 +84,6 @@ SeparateTags();
             <div class="card">
                 <div class="filterPanelHeader">
                     <h2>Filter Tags</h2>
-                    <h2 id="debug-text">Debug Text</h2>
                     <button id="closeFilterPanelBtn"> 
                         <p style="color: white; margin: 0;">X</p>
                     </button>
@@ -230,7 +229,8 @@ SeparateTags();
     }
 </style>
 
-<script>
+<script>import { Tags } from "../others/tags";
+
     let includeTags: string[] = [];
     let excludeTags: string[] = [];
     
@@ -240,7 +240,10 @@ SeparateTags();
     const filterTagPanel = document.getElementById("filterTagPanel") as HTMLDivElement;
 
     function UpdateSearchResultsFromURL() {
-        GetTagInfoFromUrl();
+        GetInfoFromUrl();
+        
+        const searchInput = document.getElementById("searchInput") as HTMLInputElement;
+        searchInput.value = searchText;
         
         UpdateMainTagsVisibility();
         UpdateSearchResults();
@@ -254,14 +257,13 @@ SeparateTags();
         UpdateUrl();
     }
 
-    function GetTagInfoFromUrl() {
+    function GetInfoFromUrl() {
         const urlSearchParams = new URLSearchParams(window.location.search);
         const params = Object.fromEntries(urlSearchParams.entries());
         
         const urlSearchInput = params["searchText"];
         if (urlSearchInput !== undefined) {
             searchText = urlSearchInput;
-            searchInput.value = searchText;
         }
 
         const urlIncludeTags = params["includeTags"];
@@ -292,6 +294,11 @@ SeparateTags();
                 console.error("Cannot find: " + tagElement);
             }
         });
+    }
+
+    function OnSearchInputChanged() {
+        searchText = searchInput.value.toUpperCase();
+        UpdateSearchResults();
     }
 
     // Tag Summary (Exclude and Include part)
@@ -358,10 +365,14 @@ SeparateTags();
             newUrlSearchParams.append("searchText", searchInput.value);
         
         if (includeTags.length > 0)
-            newUrlSearchParams.append("includeTags", JSON.stringify(includeTags));
+            newUrlSearchParams.append("includeTags", JSON.stringify(includeTags.map((tag)=> {
+                return Tags[tag as keyof typeof Tags];
+            })));
 
         if (excludeTags.length > 0)
-            newUrlSearchParams.append("excludeTags", JSON.stringify(excludeTags));
+            newUrlSearchParams.append("excludeTags", JSON.stringify(excludeTags.map((tag)=> {
+                return Tags[tag as keyof typeof Tags];
+            })));
 
         let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + newUrlSearchParams.toString();
         window.history.pushState({path: newUrl}, '', newUrl);
@@ -391,11 +402,6 @@ SeparateTags();
         const tagSummaryElement = document.getElementById(`${tagValue}-filter-summary`);
 
         function AddClassToTags(className: string) {
-            tag.classList.add(className);
-            tag.classList.add(className);
-            tag.classList.add(className);
-            tag.classList.add(className);
-            tag.classList.add(className);
             tag.classList.add(className);
             tagSummaryElement?.classList.add(className);
         }
@@ -433,7 +439,7 @@ SeparateTags();
     // ========== Initialise this page ==========
 
     // ========== Registering event listeners ==========
-    searchInput.addEventListener("input", UpdateSearchResults);
+    searchInput.addEventListener("input", OnSearchInputChanged);
     
     const filterPanelBtn = document.getElementById("openFilterPanelBtn") as HTMLButtonElement;
     filterPanelBtn.addEventListener("click", ()=> ToggleDivVisibility("filterPanel"));
