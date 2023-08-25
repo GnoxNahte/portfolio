@@ -84,6 +84,7 @@ SeparateTags();
             <div class="card">
                 <div class="filterPanelHeader">
                     <h2>Filter Tags</h2>
+                    <h2 id="debug-text">Debug Text</h2>
                     <button id="closeFilterPanelBtn"> 
                         <p style="color: white; margin: 0;">X</p>
                     </button>
@@ -97,7 +98,7 @@ SeparateTags();
                         Object.keys(tagDictionary).map((category) => {
                             const categoryValue = Tags[category as keyof typeof Tags];
                             
-                            return (
+                            return ( 
                                 <div class="tag-container-filter-panel">
                                     <h3 class={GetTagTypeClass(categoryValue)}>{PascalCaseToSpaceSeparated(category)}</h3> 
                                     <ul>
@@ -110,8 +111,7 @@ SeparateTags();
                                 </div>
                             )})
                     }
-                </div>
-                <div class="tagSummary tag-container">
+                    
                     <div id="includeTagSummary">
                         <h2>Include Tags: </h2>
                         <ul>
@@ -228,25 +228,94 @@ SeparateTags();
     .tag-container-filter-panel ul {
         margin: 10px 0px;
     }
-
-    .tagSummary ul {
-        display: flex;
-        flex-wrap: wrap;
-    }
 </style>
 
 <script>
     let includeTags: string[] = [];
     let excludeTags: string[] = [];
     
+    let searchText = "";
+    
     const searchInput = document.getElementById("searchInput") as HTMLInputElement;
     const filterTagPanel = document.getElementById("filterTagPanel") as HTMLDivElement;
 
+    function UpdateSearchResultsFromURL() {
+        GetTagInfoFromUrl();
+        
+        UpdateMainTagsVisibility();
+        UpdateSearchResults();
+    }
+    
     function UpdateSearchResults() {
-        // ========== Updating Project card visibility ==========
-        const searchInput = document.getElementById("searchInput") as HTMLInputElement;
-        let searchText = searchInput.value.toUpperCase();
-        // Update the search results
+        UpdateTagSummaryVisibility("includeTagSummary", includeTags);
+        UpdateTagSummaryVisibility("excludeTagSummary", excludeTags);
+        UpdateProjectCardsVisibility();
+        
+        UpdateUrl();
+    }
+
+    function GetTagInfoFromUrl() {
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        
+        const urlSearchInput = params["searchText"];
+        if (urlSearchInput !== undefined) {
+            searchText = urlSearchInput;
+            searchInput.value = searchText;
+        }
+
+        const urlIncludeTags = params["includeTags"];
+        if (urlIncludeTags !== undefined)
+            includeTags = JSON.parse(urlIncludeTags);
+
+        const urlExcludeTags = params["excludeTags"];
+        if (urlExcludeTags !== undefined)
+            excludeTags = JSON.parse(urlExcludeTags);
+    }
+
+    function UpdateMainTagsVisibility() {
+        // Tags on main filter panel
+        includeTags.forEach(tag => {
+            const tagElement = document.getElementById(tag + "-filter-btn");
+            if (tagElement != null) {
+                tagElement.classList.add("includeTag");
+            } else {
+                console.error("Cannot find: " + tagElement);
+            }
+        });
+        
+        excludeTags.forEach(tag => {
+            const tagElement = document.getElementById(tag + "-filter-btn");
+            if (tagElement != null) {
+                tagElement.classList.add("excludeTag");
+            } else {
+                console.error("Cannot find: " + tagElement);
+            }
+        });
+    }
+
+    // Tag Summary (Exclude and Include part)
+    function UpdateTagSummaryVisibility(tagID: string, tagArray: string[]) {
+        const tagSummary = document.getElementById(tagID) as HTMLUListElement;
+
+        if (tagArray.length === 0) {
+            tagSummary.style.display = 'none';
+            return;
+        }
+        else {
+            tagSummary.style.display = "";
+        }
+        
+        const tagSummaryList = tagSummary.getElementsByTagName("ul")[0];
+        for (let i = 0; i < tagSummaryList.childElementCount; ++i) {
+            const listItem = tagSummaryList.children.item(i) as HTMLLIElement;
+            // Remove any characters after "-"
+            const tagName = listItem.id.split("-")[0];
+            listItem.style.display = tagArray.includes(tagName) ? '' : 'none';
+        }
+    }
+
+    function UpdateProjectCardsVisibility() {
         const searchResultContainer = document.getElementById("searchResult");
         if (searchResultContainer === null) {
             console.error("Can't find searchResult");
@@ -254,7 +323,7 @@ SeparateTags();
         }
         const searchResults = searchResultContainer.getElementsByClassName("projectCard");
 
-        // Loop through all list items, and hide those who don't match the search query
+        // Loop through all project cards list items, and hide those who don't match the search query
         for (let i = 0; i < searchResults.length; ++i) {
             const project = searchResults[i] as HTMLDivElement;
             const card = project.parentElement as HTMLDivElement;
@@ -275,37 +344,15 @@ SeparateTags();
 
             // // For debugging:
             // console.log("================================")
-            // console.log("projectTags: " + projectTags);
+            // console.log("projectTags: ?" + projectTags);
             // console.log("IncludeTags: " + includeTags);
             // console.log("ExcludeTags: " + excludeTags);
             
             card.style.display = ifShow ? '' : 'none';
         }
+    }
 
-
-        // ========== Tag Summary ========== 
-        function UpdateTagSummaryVisibility(tagID: string, tagArray: string[]) {
-            const tagSummary = document.getElementById(tagID) as HTMLUListElement;
-            const ifNoElementsInArray = tagArray.length === 0;
-            tagSummary.style.display = ifNoElementsInArray ? 'none' : '';
-            
-            if (ifNoElementsInArray) {
-                return;
-            }
-
-            const tagSummaryList = tagSummary.getElementsByTagName("ul")[0];
-            for (let i = 0; i < tagSummaryList.childElementCount; ++i) {
-                const listItem = tagSummaryList.children.item(i) as HTMLLIElement;
-                // Remove any characters after "-"
-                const tagName = listItem.id.split("-")[0];
-                listItem.style.display = tagArray.includes(tagName) ? '' : 'none';
-            }
-        }
-        
-        UpdateTagSummaryVisibility("includeTagSummary", includeTags);
-        UpdateTagSummaryVisibility("excludeTagSummary", excludeTags);
-
-        // ========== Update the url ==========
+    function UpdateUrl() {
         const newUrlSearchParams = new URLSearchParams();
         if (searchInput.value !== "") 
             newUrlSearchParams.append("searchText", searchInput.value);
@@ -318,31 +365,6 @@ SeparateTags();
 
         let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + newUrlSearchParams.toString();
         window.history.pushState({path: newUrl}, '', newUrl);
-    }
-
-    function UpdateSearchResultsFromUrlParams() {
-        const urlSearchParams = new URLSearchParams(window.location.search);
-        const params = Object.fromEntries(urlSearchParams.entries());
-        
-        const urlSearchInput = params["searchText"];
-        if (urlSearchInput !== undefined)
-            searchInput.value = urlSearchInput;
-
-        const urlIncludeTags = params["includeTags"];
-        if (urlIncludeTags !== undefined)
-        {
-            includeTags = JSON.parse(urlIncludeTags);
-            includeTags.forEach(tag => {
-                const tagElement = document.getElementById(tag + "-filter-btn");
-                if (tagElement != null) {
-                    tagElement.classList.add("includeTag");
-                } else {
-                    console.error("Cannot find: " + tagElement);
-                }
-            });
-        }
-
-        UpdateSearchResults();
     }
 
     // If displayValue == "", Toggle between "block" and "none"
@@ -366,25 +388,42 @@ SeparateTags();
         const excludeTag = "excludeTag";
 
         const tagValue = tag.id.replace("-filter-btn", "");
+        const tagSummaryElement = document.getElementById(`${tagValue}-filter-summary`);
+
+        function AddClassToTags(className: string) {
+            tag.classList.add(className);
+            tag.classList.add(className);
+            tag.classList.add(className);
+            tag.classList.add(className);
+            tag.classList.add(className);
+            tag.classList.add(className);
+            tagSummaryElement?.classList.add(className);
+        }
+        
+        function RemoveClassToTags(className: string) {
+            tag.classList.remove(className);
+            tagSummaryElement?.classList.remove(className);
+        }
 
         // Change from includeTag to excludeTag
         if (tag.classList.contains(includeTag)) {
-            tag.classList.remove(includeTag);
-            tag.classList.add(excludeTag);
-            
+            RemoveClassToTags(includeTag);
+            AddClassToTags(excludeTag);
+
+
             includeTags.splice(includeTags.indexOf(tagValue), 1);
             excludeTags.push(tagValue);
         }
         // Change from excludeTag to unselect the whole tag
         else if (tag.classList.contains(excludeTag)) {
-            tag.classList.remove(excludeTag);
-
+            RemoveClassToTags(excludeTag);
+            
             excludeTags.splice(excludeTags.indexOf(tagValue), 1);
         }
         // Change from not selecting the tag to includeTag
         else {
-            tag.classList.add(includeTag);
-
+            AddClassToTags(includeTag);
+            
             includeTags.push(tagValue);
         }
 
@@ -406,7 +445,7 @@ SeparateTags();
     for (let i = 0; i < tags.length; i++) {
         tags[i].addEventListener("click", () => OnTagClicked(tags[i] as HTMLLIElement));
     }
-
-    UpdateSearchResultsFromUrlParams();
+    
+    UpdateSearchResultsFromURL();
     
 </script>
