@@ -95,11 +95,11 @@ function dateDiff(startDate: Date, endDate: Date) : string {
                     <li>{data.projectLink != null && <a href={data.projectLink} class="inlineBtn" target="_blank">Project Link</a>}</li>
                     <li>{data.githubLink != null && <a href={data.githubLink} class="inlineBtn" target="_blank">GitHub Link</a>}</li>
                 </ul>
-                <hr>
                 
-                <TableOfContent headings={headings}/>
                 <h2>Description</h2>
                 <p>{data.shortDescription}</p>
+                <TableOfContent headings={headings}/>
+                <hr>
                 <div class="markdown">
                     <Content />
                 </div>

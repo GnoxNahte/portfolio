@@ -55,6 +55,10 @@ a[target="_blank"]:not(.inlineBtn):after {
     vertical-align: text-bottom;
 }
 
+div p:last-child {
+    margin-bottom: 0px;
+}
+
 /* Scrollbar */
 
 ::-webkit-scrollbar {

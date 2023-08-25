@@ -1,8 +1,33 @@
 ---
+import ProjectCardFromCollection from "../components/ProjectCardFromCollection.astro";
+import Tooltip from "../components/Tooltip.astro";
 import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title = "Home" description="Portfolio Home Page">
-	<h1>Hello World</h1>
+	<div class="container">
+		<h1>Intro</h1>
+		<div class="card">
+			<h2>Quick Facts about me</h2>
+			<ul>
+				<li>Born in Singapore</li>
+				<!-- TODO (HIGH): Add correct link -->
+				<li>Game Developer. <a href="projects/">Game Projects</a></li>
+				<ul>
+					<li>Graduated from Game Development and Technology from NYP (Nanyang Polytechnic)</li>
+					<li>Going to SIT (Singapore Institute of Technology) after National Service</li>
+				</ul>
+				<!-- TODO (HIGH): Add correct link -->
+				<li>Web Developer. <a href="projects/">Web Projects</a></li>
+				<ul>
+					<li>Self learning in free time</li>
+					<li>Mainly used to build this website. <a href="/portfolio-website">Blog on building process</a></li>
+					<li>Finding it interesting, for now it's a backup in case game developer doesn't work.</li>
+				</ul>
+			</ul>
+		</div>
+		<h1>Featured Projects</h1>
+		<ProjectCardFromCollection title="sentient-buffet"/>
+		<ProjectCardFromCollection title="portfolio-website"/>
+</div>
 </Layout>
-    

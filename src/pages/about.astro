@@ -8,15 +8,18 @@ import Layout from "../layouts/Layout.astro";
 	<h1>About</h1> 
     <div class="container">
         <div class="card">
-            <p>Hello, I'm a Game Developer, learning some Web Development in my free time.</p>
-            <p>Born in Singapore and currently serving National Service</p>
+            <p>Hi I'm a Game Developer, learning some Web Development on my free time</p>
+            <p>Born in Singapore and currently serving NS (National Service)</p>
+            <p>Going to SIT (Singapore Institute of Technology) after NS</p>
 
             <div>
                 <h2>Education & Certificates</h2>
-                <p>Director's List - Academic Year 2019/20 Semester 1</p>
-                <p>Director's List - Academic Year 2021/22 Semester 2</p>
-                <p>Diploma in Game Development & Technology</p>
-                <p>UCAP-720: Unity Certified Associate: Programmer</p>
+                <ul>
+                    <li>Director's List - Academic Year 2019/20 Semester 1</li>
+                    <li>Director's List - Academic Year 2021/22 Semester 2</li>
+                    <li>Diploma in Game Development & Technology</li>
+                    <li>UCAP-720: Unity Certified Associate: Programmer</li>
+                </ul>
             </div>
             <div>
                 <h2>
@@ -28,10 +31,9 @@ import Layout from "../layouts/Layout.astro";
                         <p>NOTE: While some skills don't have a lot of stars, I'm willing to learn to do the tasks given and improve</p>
                     </Tooltip>
                 </h2>
-                <h4>Test</h4>
                 <details open>
                     <summary><h3>Game Development</h3></summary>
-                    <StarRatings starPosition={50} title={"Unity"} activeStars={5}/>
+                    <StarRatings starPosition={50} title={"Unity"} activeStars={4.7}/>
                     <StarRatings starPosition={50} title={"C#"} activeStars={4.5}/>
                     <StarRatings starPosition={50} title={"C++"} activeStars={3.5}/>
                 </details>
