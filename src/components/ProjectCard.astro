@@ -18,7 +18,7 @@ const {title, description, thumbnailPath = '', slug, tags} = Astro.props as Prop
     <div class="projectCard" data-tags={tags}>
         {thumbnailPath !== '' && <img src = {thumbnailPath} alt={title + " thumbnail"} class="thumbnail" />}
         <div class="details">
-            <h3>{title}</h3>
+            <h2>{title}</h2>
             <TagDisplay tags={tags} project={title} isSmall={true}/>
             <p>{description}</p>
         </div>
@@ -44,7 +44,7 @@ const {title, description, thumbnailPath = '', slug, tags} = Astro.props as Prop
         flex-grow: 1;
     }
 
-    h3 {
+    h2 {
         margin-bottom: 0;
     }
 
