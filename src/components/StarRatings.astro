@@ -30,13 +30,14 @@ const unfilledStarsArray = Array<number>(unfilledStars).fill(0);
     .star-ratings-panel {
         display: flex;
         align-items: center;
-        background-color: var(--color-tertiary);
+        background-color: var(--color-background);
         border-color: #555555;
         border-style: solid;
         margin: 5px;
         padding: 0px 10px;
         border-radius: 10px;
         width: auto;
+        --star-filled-color: #ffae1a;
     }
 
     .star-ratings-panel p {
@@ -68,12 +69,12 @@ const unfilledStarsArray = Array<number>(unfilledStars).fill(0);
     }
 
     .star.filled {
-        color: #ffae1a;
+        color: var(--star-filled-color);
     }
 
     .star.partial:after {
         content:'\2605';
-        color: #ffae1a;
+        color: var(--star-filled-color);
         position: absolute;
         margin-left: -20px;
         width: calc(var(--partial-filled-amt) * 20px);

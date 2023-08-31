@@ -6,12 +6,11 @@
         - Background & text colors are in .light and .dark classes
         - Tag Colors are in TagDisplay
     */
-    --color-btn: #416EAF;
 }
 
 body {
     line-height: 1.5;
-    background: var(--color-primary);
+    background: var(--color-background);
     color: var(--color-text);
     margin: 0;
     padding: 0;
@@ -31,8 +30,12 @@ p, li {
 }
 
 a {
-    text-decoration: none;
-    color: var(--color-btn);
+    text-decoration: underline;
+    color: var(--color-primary);
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 details summary {
@@ -80,17 +83,27 @@ div p:last-child {
 
 /* Themes */
 .light {
-    --color-primary: #ffffff;
-    --color-secondary: #fafafa;
-    --color-tertiary: #f5f5f5;
-    --color-text: #212121;
+    
+    --color-background: #121212;
+    --color-primary: #476beb;
+    --color-secondary: #2b2b2b;
+    --color-accent: #303030;
+    --color-text: #ffffff;
+
+    --color-btn: #476beb;
+
+    --color-border: #FFFFFF;
 }
 
 .dark {
-    --color-primary: #424242;
-    --color-secondary: #212121;
-    --color-tertiary: #303030;
+    --color-background: #2b2b2b;
+    --color-primary: #7593FF;
+    --color-secondary: #121212;
+    --color-accent: #555;
     --color-text: #ffffff;
+
+    --color-btn: #476beb;
+
 }
 
 /* Card */
@@ -147,7 +160,7 @@ div p:last-child {
 /* Tags */
 
 .tag-container.card {
-    background: var(--color-tertiary) ;
+    border: 2px solid var(--color-accent);
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -156,9 +169,11 @@ div p:last-child {
 }
 
 .tag-container.tag-container-small.card {
-    background: initial;
-    padding: 0px;
-    margin-bottom: 0px;
+    border: none;
+    padding: 0;
+    /* padding-top: 0;
+    padding-bottom: 0; */
+    margin-bottom: 0px; 
 }
 
 .tag-container p {
@@ -184,15 +199,15 @@ div p:last-child {
 /* Tags Colors */
 .tool-tag {
     background-color: #008080;
-    border-color: #008080;;
+    border-color: #008080;
 }
 .project-type-tag {
     background-color: #B33333;
     border-color: #B33333;
 }
 .platform-tag {
-    background-color: #6B8E23;
-    border-color: #6B8E23;
+    background-color: #5f7e20;
+    border-color: #5f7e20;
 }
 .status-tag {
     background-color: black;
