@@ -16,21 +16,22 @@ const {title, description, thumbnailPath = '', slug, tags} = Astro.props as Prop
 
 <div class='card' id={title}>
     <div class="projectCard" data-tags={tags}>
+        <!-- TODO: Make image linkable too after converting to astro's new image component -->
         {thumbnailPath !== '' && <img src = {thumbnailPath} alt={title + " thumbnail"} class="thumbnail" />}
         <div class="details">
-            <h2>{title}</h2>
+            <h2>
+                <a href={`/${slug}`}>{title}</a>
+            </h2>
             <TagDisplay tags={tags} project={title} isSmall={true}/>
             <p>{description}</p>
         </div>
     </div>
-    <a class="btn" href={`/${slug}`}>Read More</a>
 </div> 
 
 <style>
     .projectCard {
         display: flex;
         align-items: center;
-        margin-bottom: 25px;
     }
 
     .projectCard .thumbnail {
@@ -46,6 +47,11 @@ const {title, description, thumbnailPath = '', slug, tags} = Astro.props as Prop
 
     h2 {
         margin-bottom: 0;
+    }
+
+    h2 a {
+        text-decoration: none;
+        color: var(--color-text);
     }
 
     p {
