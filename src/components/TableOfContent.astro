@@ -75,15 +75,15 @@ function generateTableOfContent(headings: MarkdownHeading[]) {
         }
     }
 
-    function printTableOfContent(headings: HeadingWithSubheadings[]) {
-        for (let i = 0; i < headings.length; i++)
-        {
-            const heading = headings[i];
-            console.log(`${"\t".repeat(heading.depth)}${heading.depth}: ${heading.text}`);
-            // console.log(heading)
-            printTableOfContent(heading.subheadings);
-        }
-    }
+    // function printTableOfContent(headings: HeadingWithSubheadings[]) {
+    //     for (let i = 0; i < headings.length; i++)
+    //     {
+    //         const heading = headings[i];
+    //         console.log(`${"\t".repeat(heading.depth)}${heading.depth}: ${heading.text}`);
+    //         // console.log(heading)
+    //         printTableOfContent(heading.subheadings);
+    //     }
+    // }
 }
 
 ---
