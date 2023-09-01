@@ -41,7 +41,6 @@ let tagDictionary: { [key: string]: Array<Tags> } = {}
 //        ProjectType: [ 'School', 'GameJam', 'Personal', 'Client' ],
 //        Platform: [ 'Windows', 'WebGL', 'Website' ]
 //      }
-
 function SeparateTags()
 {
     const enumValues = Object.keys(Tags).filter(key => isNaN(Number(key)));
@@ -229,7 +228,8 @@ SeparateTags();
     }
 </style>
 
-<script>import { Tags } from "../others/tags";
+<script>
+    import { Tags } from "../others/tags";
 
     let includeTags: string[] = [];
     let excludeTags: string[] = [];
@@ -277,23 +277,25 @@ SeparateTags();
 
     function UpdateMainTagsVisibility() {
         // Tags on main filter panel
-        includeTags.forEach(tag => {
-            const tagElement = document.getElementById(tag + "-filter-btn");
+        includeTags.forEach(tagID => {
+            const tagElement = document.getElementById(tagID + "-filter-btn");
             if (tagElement != null) {
                 tagElement.classList.add("includeTag");
             } else {
-                console.error("Cannot find: " + tagElement);
+                console.error("Cannot find: [" + tagID + "-filter-btn]");
             }
         });
         
-        excludeTags.forEach(tag => {
-            const tagElement = document.getElementById(tag + "-filter-btn");
+        excludeTags.forEach(tagID => {
+            const tagElement = document.getElementById(tagID + "-filter-btn");
             if (tagElement != null) {
                 tagElement.classList.add("excludeTag");
             } else {
-                console.error("Cannot find: " + tagElement);
+                console.error("Cannot find: [" + tagID + "-filter-btn]");
             }
         });
+
+        console.log(`Include Tags: ${includeTags}\nExclude Tags: ${excludeTags}`);
     }
 
     function OnSearchInputChanged() {
@@ -302,8 +304,8 @@ SeparateTags();
     }
 
     // Tag Summary (Exclude and Include part)
-    function UpdateTagSummaryVisibility(tagID: string, tagArray: string[]) {
-        const tagSummary = document.getElementById(tagID) as HTMLUListElement;
+    function UpdateTagSummaryVisibility(tagSummaryID: string, tagArray: string[]) {
+        const tagSummary = document.getElementById(tagSummaryID) as HTMLUListElement;
 
         if (tagArray.length === 0) {
             tagSummary.style.display = 'none';
@@ -366,12 +368,14 @@ SeparateTags();
         
         if (includeTags.length > 0)
             newUrlSearchParams.append("includeTags", JSON.stringify(includeTags.map((tag)=> {
-                return Tags[tag as keyof typeof Tags];
+                return tag;
+                // return Tags[tag as keyof typeof Tags];
             })));
 
         if (excludeTags.length > 0)
             newUrlSearchParams.append("excludeTags", JSON.stringify(excludeTags.map((tag)=> {
-                return Tags[tag as keyof typeof Tags];
+                return tag;
+                // return Tags[tag as keyof typeof Tags];
             })));
 
         let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + newUrlSearchParams.toString();
@@ -414,8 +418,7 @@ SeparateTags();
         // Change from includeTag to excludeTag
         if (tag.classList.contains(includeTag)) {
             RemoveClassToTags(includeTag);
-            AddClassToTags(excludeTag);
-
+            AddClassToTags(excludeTag); 
 
             includeTags.splice(includeTags.indexOf(tagValue), 1);
             excludeTags.push(tagValue);
