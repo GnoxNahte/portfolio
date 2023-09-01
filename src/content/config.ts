@@ -2,17 +2,9 @@
 import { z, defineCollection } from 'astro:content';
 import { Tags } from "../others/tags";
 
-const imagePathCheck = z.string().refine((val) => {
-    // Check if the file path has a valid image extension
-    const pattern = /\.(jpe?g|png|gif|bmp|tiff|webp)$/i;
-    return pattern.test(val);
-  }, {
-    message: "Invalid image file path",
-  });
-
 // 2. Define a schema for each collection you'd like to validate.
 const projects = defineCollection({
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     shortDescription: z.string(), 
     startDate: z.date().optional(),
@@ -20,7 +12,7 @@ const projects = defineCollection({
     projectLink: z.string().url().optional(),
     githubLink: z.string().url().optional(),
     // TODO(MEDIUM): Use astro's image() check. See astro 2.1 update https://astro.build/blog/astro-210/#built-in-image-support
-    thumbnailPath: imagePathCheck,
+    thumbnailPath: image(),
     // tags: z.nativeEnum(Tags).array(),
     tags: z.string()
             .array()

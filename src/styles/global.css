@@ -52,7 +52,7 @@ a[target="_blank"]:not(.inlineBtn):after {
     width: 1em;
     height: 1em;
     margin: 0 0.05em 0 0.15em;
-    background: url("/public/General/NewTabIcon.png");
+    background: url("../images/General/NewTabIcon.png");
     background-size: contain;
     display: inline-block;
     vertical-align: text-bottom;

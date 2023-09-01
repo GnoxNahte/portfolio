@@ -11,11 +11,9 @@ export type HeadingWithSubheadings = MarkdownHeading & {
 };
 
 const { headings } = Astro.props as Props;
-console.log(headings);
 const tableOfContent = generateTableOfContent(headings);
 
 function generateTableOfContent(headings: MarkdownHeading[]) {
-    console.log("Generating")
     if (!headings || headings.length === 0)
         return undefined;
 
@@ -42,7 +40,6 @@ function generateTableOfContent(headings: MarkdownHeading[]) {
 
     let currIndex = 1;
 
-    console.log("Buildings...");
     buildHeadingsTree(tableOfContent, tableOfContent[0]);
     return tableOfContent;
 
@@ -57,17 +54,14 @@ function generateTableOfContent(headings: MarkdownHeading[]) {
             const prevDepth = prevHeading.depth;
 
             if (heading.depth < prevDepth) {
-                console.log("Reached lowest depth, returning: " + heading.depth);
                 return undefined;
             }
             else if (heading.depth === prevDepth) {
-                console.log("Depth same: " + heading.depth);
                 prevParentHeading.push(heading);
                 ++currIndex
                 buildHeadingsTree(prevParentHeading, heading);
             }
             else if (heading.depth > prevDepth) {
-                console.log("New depth higher, adding to subheading: " + heading.depth);
                 prevHeading.subheadings.push(heading);
                 ++currIndex
                 buildHeadingsTree(prevHeading.subheadings, heading);

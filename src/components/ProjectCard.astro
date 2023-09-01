@@ -1,23 +1,31 @@
 ---
 import type { Tags } from '../others/tags';
 import TagDisplay from './TagDisplay.astro';
+import { Image } from "astro:assets";
+
+export interface ZodImageProps {
+    height: number;
+    src: string;
+    width: number;
+    format: "png" | "webp" | "jpeg" | "jpg" | "svg" | "tiff" | "gif";
+}
 
 export interface Props {
     title: string;
     description: string;
-    thumbnailPath?: string;
+    thumbnailPath: ZodImageProps;
     slug: string;
     tags: Tags[];
 };
 
-const {title, description, thumbnailPath = '', slug, tags} = Astro.props as Props;
-
+const {title, description, thumbnailPath, slug, tags} = Astro.props as Props;
 ---
 
 <div class='card' id={title}>
-    <div class="projectCard" data-tags={tags}>
+        <div class="projectCard" data-tags={tags}>
+        <Image src={thumbnailPath} alt={title + " thumbnail"} class="thumbnail" />
         <!-- TODO: Make image linkable too after converting to astro's new image component -->
-        {thumbnailPath !== '' && <img src = {thumbnailPath} alt={title + " thumbnail"} class="thumbnail" />}
+        <!-- {thumbnailPath !== '' && <img src = "../images/EventRegistration/EventRegistration_CreateEvent.png" alt={title + " thumbnail"} class="thumbnail" />} -->
         <div class="details">
             <h2>
                 <a href={`/${slug}`}>{title}</a>
@@ -36,6 +44,8 @@ const {title, description, thumbnailPath = '', slug, tags} = Astro.props as Prop
 
     .projectCard .thumbnail {
         display: inline-block;
+        object-fit: contain;
+        height: unset;
         width: 30%;
     }
     

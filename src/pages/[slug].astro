@@ -5,6 +5,7 @@ import TagDisplay from "../components/TagDisplay.astro";
 import { type CollectionEntry, getCollection } from "astro:content";
 import { Tags } from "../others/tags";
 import TableOfContent from "../components/TableOfContent.astro";
+import { Image } from "astro:assets";
 
 export async function getStaticPaths() {
     const projects = await getCollection("projects");
@@ -79,7 +80,7 @@ function dateDiff(startDate: Date, endDate: Date) : string {
         <div class="container">
             <div class="card">
                 <h1>{data.title}</h1>
-                <img src={data.thumbnailPath} alt={data.title + " image"}>
+                <Image src={data.thumbnailPath} alt={data.title + " image"}>
                 <div style="height: 25px;"></div> <!-- Small block to separate img and tags -->
                 <TagDisplay tags={data.tags} project={data.title}/>
                 { data.startDate &&
@@ -123,6 +124,8 @@ function dateDiff(startDate: Date, endDate: Date) : string {
         width: 100%;
         max-width: 500px;
         margin: 0 auto;
+        object-fit: contain;
+        height: unset;
     }
 </style>
 
