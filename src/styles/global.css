@@ -121,6 +121,10 @@ div p:last-child {
     border-radius: 10px;
 }
 
+.card h2 {
+    margin-top: 0;
+}
+
 /* Other Classes */
 
 .container {

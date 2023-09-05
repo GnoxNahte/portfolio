@@ -82,7 +82,7 @@ function dateDiff(startDate: Date, endDate: Date) : string {
                 <h1>{data.title}</h1>
                 <!-- TODO: Change to use Astro's <Image /> Not
                      Not sure why last time Astro v3.0.3, any content after <Image /> was gone. Might be a bug -->
-                <img src={data.thumbnailPath.src} alt={data.title + " image"}>
+                <img src={data.thumbnailPath.src} alt={data.title + " image"} transition:name=`project-img-${data.title}`>
                 <div style="height: 25px;"></div> <!-- Small block to separate img and tags -->
                 <TagDisplay tags={data.tags} project={data.title}/>
                 { data.startDate &&

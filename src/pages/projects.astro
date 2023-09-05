@@ -75,7 +75,7 @@ SeparateTags();
     <section>
         <div class="container searchBar">
             <div class="card">
-                <input id="searchInput" type="search" placeholder="Search"/>
+                <input id="searchInput" type="search" placeholder="Search by Title"/>
                 <button id="openFilterPanelBtn">Filter</button>
             </div> 
         </div> 
@@ -110,7 +110,7 @@ SeparateTags();
                             )})
                     }
                     
-                    <div id="includeTagSummary">
+                    <div id="includeTagSummary" style="display: none;">
                         <h2>Include Tags: </h2>
                         <ul>
                             <!-- Toggle Visibility in <script> -->
@@ -119,7 +119,7 @@ SeparateTags();
                                 }
                         </ul>
                     </div>
-                    <div id="excludeTagSummary">
+                    <div id="excludeTagSummary" style="display: none;">
                         <h2>Exclude Tags: </h2>
                         <ul>
                             <!-- Toggle Visibility in <script> -->
@@ -229,17 +229,43 @@ SeparateTags();
 </style>
 
 <script>
-    import { Tags } from "../others/tags";
 
     let includeTags: string[] = [];
     let excludeTags: string[] = [];
     
     let searchText = "";
-    
-    const searchInput = document.getElementById("searchInput") as HTMLInputElement;
-    const filterTagPanel = document.getElementById("filterTagPanel") as HTMLDivElement;
+
+    function Init() {
+        if (document.getElementById("filterTagPanel") == null)
+        {
+            console.log("Test");
+            return;
+        }
+
+        console.log("Init...");
+        // ===== Registering event listeners =====
+        const searchInput = document.getElementById("searchInput") as HTMLInputElement;
+        searchInput.addEventListener("input", OnSearchInputChanged); // Test
+        
+        const filterPanelBtn = document.getElementById("openFilterPanelBtn") as HTMLButtonElement;
+        filterPanelBtn.addEventListener("click", ()=> ToggleDivVisibility("filterPanel")); //Test
+
+        const filterPanelCloseBtn = document.getElementById("closeFilterPanelBtn") as HTMLButtonElement;
+        filterPanelCloseBtn.addEventListener("click", ()=> ToggleDivVisibility("filterPanel", "none"));
+
+        const filterTagPanel = document.getElementById("filterTagPanel") as HTMLDivElement;
+        const tags = filterTagPanel.getElementsByClassName("tag");
+        for (let i = 0; i < tags.length; i++) {
+            tags[i].addEventListener("click", () => OnTagClicked(tags[i] as HTMLLIElement));
+            console.log(tags[i].getAttribute('listener'));
+        }
+
+        // ===== Calling other functions =====
+        UpdateSearchResultsFromURL();
+    }
 
     function UpdateSearchResultsFromURL() {
+        console.log("Update from url");
         GetInfoFromUrl();
         
         const searchInput = document.getElementById("searchInput") as HTMLInputElement;
@@ -260,19 +286,24 @@ SeparateTags();
     function GetInfoFromUrl() {
         const urlSearchParams = new URLSearchParams(window.location.search);
         const params = Object.fromEntries(urlSearchParams.entries());
+        console.log("Print" + window.location.search); 
         
         const urlSearchInput = params["searchText"];
         if (urlSearchInput !== undefined) {
             searchText = urlSearchInput;
         }
-
+        
         const urlIncludeTags = params["includeTags"];
         if (urlIncludeTags !== undefined)
             includeTags = JSON.parse(urlIncludeTags);
+        else
+            includeTags = []; // Reset if it never fully load
 
         const urlExcludeTags = params["excludeTags"];
         if (urlExcludeTags !== undefined)
             excludeTags = JSON.parse(urlExcludeTags);
+        else
+            excludeTags = []; // Reset if it never fully load
     }
 
     function UpdateMainTagsVisibility() {
@@ -295,10 +326,11 @@ SeparateTags();
             }
         });
 
-        console.log(`Include Tags: ${includeTags}\nExclude Tags: ${excludeTags}`);
+        // console.log(`Include Tags: ${includeTags}\nExclude Tags: ${excludeTags}`);
     }
 
     function OnSearchInputChanged() {
+        const searchInput = document.getElementById("searchInput") as HTMLInputElement;
         searchText = searchInput.value.toUpperCase();
         UpdateSearchResults();
     }
@@ -362,6 +394,7 @@ SeparateTags();
     }
 
     function UpdateUrl() {
+        const searchInput = document.getElementById("searchInput") as HTMLInputElement;
         const newUrlSearchParams = new URLSearchParams();
         if (searchInput.value !== "") 
             newUrlSearchParams.append("searchText", searchInput.value);
@@ -401,18 +434,25 @@ SeparateTags();
     function OnTagClicked(tag: HTMLLIElement) {
         const includeTag = "includeTag";
         const excludeTag = "excludeTag";
+        console.log("Tag clicked");
 
-        const tagValue = tag.id.replace("-filter-btn", "");
-        const tagSummaryElement = document.getElementById(`${tagValue}-filter-summary`);
+        const hyphenIndex = tag.id.indexOf("-");
+        const tagValue = tag.id.substring(0, hyphenIndex);
+
+        // Select the other tag that the user didnt click
+        const clickedTagSummary = tag.id.includes("summary");
+        const otherTag = clickedTagSummary ? 
+                            document.getElementById(`${tagValue}-filter-btn`) : // If clicked tag summary, get main tag btn
+                            document.getElementById(`${tagValue}-filter-summary`) // If clicked main tag btn, get tag summary
 
         function AddClassToTags(className: string) {
             tag.classList.add(className);
-            tagSummaryElement?.classList.add(className);
+            otherTag?.classList.add(className);
         }
         
         function RemoveClassToTags(className: string) {
             tag.classList.remove(className);
-            tagSummaryElement?.classList.remove(className);
+            otherTag?.classList.remove(className);
         }
 
         // Change from includeTag to excludeTag
@@ -441,20 +481,7 @@ SeparateTags();
     
     // ========== Initialise this page ==========
 
-    // ========== Registering event listeners ==========
-    searchInput.addEventListener("input", OnSearchInputChanged);
-    
-    const filterPanelBtn = document.getElementById("openFilterPanelBtn") as HTMLButtonElement;
-    filterPanelBtn.addEventListener("click", ()=> ToggleDivVisibility("filterPanel"));
-
-    const filterPanelCloseBtn = document.getElementById("closeFilterPanelBtn") as HTMLButtonElement;
-    filterPanelCloseBtn.addEventListener("click", ()=> ToggleDivVisibility("filterPanel", "none"));
-
-    const tags = filterTagPanel.getElementsByClassName("tag");
-    for (let i = 0; i < tags.length; i++) {
-        tags[i].addEventListener("click", () => OnTagClicked(tags[i] as HTMLLIElement));
-    }
-    
-    UpdateSearchResultsFromURL();
+    // Init();
+    document.addEventListener('astro:page-load', Init);
     
 </script>
