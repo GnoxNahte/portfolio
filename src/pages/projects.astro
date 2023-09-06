@@ -71,84 +71,94 @@ SeparateTags();
 ---
 
 <Layout title = "Projects" description="Portfolio Projects">
-	<h1>Projects</h1>
     <section>
-        <div class="container searchBar">
-            <div class="card">
-                <input id="searchInput" type="search" placeholder="Search by Title"/>
-                <button id="openFilterPanelBtn">Filter</button>
-            </div> 
-        </div> 
-        <div class="container filterPanel">
-            <div class="card">
-                <div class="filterPanelHeader">
-                    <h2>Filter Tags</h2>
-                    <button id="closeFilterPanelBtn"> 
-                        <p style="color: white; margin: 0;">X</p>
-                    </button>
-                </div>
-                <div class="tag-container" id="filterTagPanel">
-                    {
-                        // 1. Loop through each category in tagDictionary, 
-                        // 2.   Display Header for category
-                        // 3.   Loop through each tag in category
-                        // 4.       Display the tag
-                        Object.keys(tagDictionary).map((category) => {
-                            const categoryValue = Tags[category as keyof typeof Tags];
-                            
-                            return ( 
-                                <div class="tag-container-filter-panel">
-                                    <h3 class={GetTagTypeClass(categoryValue)}>{PascalCaseToSpaceSeparated(category)}</h3> 
-                                    <ul>
-                                        {
-                                            tagDictionary[category].map((tag) => {
-                                                return <Tag tag={tag} project="filter-btn" ifAddLink={false}/>
-                                            })
-                                        }
-                                    </ul>
-                                </div>
-                            )})
-                    }
-                    
-                    <div id="includeTagSummary" style="display: none;">
-                        <h2>Include Tags: </h2>
-                        <ul>
-                            <!-- Toggle Visibility in <script> -->
-                                {
-                                    tagArray.map((tag) => <Tag tag={tag} project="filter-summary" ifAddLink={false} additionalClasses={"includeTag"}/>)
-                                }
-                        </ul>
+        <div class="two-column-container">
+            <div class="filterPanel">
+                <div class="searchBar">
+                    <div class="card">
+                        <input id="searchInput" type="search" placeholder="Search by Title"/>
+                    </div> 
+                </div> 
+                <div class="card">
+                    <div class="filterPanelHeader">
+                        <h2>Filter Tags</h2>
                     </div>
-                    <div id="excludeTagSummary" style="display: none;">
-                        <h2>Exclude Tags: </h2>
-                        <ul>
-                            <!-- Toggle Visibility in <script> -->
-                            {
-                                tagArray.map((tag) => <Tag tag={tag} project="filter-summary" ifAddLink={false} additionalClasses={"excludeTag"}/>)
-                            }
-                        </ul>
+                    <div class="tag-container" id="filterTagPanel">
+                        {
+                            // 1. Loop through each category in tagDictionary, 
+                            // 2.   Display Header for category
+                            // 3.   Loop through each tag in category
+                            // 4.       Display the tag
+                            Object.keys(tagDictionary).map((category) => {
+                                const categoryValue = Tags[category as keyof typeof Tags];
+                                
+                                return ( 
+                                    <div class="tag-container-filter-panel">
+                                        <h3 class={GetTagTypeClass(categoryValue)}>{PascalCaseToSpaceSeparated(category)}</h3> 
+                                        <ul>
+                                            {
+                                                tagDictionary[category].map((tag) => {
+                                                    return <Tag tag={tag} project="filter-btn" ifAddLink={false}/>
+                                                })
+                                            }
+                                        </ul>
+                                    </div>
+                                )})
+                        }
+                        
+                        <div id="includeTagSummary" style="display: none;">
+                            <h2>Include Tags: </h2>
+                            <ul>
+                                <!-- Toggle Visibility in <script> -->
+                                    {
+                                        tagArray.map((tag) => <Tag tag={tag} project="filter-summary" ifAddLink={false} additionalClasses={"includeTag"}/>)
+                                    }
+                            </ul>
+                        </div>
+                        <div id="excludeTagSummary" style="display: none;">
+                            <h2>Exclude Tags: </h2>
+                            <ul>
+                                <!-- Toggle Visibility in <script> -->
+                                {
+                                    tagArray.map((tag) => <Tag tag={tag} project="filter-summary" ifAddLink={false} additionalClasses={"excludeTag"}/>)
+                                }
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="container" id="searchResult">
-                {cards.map(card => (
-                    card.data.ifShow &&
-                    <ProjectCard 
-                        title={card.data.title} 
-                        description={card.data.shortDescription} 
-                        thumbnailPath={card.data.thumbnailPath}
-                        slug={card.slug}
-                        tags={card.data.tags}
-                    />
-                ))}
+            <div id="searchResult">
+                    <h1>Projects</h1>
+                    {cards.map(card => (
+                        card.data.ifShow &&
+                        <ProjectCard 
+                            title={card.data.title} 
+                            description={card.data.shortDescription} 
+                            thumbnailPath={card.data.thumbnailPath}
+                            slug={card.slug}
+                            tags={card.data.tags}
+                        />
+                    ))}
+            </div>
         </div>
     </section>
 </Layout>   
 
 <style>
-    .searchBar .card {
+    .two-column-container {
         display: flex;
+        gap: 30px;
+        margin: 30px;
+    }
+
+    .filterPanel {
+        height: 100vh;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        min-width: 22.5rem;
+    overflow-y: auto;  /* Add vertical scroll when needed */
+
     }
 
     .searchBar input {
@@ -171,50 +181,21 @@ SeparateTags();
         background-color: white;
     }
 
-    #openFilterPanelBtn {
-        margin-left: 20px;
-        background-color: var(--color-accent);
-        border-radius: 0.7rem;
-        border-color: #555555;
-        border-style: solid;
-        color: var(--color-text);
-        padding: 0.5rem;
-    }
-
-    #openFilterPanelBtn:hover {
-        cursor: pointer;
-        background-color: #111111;
-    }
-
-    .filterPanel {
-        /* TODO: Uncomment this line, for testing only */
-        /* display: none; */
-    }
-
     .filterPanel h2 {
         display:inline;
         margin: 0;
     }
 
+    .filterPanel > div:last-child {
+        margin-bottom: 0;
+    }
+
     .filterPanelHeader {
         display: flex;
         justify-content:space-between;
-        align-items: center;;
+        align-items: center;
         height: auto;
         margin-bottom: 20px;
-    }
-
-    #closeFilterPanelBtn {
-        background: transparent;
-        border: transparent;
-        border-radius: 50%;
-        width: 2em;
-        aspect-ratio: 1 / 1;
-        background-color: var(--color-btn);
-    }
-
-    #closeFilterPanelBtn:hover {
-        background-color: #555555;
     }
 
     .tag-container h3 {
@@ -246,12 +227,6 @@ SeparateTags();
         // ===== Registering event listeners =====
         const searchInput = document.getElementById("searchInput") as HTMLInputElement;
         searchInput.addEventListener("input", OnSearchInputChanged); // Test
-        
-        const filterPanelBtn = document.getElementById("openFilterPanelBtn") as HTMLButtonElement;
-        filterPanelBtn.addEventListener("click", ()=> ToggleDivVisibility("filterPanel")); //Test
-
-        const filterPanelCloseBtn = document.getElementById("closeFilterPanelBtn") as HTMLButtonElement;
-        filterPanelCloseBtn.addEventListener("click", ()=> ToggleDivVisibility("filterPanel", "none"));
 
         const filterTagPanel = document.getElementById("filterTagPanel") as HTMLDivElement;
         const tags = filterTagPanel.getElementsByClassName("tag");
