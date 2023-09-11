@@ -4,6 +4,12 @@ import ProjectCard from "../components/ProjectCard.astro";
 import Tag, { GetTagTypeClass, PascalCaseToSpaceSeparated } from "../components/Tag.astro";
 import Layout from "../layouts/Layout.astro";
 import { Tags } from "../others/tags";
+import { Image } from "astro:assets";
+
+import filterIcon from "../images/General/Icons/filter.png";
+import filterFilledIcon from "../images/General/Icons/filter-filled.png";
+import cancelIcon from "../images/General/Icons/filter-filled.png"
+
 const cards = await getCollection("projects");
 
 let tagArray: Tags[] = []; // Contains all tags without the categories
@@ -64,22 +70,22 @@ function SeparateTags()
     }
 }
 
-
 SeparateTags();
-
 
 ---
 
 <Layout title = "Projects" description="Portfolio Projects">
     <section>
-        <div class="two-column-container">
+        <div class="layout-container">
             <div class="filterPanel">
-                <div class="searchBar">
-                    <div class="card">
-                        <input id="searchInput" type="search" placeholder="Search by Title"/>
-                    </div> 
+                <div class="searchBar card">
+                    <input id="searchInput" type="search" placeholder="Search by Title"/>
+                    <button id="openFilterPanelBtn">Filter
+                        <Image src={filterIcon} alt="filter-icon" class="filter-icon"/>
+                        <Image src={filterFilledIcon} alt="filter-filled-icon" class="filter-filled-icon"/>
+                    </button>
                 </div> 
-                <div class="card">
+                <div class="card filterTagCard">
                     <div class="filterPanelHeader">
                         <h2>Filter Tags</h2>
                     </div>
@@ -139,26 +145,25 @@ SeparateTags();
                             tags={card.data.tags}
                         />
                     ))}
+                    </div>
             </div>
         </div>
     </section>
-</Layout>   
+</Layout>
 
 <style>
-    .two-column-container {
+    .layout-container {
         display: flex;
         gap: 30px;
-        margin: 30px;
+        display: flex;
+        justify-content: center;
+        margin: 50px;
+
+        flex-direction: column;
     }
 
-    .filterPanel {
-        height: 100vh;
-        position: -webkit-sticky;
-        position: sticky;
-        top: 0;
-        min-width: 22.5rem;
-    overflow-y: auto;  /* Add vertical scroll when needed */
-
+    .searchBar {
+        display: flex;
     }
 
     .searchBar input {
@@ -169,6 +174,47 @@ SeparateTags();
         border-style: solid;
         color: var(--color-text);
         padding: 0.5rem;
+    }
+
+    #openFilterPanelBtn {
+        margin-left: 20px;
+        background-color: var(--color-accent);
+        border-radius: 0.7rem;
+        border-color: #555555;
+        border-style: solid;
+        color: var(--color-text);
+        padding: 0.5rem;
+        display: flex;
+        white-space: nowrap;
+    }
+
+    #openFilterPanelBtn:hover {
+        cursor: pointer;
+        background-color: #111111;
+    }
+    
+    #openFilterPanelBtn:hover .filter-icon {
+        display: none;
+    }
+    
+    #openFilterPanelBtn .filter-icon {
+        display: initial
+    }
+    
+    #openFilterPanelBtn:hover .filter-filled-icon {
+        display: initial;
+    }
+    
+    #openFilterPanelBtn .filter-filled-icon {
+        display: none
+    }
+    
+
+    .searchBar img {
+        color: white;
+        height: 1rem;
+        width: 1rem;
+        margin-left: 0.25rem;
     }
 
     input[type="search"]::-webkit-search-cancel-button {
@@ -207,6 +253,32 @@ SeparateTags();
     .tag-container-filter-panel ul {
         margin: 10px 0px;
     }
+
+    #searchResult h1 {
+        margin-top: 0;
+        margin-bottom: 50px;
+        font-size: 3rem;
+    }
+
+    
+    @media screen and (min-width: 1250px) {
+        .layout-container {
+            flex-direction: row;
+        }
+        .filterPanel {
+            height: 100vh;
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            min-width: 22.5rem;
+            overflow-y: auto;  /* Add vertical scroll when needed */
+        }
+
+        #openFilterPanelBtn {
+            display: none;
+        }
+    }
+
 </style>
 
 <script>
@@ -217,16 +289,14 @@ SeparateTags();
     let searchText = "";
 
     function Init() {
-        if (document.getElementById("filterTagPanel") == null)
-        {
-            console.log("Test");
-            return;
-        }
-
         console.log("Init...");
+
         // ===== Registering event listeners =====
         const searchInput = document.getElementById("searchInput") as HTMLInputElement;
         searchInput.addEventListener("input", OnSearchInputChanged); // Test
+
+        const filterPanelBtn = document.getElementById("openFilterPanelBtn") as HTMLButtonElement;
+        filterPanelBtn.addEventListener("click", ()=> ToggleDivVisibility("filterTagCard")); 
 
         const filterTagPanel = document.getElementById("filterTagPanel") as HTMLDivElement;
         const tags = filterTagPanel.getElementsByClassName("tag");
@@ -234,6 +304,14 @@ SeparateTags();
             tags[i].addEventListener("click", () => OnTagClicked(tags[i] as HTMLLIElement));
             console.log(tags[i].getAttribute('listener'));
         }
+
+        // Selecting space bar if user presses '/'
+        document.addEventListener('keydown', (event) => {
+            if (event.key == '/') {
+                searchInput.focus();
+                event.preventDefault();
+            }
+        });
 
         // ===== Calling other functions =====
         UpdateSearchResultsFromURL();
@@ -392,9 +470,9 @@ SeparateTags();
 
     // If displayValue == "", Toggle between "block" and "none"
     // Else style.display = displayValue
-    function ToggleDivVisibility(id: string, displayValue ="")
+    function ToggleDivVisibility(className: string, displayValue ="")
     {
-        const divElement = document.getElementsByClassName(id)[0] as HTMLDivElement;
+        const divElement = document.getElementsByClassName(className)[0] as HTMLDivElement;
         if (displayValue === "") {
             const currDisplay = divElement.style.display;
             divElement.style.display = currDisplay === "none" ? "block" : "none";
