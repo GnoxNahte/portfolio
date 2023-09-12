@@ -2,6 +2,7 @@
 import { ViewTransitions } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import '../styles/global.css';
+// import { Sprite } from 'astro-icon';
 
 export interface Props {
     title: string;
@@ -25,7 +26,9 @@ const { title, description, darkMode = true} = Astro.props as Props;
 </head>
 <body class = {darkMode ? 'dark' : 'light'}>
     <Header/>
-    <slot/> 
+    <!-- <Sprite.Provider>  For astro-icon package: https://github.com/natemoo-re/astro-icon#usage -->
+        <slot/> 
+    <!-- </Sprite.Provider> -->
 </body>
 </html>
 
