@@ -145,6 +145,9 @@ SeparateTags();
                             tags={card.data.tags}
                         />
                     ))}
+                    <div class="card" id="noResultsFound">
+                        <h2>No Results Found</h2>
+                        <p>If the page should be here or want any projects with that specifications, please <a href="/about#contact">contact me</a></p>
                     </div>
             </div>
         </div>
@@ -410,6 +413,9 @@ SeparateTags();
     }
 
     function UpdateProjectCardsVisibility() {
+        // If has at least 1 project
+        let hasProject = false;
+
         const searchResultContainer = document.getElementById("searchResult");
         if (searchResultContainer === null) {
             console.error("Can't find searchResult");
@@ -430,10 +436,16 @@ SeparateTags();
                 const projectTagsRaw= project.getAttribute("data-tags") as string;
                 const projectTags = projectTagsRaw.replaceAll(" ", "").split(',');
 
-                if (includeTags.length > 0 && !includeTags.every(tag => projectTags.includes(tag)))
+                if (
+                    // If there are include tags and the project has all include tags
+                    includeTags.length > 0 && !includeTags.every(tag => projectTags.includes(tag)) || 
+                    // If there are exclude tags and the project doesn't have any exclude tags
+                    excludeTags.length > 0 && excludeTags.some(tag => projectTags.includes(tag)))
                     ifShow = false;
-                if (excludeTags.length > 0 && excludeTags.some(tag => projectTags.includes(tag)))
-                    ifShow = false;
+                else {
+                    ifShow = true;
+                    hasProject = true;
+                }
             }
 
             // // For debugging:
@@ -444,6 +456,9 @@ SeparateTags();
             
             card.style.display = ifShow ? '' : 'none';
         }
+
+        const noResultsFound = document.getElementById("noResultsFound") as HTMLDivElement;
+        noResultsFound.style.display = hasProject ? 'none' : '';
     }
 
     function UpdateUrl() {
