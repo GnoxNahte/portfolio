@@ -159,7 +159,9 @@ SeparateTags();
         gap: 30px;
         display: flex;
         justify-content: center;
-        margin: 50px;
+        margin: 50px auto;
+        padding: 0px 50px;
+        max-width: 1500px;
 
         flex-direction: column;
     }
@@ -258,6 +260,11 @@ SeparateTags();
         font-size: 3rem;
     }
 
+    #searchResult {
+        display: flex;
+        flex-direction: column;
+    }
+
     @media screen and (min-width: 1250px) {
         .layout-container {
             flex-direction: row;
@@ -299,7 +306,6 @@ SeparateTags();
         const tags = filterTagPanel.getElementsByClassName("tag");
         for (let i = 0; i < tags.length; i++) {
             tags[i].addEventListener("click", () => OnTagClicked(tags[i] as HTMLLIElement));
-            console.log(tags[i].getAttribute('listener'));
         }
 
         // Selecting space bar if user presses '/'
@@ -336,7 +342,6 @@ SeparateTags();
     function GetInfoFromUrl() {
         const urlSearchParams = new URLSearchParams(window.location.search);
         const params = Object.fromEntries(urlSearchParams.entries());
-        console.log("Print" + window.location.search); 
         
         const urlSearchInput = params["searchText"];
         if (urlSearchInput !== undefined) {
@@ -448,7 +453,23 @@ SeparateTags();
             // console.log("IncludeTags: " + includeTags);
             // console.log("ExcludeTags: " + excludeTags);
             
-            card.style.display = ifShow ? '' : 'none';
+            // Prevent multiple "hidden" strings
+            const hideClassName = "hideCard";
+            const showClassName = "showCard";
+
+            // Is the card hidden currently (before changing)
+            const isHidden = card.classList.contains(hideClassName);
+
+            // If it should be shown but its hidden
+            if (ifShow && isHidden) {
+                card.classList.remove(hideClassName);
+                card.classList.add(showClassName);
+            }
+            // If it should be hidden but its shown
+            else if (!ifShow && !isHidden) {
+                card.classList.add(hideClassName);
+                card.classList.remove(showClassName);
+            }
         }
 
         const noResultsFound = document.getElementById("noResultsFound") as HTMLDivElement;
@@ -501,7 +522,7 @@ SeparateTags();
         const hyphenIndex = tag.id.indexOf("-");
         const tagValue = tag.id.substring(0, hyphenIndex);
 
-        // Select the other tag that the user didnt click
+        // Select the other tag that the user didn't click
         const clickedTagSummary = tag.id.includes("summary");
         const otherTag = clickedTagSummary ? 
                             document.getElementById(`${tagValue}-filter-btn`) : // If clicked tag summary, get main tag btn

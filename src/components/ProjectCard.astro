@@ -37,6 +37,11 @@ const {title, description, thumbnailPath, slug, tags} = Astro.props as Props;
 </div> 
 
 <style>
+    .card {
+        max-height: 25rem;
+        transition: transform 100ms;
+    }
+
     .projectCard {
         display: flex;
         align-items: center;
@@ -76,6 +81,60 @@ const {title, description, thumbnailPath, slug, tags} = Astro.props as Props;
     p {
         margin-top: 0;
         width: 100%;
+    }
+
+    .hideCard {
+        /* max-height: 0; */
+        /* transition: max-height 2000ms; */
+        animation: 750ms ease-out  both hideCard;
+
+        /* position: absolute; */
+    }
+
+    @keyframes hideCard {
+        from {
+            transform: translateX(0) scaleY(1);
+            max-height: 20rem;
+            opacity: 1;
+        }
+        25% {
+            opacity: 0;
+            /* transform: translateX(50%) scaleY(0); */
+        }
+        to {
+            padding: 0;
+            margin: 0;
+            max-height: 0;
+            opacity: 0;
+        }
+    }
+
+    .showCard {
+        /* max-height: 0; */
+        /* transition: max-height 2000ms; */
+        animation: 750ms ease-out  both showCard;
+
+        /* position: absolute; */
+    }
+
+    @keyframes showCard {
+        from {
+            transform: translateX(50) scaleY(0);
+            padding: 0;
+            margin: 0;
+            max-height: 0;
+            opacity: 0;
+        }
+        50% {
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0%) scaleY(1);
+            max-height: 25rem;
+            opacity: 1;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
     }
 
     @media screen and (max-width: 750px) {
