@@ -22,10 +22,10 @@ const {title, description, thumbnailPath, slug, tags} = Astro.props as Props;
 ---
 
 <div class='card' id={title}>
-        <div class="projectCard" data-tags={tags}>
-            <a href={`/${slug}`} class="thumbnail">
-                <Image src={thumbnailPath} alt={title + " thumbnail"} transition:name=`project-img-${title}`/>
-            </a>
+    <div class="projectCard" data-tags={tags}>
+        <a href={`/${slug}`} class="thumbnail">
+            <Image src={thumbnailPath} alt={title + " thumbnail"} transition:name=`project-img-${title}`/>
+        </a>
         <div class="details">
             <h2>
                 <a href={`/${slug}`}>{title}</a>

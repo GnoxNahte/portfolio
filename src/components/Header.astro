@@ -3,7 +3,7 @@
             <a href="/">Ethan Ong</a>
         <nav>
             <ul>
-                <li><a href="/" id="header-home">Home</a></li>
+                <li id="header-home"><a href="/">Home</a></li>
                 <li><a href="/projects">Projects</a></li>
                 <li><a href="/about">About</a></li>
                 <!-- <li><a href="index.html">
@@ -29,7 +29,8 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 0 20px;
+        margin-top: 0;
+        padding: 0 30px;
         max-width: 1500px;
     }
     
@@ -51,8 +52,8 @@
         text-decoration: underline;
     }
 
-    /* @media screen and (max-width: 650px) {
-    .header {
+    @media screen and (max-width: 515px) {
+    /* .header {
         height: 250px;
     }
 
@@ -67,11 +68,15 @@
         padding: 0;
         align-items: center;
         margin: 0;
-    }
+    } */
 
     #header-home {
         display: none;
-    } */
+    }
+
+    ul {
+        padding-left: 20px;
+    }
 }
 
 </style>
