@@ -58,8 +58,10 @@ const {title, description, thumbnailPath, slug, tags} = Astro.props as Props;
         width: 30%;
         min-width: 30%;
     }
+
     .projectCard .thumbnail img {
         height: unset;
+        max-height: 25rem;
         width: 100%;
         object-fit: contain;
     }
@@ -98,13 +100,11 @@ const {title, description, thumbnailPath, slug, tags} = Astro.props as Props;
 
     @keyframes hideCard {
         from {
-            transform: translateX(0%) scaleY(1);
-            max-height: 20rem;
+            max-height: 25rem;
             opacity: 1;
         }
         50% {
             opacity: 0;
-            transform: translateX(30%);
         }
         to {
             padding: 0;
@@ -124,14 +124,12 @@ const {title, description, thumbnailPath, slug, tags} = Astro.props as Props;
 
     @keyframes showCard {
         from {
-            transform: translateX(30%);
             padding: 0;
             margin: 0;
             max-height: 0;
             opacity: 0;
         }
-        50% {
-            transform: translateX(0%) scaleY(1);
+        75% {
             opacity: 1;
         }
         to {
