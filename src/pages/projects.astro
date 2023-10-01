@@ -287,6 +287,7 @@ SeparateTags();
 </style>
 
 <script>
+    import { navigate } from "astro:transitions/client";
 
     let includeTags: string[] = [];
     let excludeTags: string[] = [];
@@ -497,6 +498,11 @@ SeparateTags();
 
         let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + newUrlSearchParams.toString();
         window.history.pushState({path: newUrl}, '', newUrl);
+        // TODO: Try with Astro new navigate API? 
+        // https://astro.build/blog/astro-320/#javascript-navigation-api
+        // navigate(newUrl, {
+            // history: 'replace'
+        // });
     }
 
     // If displayValue == "", Toggle between "block" and "none"

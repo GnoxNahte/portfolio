@@ -4,10 +4,10 @@ import TagDisplay from './TagDisplay.astro';
 import { Image } from "astro:assets";
 
 export interface ZodImageProps {
-    height: number;
     src: string;
+    height: number;
     width: number;
-    format: "png" | "webp" | "jpeg" | "jpg" | "svg" | "tiff" | "gif";
+    format: "png" | "webp" | "jpeg" | "jpg" | "svg" | "tiff" | "gif" | "avif";
 }
 
 export interface Props {
@@ -57,6 +57,7 @@ const {title, description, thumbnailPath, slug, tags} = Astro.props as Props;
         height: unset;
         width: 30%;
         min-width: 30%;
+        overflow: hidden;
     }
 
     .projectCard .thumbnail img {
