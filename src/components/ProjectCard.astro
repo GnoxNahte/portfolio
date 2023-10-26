@@ -44,7 +44,8 @@ const {title, description, thumbnailPath, slug, tags} = Astro.props as Props;
         --animation-time: 1000ms;
         --animation-curve: cubic-bezier(0.15, 0.79, 0.2, 1);
         
-        max-height: var(--curr-max-height);
+        height: max-content;
+        overflow: hidden;
     }
     
     .projectCard {
@@ -53,11 +54,8 @@ const {title, description, thumbnailPath, slug, tags} = Astro.props as Props;
     }
 
     .projectCard .thumbnail {
-        display: inline-block;
-        height: unset;
         width: 30%;
         min-width: 30%;
-        overflow: hidden;
     }
 
     .projectCard .thumbnail img {
