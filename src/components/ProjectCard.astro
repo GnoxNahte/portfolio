@@ -56,12 +56,18 @@ const {title, description, thumbnailPath, slug, tags} = Astro.props as Props;
     .projectCard .thumbnail {
         width: 30%;
         min-width: 30%;
+        /* overflow: hidden; */
     }
 
     .projectCard .thumbnail img {
         height: unset;
         width: 100%;
         object-fit: contain;
+        transition: .25s;
+    }
+
+    .projectCard:hover .thumbnail img {
+        transform: scale(1.025);
     }
 
     .projectCard .details {
