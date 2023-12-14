@@ -21,7 +21,7 @@ export interface Props {
 const {title, description, thumbnailPath, slug, tags} = Astro.props as Props;
 ---
 
-<div class='card' id={title}>
+<div class="card" id={title}>
     <div class="projectCard" data-tags={tags}>
         <a href={`/${slug}`} class="thumbnail">
             <Image src={thumbnailPath} alt={title + " thumbnail"} transition:name=`project-img-${title}`/>
@@ -46,6 +46,11 @@ const {title, description, thumbnailPath, slug, tags} = Astro.props as Props;
         
         height: max-content;
         overflow: hidden;
+        transition: 0.1s;
+    }
+    
+    .card:hover {
+        outline: rgba(255,255,255,0.9) solid 2px;
     }
     
     .projectCard {
@@ -57,6 +62,7 @@ const {title, description, thumbnailPath, slug, tags} = Astro.props as Props;
         width: 30%;
         min-width: 30%;
         overflow: hidden;
+        border-radius: 10px;
     }
 
     .projectCard .thumbnail img {
