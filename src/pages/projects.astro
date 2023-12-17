@@ -437,6 +437,9 @@ SeparateTags();
                 const projectTagsRaw= project.getAttribute("data-tags") as string;
                 const projectTags = projectTagsRaw.replaceAll(" ", "").split(',');
 
+                // TODO: Include tags "OR" instead of "AND" for tags that are in the same category
+                // E.g. when select UNITY, UNREAL, SCHOOL,
+                //      (UNITY OR UNREAL) AND (SCHOOL)
                 if (
                     // If there are include tags and the project has all include tags
                     includeTags.length > 0 && !includeTags.every(tag => projectTags.includes(tag)) || 
