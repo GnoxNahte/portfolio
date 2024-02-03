@@ -9,7 +9,7 @@ export enum Tags {
     // Engine
     Tool = 0,
     Unity,
-    Unreal,
+    // Unreal,
     Astro, 
     SvelteKit,
     
@@ -23,7 +23,7 @@ export enum Tags {
     // Platform
     Platform = 200,
     Windows,
-    WebGL,
+    // WebGL,
     Website,
 
     // Status
