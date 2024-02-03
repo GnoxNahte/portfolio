@@ -12,25 +12,21 @@ import Layout from "../layouts/Layout.astro";
 			
 			<h2>Education</h2>
 			<ul>
-				<li>Game Developer. <a href="projects/">Game Projects</a></li>
-				<li>
-					<ul>
-						<li>Graduated from Game Development and Technology from NYP (Nanyang Polytechnic)</li>
-						<!-- <li>Going to SIT (Singapore Institute of Technology) after National Service</li> -->
-					</ul>
-				</li>
+				<li>Game Developer. <a href="/projects?includeTags=%5B%22201%22%5D">Game Projects</a></li>
+				<ul>
+					<li>Graduated from Game Development and Technology from NYP (Nanyang Polytechnic)</li>
+					<!-- <li>Going to SIT (Singapore Institute of Technology) after National Service</li> -->
+				</ul>
 				<!-- TODO (HIGH): Add correct link -->
-				<li>Web Developer. <a href="projects/">Web Projects</a></li>
-				<li>
-					<ul>
-						<li>Self taught during my free time</li>
-						<li>Mainly used to build this website. <a href="/portfolio-website">Blog on building process</a></li>
-					</ul>
-				</li>
+				<li>Web Developer. <a href="/projects?includeTags=%5B%22203%22%5D">Web Projects</a></li>
+				<ul>
+					<li>Self taught during my free time</li>
+					<li>Mainly used to build this website. <a href="/portfolio-website">Blog on building process</a></li>
+				</ul>
 			</ul>
 		</div>
 		<h1>Featured Projects</h1>
-		<ProjectCardFromCollection title="sentient-buffet"/>
+		<ProjectCardFromCollection title="spellbound-rollers"/>
 		<ProjectCardFromCollection title="portfolio-website"/>
 	</div>
 </Layout>
