@@ -1,6 +1,12 @@
 ---
+import ImageCarousel from "../components/ImageCarousel.astro";
 import ProjectCardFromCollection from "../components/ProjectCardFromCollection.astro";
 import Layout from "../layouts/Layout.astro";
+import testImg from "../images/EventRegistration/EventRegistration_CreateEvent.png"
+import testImg1 from "../images/EventRegistration/EventRegistration_Email.png"
+import testImg2 from "../images/EventRegistration/EventRegistration_EventDashboard.png"
+import testImg3 from "../images/EventRegistration/EventRegistration_ExcelExport.png"
+import testImg4 from "../images/EventRegistration/EventRegistration_FirebaseConsole_Users.png"
 ---
 
 <Layout title = "Home" description="Portfolio Home Page">
@@ -28,5 +34,7 @@ import Layout from "../layouts/Layout.astro";
 		<h1>Featured Projects</h1>
 		<ProjectCardFromCollection title="spellbound-rollers"/>
 		<ProjectCardFromCollection title="portfolio-website"/>
+		<ImageCarousel images={[testImg, testImg1, testImg2, testImg3, testImg4]} useThumbnailPreview={true}/>
+		<!-- <ImageCarousel images={[testImg, testImg1, testImg2]} useThumbnailPreview={true}/> -->
 	</div>
 </Layout>

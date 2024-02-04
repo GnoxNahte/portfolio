@@ -31,6 +31,7 @@ const {title, description, thumbnailPath, slug, tags} = Astro.props as Props;
                 <a href={`/${slug}`}>{title}</a>
             </h2>
             <TagDisplay tags={tags} project={title} isSmall={true}/>
+            <!-- TODO: Add date -->
             <p>{description}</p>
         </div>
     </div>

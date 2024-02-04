@@ -1,0 +1,206 @@
+---
+import Icon from 'astro-icon';
+import { Image } from 'astro:assets';
+
+export interface ZodImageProps {
+    src: string;
+    height: number;
+    width: number;
+    format: "png" | "webp" | "jpeg" | "jpg" | "svg" | "tiff" | "gif" | "avif";
+}
+
+export interface Props {
+    images: ZodImageProps[];
+    useThumbnailPreview: boolean;
+}
+
+const {images, useThumbnailPreview} = Astro.props as Props;
+
+function getRandomInt(max: number) {
+  return Math.floor(Math.random() * max);
+}
+
+// Quick fix for preventing conflicts when there's multiple carousels
+const carouselId = getRandomInt(1000);
+
+---
+
+<div class="image-carousel" id={"image-carousel-" + carouselId}>
+    <div class="carousel-content">
+        <button class="arrow">
+            <Icon name="ep:arrow-left-bold"/>
+        </button>
+        <div class="image-container">
+            {
+                images.map((image, i) => (
+                    <Image src={image} alt={image.src} id={"img-" + i + "-" + carouselId}/>
+                ))
+            }
+        </div>
+        <button class="arrow">
+            <Icon name="ep:arrow-right-bold"/>
+        </button>
+    </div>
+    <div class="indicators">
+        {
+            images.map((image, i) => (
+                <a href={"#img-" + i + "-" + carouselId}>
+                    {useThumbnailPreview &&
+                        <Image src={image} alt={image.src}/>
+                    }
+                </a>
+            ))
+        }
+    </div>
+</div>
+
+<style>
+    .image-carousel {
+        width: 100%;
+    }
+    
+    .carousel-content {
+        display: flex;
+        object-fit: contain;
+    }
+    
+    .arrow {
+        width: 50px;
+        height: 50px;
+        align-self: center;
+    }
+
+    .arrow:first-child {
+        margin-right: 10px;
+    }
+    
+    .arrow:last-child {
+        margin-left: 10px;
+    }
+
+    .image-container {
+        display: flex;
+        flex-grow: 1;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        /* Scrolls smoothly when clicking on links */
+        scroll-behavior: smooth;
+    }
+    
+    .image-container::-webkit-scrollbar {
+        display: none;
+    }
+    
+    img {
+        scroll-snap-align: center;
+        width: 100%;
+        margin: 0 10px;
+        max-height: 50rem;
+        object-fit: contain;
+        flex-shrink: 0;
+        align-self: center;
+    }
+    
+    .indicators {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+        margin-top: 15px;
+        max-height: 100px;
+    }
+
+    .indicators a {
+        opacity: 0.4;
+        transition: all 0.2s;
+    }
+    
+    .indicators a.selected {
+        opacity: 1;
+    }
+    
+    /* For indicators that uses the thumbnail preview */
+    .indicators a:has(img) {
+        object-fit: contain;
+        flex: 1 1 0;
+        align-self: center;
+        margin: 5px;
+        border: 2px solid var(--color-accent);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    
+    .indicators a img {
+        object-fit: contain;
+        max-height: 100px;
+        margin: 0;
+        padding: 0;
+        padding-top: 5px;
+    }
+    
+    /* For indicators that DOES NOT use the thumbnail preview, show dots for the user to click on */
+    .indicators a:not(:has(img)) {
+        margin: 7px;
+        background-color: var(--color-accent);
+        display: inline-block;
+        width:  15px;
+        height: 15px;
+        border-radius: 50%;
+    }
+</style>
+
+<script>
+    const carousels = document.getElementsByClassName("image-carousel");
+    let selectedElement : HTMLAnchorElement | null = null;
+
+    function SelectSlide(link: HTMLAnchorElement) {
+        selectedElement?.classList.remove("selected");
+
+        link.classList.add("selected");
+        selectedElement = link;
+    }
+
+    // TODO: Make it able to use with multiple ImageCarousels
+    for (let i = 0; i < carousels.length; i++) {
+        const carousel = carousels[i];
+
+        const links = carousel.querySelectorAll("a");
+        selectedElement = links[0];
+        selectedElement.classList.add("selected");
+
+        links.forEach((link) => {
+            link.addEventListener('click', (e) => {
+                SelectSlide(link);
+            })
+        });
+        
+        function OffsetSlide(amt: number) {
+            for (let i = 0; i < links.length; i++) {
+                if (links[i] === selectedElement)
+                {
+                    const nextIndex = (i + amt + links.length) % links.length;
+                    console.log("Prev: " + i + " | " + nextIndex);
+                    SelectSlide(links[nextIndex]);
+                    const newUrl = links[nextIndex].href;
+                    window.location.replace(links[nextIndex].href);
+                    return;
+                }
+            }
+        }
+
+        // Register buttons
+        const arrows = carousel.getElementsByClassName("arrow");
+        console.log("Arrow: "+ arrows.length);
+        arrows[0].addEventListener('click', (e) => { OffsetSlide(-1); })
+        arrows[1].addEventListener('click', (e) => { OffsetSlide(1); })
+
+        // TODO: Track scrolling for mobile. Switching computers.
+        // // Track scrolling
+        // const container = carousel.getElementsByClassName("image-container")[0];
+        // container?.addEventListener('scroll', ()=> {
+        //     const currScroll = container.scrollLeft;
+        //     console.log("SCROLL:"+currScroll);
+        // })
+    }
+
+    carousels
+</script>

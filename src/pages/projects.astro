@@ -90,6 +90,7 @@ SeparateTags();
                         <button id="clear-filter-btn">Clear Filter</button>
                     </div>
                     <div class="tag-container" id="filterTagPanel">
+                        <!-- TODO: Add sort options -->
                         {
                             // 1. Loop through each category in tagDictionary, 
                             // 2.   Display Header for category
@@ -491,7 +492,7 @@ SeparateTags();
                 // return Tags[tag as keyof typeof Tags];
             })));
 
-        let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + newUrlSearchParams.toString();
+        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + newUrlSearchParams.toString();
         window.history.pushState({path: newUrl}, '', newUrl);
         // TODO: Try with Astro new navigate API? 
         // https://astro.build/blog/astro-320/#javascript-navigation-api
