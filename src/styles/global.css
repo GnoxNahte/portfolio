@@ -1,6 +1,7 @@
 :root {
     font-size: 16px;
     font-family: sans-serif;
+    scroll-behavior: smooth;
 
     /* Colors 
         - Background & text colors are in .light and .dark classes
@@ -16,7 +17,6 @@ body {
     padding: 0;
     overflow-y: auto;
     overflow-x: clip;
-    scroll-behavior: smooth;
 }
 
 h1 {
