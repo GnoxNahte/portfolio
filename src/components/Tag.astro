@@ -63,7 +63,7 @@ const isStatusTag = tag > Tags.Status;
 ---
 <li class={tagClass + " tag " + additionalClasses} id={tag + "-" + project}>
         {ifAddLink ? 
-            <a href={"/search?" + urlSearchParams.toString()}>
+            <a href={"/projects?" + urlSearchParams.toString()}>
                 {isStatusTag && <span class={`circle status-${tagName.toLowerCase()}`}></span>}
                 {tagResult} 
             </a> 

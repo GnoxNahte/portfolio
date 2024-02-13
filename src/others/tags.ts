@@ -7,9 +7,9 @@
 //      4. CSS classes, at "Tag Colors"
 export enum Tags {
     // Engine
-    Tool = 0,
+    Software = 0,
     Unity,
-    Unreal,
+    // Unreal,
     Astro, 
     SvelteKit,
     
