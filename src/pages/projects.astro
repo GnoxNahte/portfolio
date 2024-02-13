@@ -80,15 +80,17 @@ SeparateTags();
                     <Icon name="ic:round-search" class="searchIcon"/>
                     <input id="searchInput" type="search" placeholder="Search by Title"/>
                     <button id="openFilterPanelBtn">
-                        <span>Filter</span>
                         <Icon name="ic:round-tune" class="filterIcon" />
+                        <span>Filter</span>
                     </button>
                 </div> 
                 <div class="card filterTagCard">
                     <div class="filterPanelHeader">
                         <h2>Filter Tags</h2>
+                        <button id="clear-filter-btn">Clear Filter</button>
                     </div>
                     <div class="tag-container" id="filterTagPanel">
+                        <!-- TODO: Add sort options -->
                         {
                             // 1. Loop through each category in tagDictionary, 
                             // 2.   Display Header for category
@@ -180,26 +182,14 @@ SeparateTags();
         color: var(--color-text);
         padding: 0.5rem 0.5rem 0.5rem 2rem;
     }
-
+    
     #openFilterPanelBtn {
-        margin-left: 20px;
-        background-color: var(--color-accent);
-        border-radius: 0.7rem;
-        border-color: #555555;
-        border-style: solid;
-        color: var(--color-text);
-        padding: 0.5rem;
         display: flex;
-        white-space: nowrap;
+        margin-left: 20px;
     }
 
     #openFilterPanelBtn > span {
-        margin-right: 5px;
-    }
-
-    #openFilterPanelBtn:hover {
-        cursor: pointer;
-        background-color: #111111;
+        margin-left: 3px;
     }
 
     input[type="search"]::-webkit-search-cancel-button {
@@ -303,6 +293,9 @@ SeparateTags();
 
         const filterPanelBtn = document.getElementById("openFilterPanelBtn") as HTMLButtonElement;
         filterPanelBtn.addEventListener("click", ()=> ToggleDivVisibility("filterTagCard")); 
+
+        const clearFilterBtn = document.getElementById("clear-filter-btn") as HTMLButtonElement;
+        clearFilterBtn.addEventListener("click", ()=> ClearList());
 
         const filterTagPanel = document.getElementById("filterTagPanel") as HTMLDivElement;
         const tags = filterTagPanel.getElementsByClassName("tag");
@@ -499,7 +492,7 @@ SeparateTags();
                 // return Tags[tag as keyof typeof Tags];
             })));
 
-        let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + newUrlSearchParams.toString();
+        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + newUrlSearchParams.toString();
         window.history.pushState({path: newUrl}, '', newUrl);
         // TODO: Try with Astro new navigate API? 
         // https://astro.build/blog/astro-320/#javascript-navigation-api
@@ -532,42 +525,56 @@ SeparateTags();
         const hyphenIndex = tag.id.indexOf("-");
         const tagValue = tag.id.substring(0, hyphenIndex);
 
-        // Select the other tag that the user didn't click
+        // Select the filter btn tag
         const clickedTagSummary = tag.id.includes("summary");
-        const otherTag = clickedTagSummary ? 
-                            document.getElementById(`${tagValue}-filter-btn`) : // If clicked tag summary, get main tag btn
-                            document.getElementById(`${tagValue}-filter-summary`) // If clicked main tag btn, get tag summary
-
-        function AddClassToTags(className: string) {
-            tag.classList.add(className);
-            otherTag?.classList.add(className);
-        }
-        
-        function RemoveClassToTags(className: string) {
-            tag.classList.remove(className);
-            otherTag?.classList.remove(className);
-        }
+        if (clickedTagSummary)
+            tag = document.getElementById(`${tagValue}-filter-btn`) as HTMLLIElement;
 
         // Change from includeTag to excludeTag
         if (tag.classList.contains(includeTag)) {
-            RemoveClassToTags(includeTag);
-            AddClassToTags(excludeTag); 
+            tag.classList.remove(includeTag);
+            tag.classList.add(excludeTag);
 
             includeTags.splice(includeTags.indexOf(tagValue), 1);
             excludeTags.push(tagValue);
         }
         // Change from excludeTag to unselect the whole tag
         else if (tag.classList.contains(excludeTag)) {
-            RemoveClassToTags(excludeTag);
+            tag.classList.remove(excludeTag);
             
             excludeTags.splice(excludeTags.indexOf(tagValue), 1);
         }
         // Change from not selecting the tag to includeTag
         else {
-            AddClassToTags(includeTag);
+            tag.classList.add(includeTag);
             
             includeTags.push(tagValue);
         }
+
+        UpdateSearchResults();
+    }
+
+    function ClearList() {
+        // TODO: Make it more efficient
+        // Do this way to avoid targeting the summary tags. Maybe have a separate div for tag-container-filter-panel so this only needs 1 loop
+        const tagContainers = document.getElementsByClassName("tag-container-filter-panel");
+        for (let i = 0; i < tagContainers.length; i++) {
+            // Remove include tag class
+            const includeTags = tagContainers[i].getElementsByClassName("includeTag");
+            for (let j = 0; j < includeTags.length; j++) {
+                includeTags[j].classList.remove("includeTag");
+                console.log("Tag: " + tagContainers[i].classList);
+            }
+
+            // Remove include tag class
+            const excludeTags = tagContainers[i].getElementsByClassName("excludeTag");
+            for (let j = 0; j < excludeTags.length; j++) {
+                excludeTags[j].classList.remove("excludeTag");
+            }
+        }
+
+        includeTags = [];
+        excludeTags = [];
 
         UpdateSearchResults();
     }

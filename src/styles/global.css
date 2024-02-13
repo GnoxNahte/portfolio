@@ -16,6 +16,7 @@ body {
     padding: 0;
     overflow-y: auto;
     overflow-x: clip;
+    scroll-behavior: smooth;
 }
 
 h1 {
@@ -62,6 +63,27 @@ a[target="_blank"]:not(.inlineBtn):after {
 
 div p:last-child {
     margin-bottom: 0px;
+}
+
+button {
+    background-color: var(--color-accent);
+    border-radius: 0.7rem;
+    border-color: var(--color-accent);
+    border-style: solid;
+    color: var(--color-text);
+    padding: 0.5rem;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+button:hover {
+    cursor: pointer;
+    background-color: #111;
+}
+
+button:active {
+    box-shadow: 0 0 5px 5px var(--color-accent);
+    transform: scale(1.075);
 }
 
 /* Scrollbar */
