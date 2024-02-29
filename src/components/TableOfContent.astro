@@ -41,6 +41,7 @@ function generateTableOfContent(headings: MarkdownHeading[]) {
     let currIndex = 1;
 
     buildHeadingsTree(tableOfContent, tableOfContent[0]);
+    // printTableOfContent(tableOfContent); 
     return tableOfContent;
 
     function buildHeadingsTree(prevParentHeading: HeadingWithSubheadings[], prevHeading: HeadingWithSubheadings) {
@@ -58,12 +59,12 @@ function generateTableOfContent(headings: MarkdownHeading[]) {
             }
             else if (heading.depth === prevDepth) {
                 prevParentHeading.push(heading);
-                ++currIndex
+                ++currIndex;
                 buildHeadingsTree(prevParentHeading, heading);
             }
             else if (heading.depth > prevDepth) {
                 prevHeading.subheadings.push(heading);
-                ++currIndex
+                ++currIndex;
                 buildHeadingsTree(prevHeading.subheadings, heading);
             }
         }

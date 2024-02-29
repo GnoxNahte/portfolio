@@ -85,9 +85,9 @@ function dateDiff(startDate: Date, endDate: Date) : string {
                 <div style="height: 25px;"></div> <!-- Small block to separate img and tags -->
                 <TagDisplay tags={data.tags} project={data.title}/>
                 { data.releaseDate ? 
-                    <h4>Date: <span class="date">{data.startDate.toLocaleDateString(userLocale, dateOptions)} - {data.releaseDate.toLocaleDateString(userLocale, dateOptions)} ({duration})</span></h4>
+                    <p>Date: <span class="date">{data.startDate.toLocaleDateString(userLocale, dateOptions)} - {data.releaseDate.toLocaleDateString(userLocale, dateOptions)} ({duration})</span></p>
                     :
-                    <h4>Date: <span class="date">{data.startDate.toLocaleDateString(userLocale, dateOptions)} - Ongoing</span></h4>
+                    <p>Date: <span class="date">{data.startDate.toLocaleDateString(userLocale, dateOptions)} - Ongoing</span></p>
                 }
                 <ul class="list-of-links">
                     <li>{data.projectLink != null && <a href={data.projectLink} class="inlineBtn" target="_blank">Project Link</a>}</li>

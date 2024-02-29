@@ -61,7 +61,7 @@ a[target="_blank"]:not(.inlineBtn):after {
     vertical-align: text-bottom;
 }
 
-div p:last-child {
+.card p:last-child {
     margin-bottom: 0px;
 }
 
@@ -149,6 +149,10 @@ button:active {
     margin-top: 0;
 }
 
+.card p:first-child {
+    margin-top: 0;
+}
+
 /* Other Classes */
 
 .container {
@@ -208,7 +212,8 @@ button:active {
     margin-bottom: 0px; 
 }
 
-.tag-container p {
+.tag-container.card p {
+    margin-top: 10px;
     margin-right: 10px;
 }
 .tag-container ul {

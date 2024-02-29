@@ -1,40 +1,33 @@
 ---
-import ImageCarousel from "../components/ImageCarousel.astro";
 import ProjectCardFromCollection from "../components/ProjectCardFromCollection.astro";
 import Layout from "../layouts/Layout.astro";
-import testImg from "../images/EventRegistration/EventRegistration_CreateEvent.png"
-import testImg1 from "../images/EventRegistration/EventRegistration_Email.png"
-import testImg2 from "../images/EventRegistration/EventRegistration_EventDashboard.png"
-import testImg3 from "../images/EventRegistration/EventRegistration_ExcelExport.png"
-import testImg4 from "../images/EventRegistration/EventRegistration_FirebaseConsole_Users.png"
 ---
 
 <Layout title = "Home" description="Portfolio Home Page">
 	<div class="container">
 		<h1>Intro</h1>
 		<div class="card">
-			<p>Hi I'm Ethan, a Game / Web Developer based in Singapore.</p>
+			<p>Hi I'm Ethan, a Game / Web Developer based in Singapore <img src="https://flagsapi.com/SG/flat/32.png" style="display: inline; transform: translateY(0.5em)" alt="SG Flag">.</p>
 			<p>I'm passionate both game and web development and I'm looking for new projects that interest me and can contribute to!</p>
 			
 			<h2>Education</h2>
 			<ul>
-				<li>Game Developer. <a href="/projects?includeTags=%5B%22201%22%5D">Game Projects</a></li>
-				<ul>
-					<li>Graduated from Game Development and Technology from NYP (Nanyang Polytechnic)</li>
-					<!-- <li>Going to SIT (Singapore Institute of Technology) after National Service</li> -->
-				</ul>
+				<li>Game Developer. <a href="/projects?includeTags=%5B%22201%22%5D">Game Projects</a>
+					<ul>
+						<li>Graduated from Game Development and Technology from NYP (Nanyang Polytechnic)</li>
+					</ul>
+				</li>
 				<!-- TODO (HIGH): Add correct link -->
-				<li>Web Developer. <a href="/projects?includeTags=%5B%22203%22%5D">Web Projects</a></li>
-				<ul>
-					<li>Self taught during my free time</li>
-					<li>Mainly used to build this website. <a href="/portfolio-website">Blog on building process</a></li>
-				</ul>
+				<li>Web Developer. <a href="/projects?includeTags=%5B%22203%22%5D">Web Projects</a>
+					<ul>
+						<li>Self taught during my free time</li>
+						<li>Mainly used to build this website. <a href="/portfolio-website">Blog on building process</a></li>
+					</ul>
+				</li>
 			</ul>
 		</div>
 		<h1>Featured Projects</h1>
 		<ProjectCardFromCollection title="spellbound-rollers"/>
 		<ProjectCardFromCollection title="portfolio-website"/>
-		<ImageCarousel images={[testImg, testImg1, testImg2, testImg3, testImg4]} useThumbnailPreview={true}/>
-		<!-- <ImageCarousel images={[testImg, testImg1, testImg2]} useThumbnailPreview={true}/> -->
 	</div>
 </Layout>
