@@ -17,6 +17,8 @@ if (!project)
 {project ? 
     <ProjectCard 
         title={project.data.title} 
+        startDate={project.data.startDate}
+        releaseDate={project.data.releaseDate}
         description={project.data.shortDescription} 
         thumbnailPath={project.data.thumbnailPath}
         slug={project.slug}

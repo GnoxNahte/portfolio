@@ -1,5 +1,5 @@
 ---
-import type { Tags } from '../others/tags';
+import { Tags } from '../others/tags';
 import TagDisplay from './TagDisplay.astro';
 import { Image } from "astro:assets";
 
@@ -13,12 +13,19 @@ export interface ZodImageProps {
 export interface Props {
     title: string;
     description: string;
+    startDate: Date;
+    releaseDate?: Date;
     thumbnailPath: ZodImageProps;
     slug: string;
     tags: Tags[];
 };
 
-const {title, description, thumbnailPath, slug, tags} = Astro.props as Props;
+const {title, startDate, releaseDate, description, thumbnailPath, slug, tags} = Astro.props as Props;
+
+const dateOptions: Intl.DateTimeFormatOptions = { day: "numeric", month: "long", year: "numeric" };
+// TODO (LOW): Detect the user's location using window.navigator.language
+// But need to use <script></script>?
+const userLocale="en-UK";
 ---
 
 <div class="card" id={title}>
@@ -32,6 +39,11 @@ const {title, description, thumbnailPath, slug, tags} = Astro.props as Props;
             </h2>
             <TagDisplay tags={tags} project={title} isSmall={true}/>
             <!-- TODO: Add date -->
+            {(tags.includes(Tags.Ongoing) || releaseDate === undefined) ?
+                <p>Date: <span class="date">{startDate.toLocaleDateString(userLocale, dateOptions)} - Ongoing</span></p>
+                :
+                <p>Date: <span class="date">{startDate.toLocaleDateString(userLocale, dateOptions)} - {releaseDate.toLocaleDateString(userLocale, dateOptions)}</span></p>
+            }
             <p>{description}</p>
         </div>
     </div>
@@ -99,6 +111,7 @@ const {title, description, thumbnailPath, slug, tags} = Astro.props as Props;
 
     p {
         margin-top: 0;
+        margin-bottom: 0;
         width: 100%;
     }
 
