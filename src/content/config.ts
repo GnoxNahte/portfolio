@@ -55,7 +55,7 @@ const projects = defineCollection({
                 return tagResult;
               })
             }),
-    ifShow: z.boolean().default(true),
+    isDraft: z.boolean().default(false),
   }),
 });
 

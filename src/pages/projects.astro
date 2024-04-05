@@ -8,7 +8,9 @@ import { Image } from "astro:assets";
 
 import Icon, { Sprite } from "astro-icon";
 
-const cards = await getCollection("projects");
+const cards = await getCollection("projects", ({data}) => {
+    return !data.isDraft;
+});
 
 let tagArray: Tags[] = []; // Contains all tags without the categories
 
@@ -137,7 +139,7 @@ SeparateTags();
             <div id="searchResult">
                     <h1>Projects</h1>
                     {cards.map(card => (
-                        card.data.ifShow &&
+                        // card.data.isDraft &&
                         <ProjectCard 
                             title={card.data.title} 
                             startDate={card.data.startDate!}
