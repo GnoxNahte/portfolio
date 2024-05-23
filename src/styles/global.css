@@ -23,6 +23,11 @@ h1 {
     line-height: 1.2;
     text-align: center;
 }
+h2 {
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    border-bottom: solid 2px #3c3c3ccc;
+}
 /* 
 h1 { font-size: 2rem; }
 h2 { font-size: 1.5rem; }
@@ -50,7 +55,7 @@ details summary > * {
     padding-left: 5px;
 }
 
-a[target="_blank"]:not(.inlineBtn):after {
+a[target="_blank"]:after {
     content: "";
     width: 1em;
     height: 1em;
@@ -156,7 +161,7 @@ button:active {
 /* Other Classes */
 
 .container {
-    max-width: 1500px;
+    max-width: 900px;
     margin: 30px auto;
     padding: 0 30px;
 }
@@ -182,15 +187,34 @@ button:active {
     background: var(--color-btn);
     color: var(--color-text);
     text-transform: uppercase;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     letter-spacing: 1px;
     text-align: center;
     text-decoration: none;
     transform: translateY(-0.1rem);
 }
 
+a[target="_blank"].inlineBtn:after
+ {
+    margin-left: .3rem;
+    transform: translateY(-1.5px);
+    filter: brightness(1000%);
+}
+
 .date {
     font-style: italic;
+}
+
+/* YouTube Embed */
+iframe {
+    width: 100%;
+    min-width: 300px;
+    max-width: 50%;
+
+    display: block;
+    margin: 0 auto;
+
+    aspect-ratio: 16/9;
 }
 
 /* Tags */

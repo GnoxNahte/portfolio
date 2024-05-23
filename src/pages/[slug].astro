@@ -77,36 +77,60 @@ function dateDiff(startDate: Date, endDate: Date) : string {
 
 <Layout title={data.title} description={data.shortDescription}>
     <article>
-        <div class="container">
-            <div class="card">
-                <h1>{data.title}</h1>
-                <Image src={data.thumbnailPath} alt={data.title + " thumbnail"} transition:name=`project-img-${data.title}`/>
-                <!-- TODO: display Tags and any other metadata beside the Image. Currently the thumbnail image has a lot of empty space on the sides. -->
-                <div style="height: 25px;"></div> <!-- Small block to separate img and tags -->
-                <TagDisplay tags={data.tags} project={data.title}/>
-                { data.releaseDate ? 
-                    <p>Date: <span class="date">{data.startDate.toLocaleDateString(userLocale, dateOptions)} - {data.releaseDate.toLocaleDateString(userLocale, dateOptions)} ({duration})</span></p>
-                    :
-                    <p>Date: <span class="date">{data.startDate.toLocaleDateString(userLocale, dateOptions)} - Ongoing</span></p>
-                }
-                <ul class="list-of-links">
-                    <li>{data.projectLink != null && <a href={data.projectLink} class="inlineBtn" target="_blank">Project Link</a>}</li>
-                    <li>{data.githubLink != null && <a href={data.githubLink} class="inlineBtn" target="_blank">GitHub Link</a>}</li>
-                </ul>
-                
-                <h2>Description</h2>
-                <p>{data.shortDescription}</p>
-                <TableOfContent headings={headings}/>
-                <hr>
-                <div class="markdown">
-                    <Content />
+        <div class="layout-container">
+            <div class="filler"></div>
+            <div class="container">
+                <div class="card">
+                    <h1>{data.title}</h1>
+                    <Image src={data.thumbnailPath} alt={data.title + " thumbnail"} transition:name=`project-img-${data.title}`/>
+                    <!-- TODO: display Tags and any other metadata beside the Image. Currently the thumbnail image has a lot of empty space on the sides. -->
+                    <div style="height: 25px;"></div> <!-- Small block to separate img and tags -->
+                    <TagDisplay tags={data.tags} project={data.title}/>
+                    { data.releaseDate ? 
+                        <p>Date: <span class="date">{data.startDate.toLocaleDateString(userLocale, dateOptions)} - {data.releaseDate.toLocaleDateString(userLocale, dateOptions)} ({duration})</span></p>
+                        :
+                        <p>Date: <span class="date">{data.startDate.toLocaleDateString(userLocale, dateOptions)} - Ongoing</span></p>
+                    }
+                    <ul class="list-of-links">
+                        <li>{data.projectLink != null && <a href={data.projectLink} class="inlineBtn" target="_blank">Project Link</a>}</li>
+                        <li>{data.githubLink != null && <a href={data.githubLink} class="inlineBtn" target="_blank">GitHub Link</a>}</li>
+                    </ul>
+                    
+                    <!-- <h2>Description</h2>
+                    <p>{data.shortDescription}</p> -->
+                    <!-- <hr> -->
+                    <div class="markdown">
+                        <Content />
+                    </div>
                 </div>
             </div>
+            <TableOfContent headings={headings} class:list={"test"}/>
         </div>
     </article>
 </Layout>
 
 <style>
+    .filler {
+        background-color: red;
+        /* position: relative; */
+        width: max(250px, calc(100vw - 100000px));
+    }
+    .layout-container {
+        display: grid;
+        gap: 0px;
+        display: flex;
+        justify-content: center;
+        margin: 50px auto;
+        padding: 0px 30px;
+        max-width: 1500px;
+        
+        flex-direction: row;
+    }
+
+    .container {
+        margin: 0;
+    }
+
     .list-of-links {
         list-style: none;
         padding: 0;

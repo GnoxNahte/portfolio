@@ -24,7 +24,7 @@ export enum Tags {
     // Platform
     Platform = 200,
     Windows,
-    // WebGL,
+    WebGL,
     Website,
 
     // Status

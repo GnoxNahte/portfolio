@@ -1,6 +1,8 @@
 ---
 import type { MarkdownHeading } from 'astro'
 import TableOfContentElements from './TableOfContentElements.astro';
+import Image from 'astro/components/Image.astro';
+import leftArrowSVG from "../images/General/tab.svg"
 
 export interface Props {
     headings: MarkdownHeading[];
@@ -83,11 +85,82 @@ function generateTableOfContent(headings: MarkdownHeading[]) {
 
 ---
 
-<details open>
-    <summary><h2>Table of Content</h2></summary>
-    <!-- {headings.map(heading => <a href={`#${heading.text.toLowerCase().replaceAll(" ", "-")}`}>{heading.text}</a> )} -->
-    <!-- {tableOfContent && GenerateTableOfContentHTML(tableOfContent)} -->
-    <!-- {test()} -->
+<div class="table-of-content-wrapper">
+    <div class="table-of-content-container">
+        <div class="table-of-content">
+            <Image src={leftArrowSVG} alt="test" width="25" height="25" class:list={"expand-toc-arrow"}></Image>
+            <h2>Table of Contents</h2>
+            {tableOfContent && <TableOfContentElements headings={tableOfContent}/>}
+        </div>
+    </div>
+</div>
     
-    {tableOfContent && <TableOfContentElements headings={tableOfContent}/>}
-</details>
+<style>
+    .table-of-content-wrapper {
+        /* position: relative; */
+        min-width: 250px;
+        max-width: 275px;
+    }
+
+    .table-of-content-container {
+        position: absolute;
+        height: 100vh;
+        /* position: relative; */
+        /* left: 0%; */
+        transition: all 0.5s;
+    }
+    
+    .table-of-content {
+        position: sticky;
+        top: 25px;
+        
+        padding: 15px 20px 10px;
+        border-radius: 10px;
+        height: fit-content;
+        background-color: var(--color-secondary);
+    }
+
+    .table-of-content h2 {
+        margin: 0;
+        padding: 0;
+        border-bottom: none;
+    }
+    
+    .table-of-content ul {
+        margin: 0;
+        padding: 0;
+    }
+
+    .expand-toc-arrow {
+        display: none;
+    }
+
+    @media screen and (max-width: 1200px) {
+        .table-of-content-wrapper {
+            min-width: 30px;
+            width: 30px;
+        }
+
+        .table-of-content-container {
+            transform: translateX(calc(100% + 10px));
+        }
+        
+        .table-of-content-container:hover {
+            transform: translateX(35px);
+        }
+
+        .table-of-content {
+            overflow: visible;
+        }
+
+        .expand-toc-arrow {
+            display: block;
+            position: absolute;
+            transform: translate(-40px, 1.25rem);
+        }
+    }
+</style>
+
+<script>
+    
+</script>
