@@ -110,10 +110,12 @@ function dateDiff(startDate: Date, endDate: Date) : string {
 </Layout>
 
 <style>
+    /* To "counter-act table of content and make the main content center" */
     .filler {
-        background-color: red;
-        /* position: relative; */
-        width: max(250px, calc(100vw - 100000px));
+        max-width: 250px;
+        /* TODO: Set a max-width variable and change this hardcoded value (1500px) */
+        width: calc(100vw - 1500px);
+        /* width: max(250px, ); */
     }
     .layout-container {
         display: grid;
