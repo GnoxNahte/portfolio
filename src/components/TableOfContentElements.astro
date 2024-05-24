@@ -1,0 +1,56 @@
+---
+// NOTE: Seperate this file with TableOfContent so that this file can reference it self when there are subheadings.
+// In line 18, it shows Astro.self and inserts any subheadings (if there are any)
+// So don't try to combine it with TableOfContent
+import type { HeadingWithSubheadings } from './TableOfContent.astro';
+
+export interface Props {
+    headings: HeadingWithSubheadings[];
+}
+
+const { headings } = Astro.props as Props;
+---
+
+<ul>
+    {headings.map(heading => {
+        return (
+            <li>
+                <span><a href={`#${heading.text.toLowerCase().replaceAll(" ", "-")}`}>{heading.text}</a></span>
+                {heading.subheadings.length > 0 && <Astro.self headings={heading.subheadings} />}
+            </li>
+        );
+    })}
+</ul> 
+
+<style>
+    ul {
+        margin-top: 8px;
+        padding: 0;
+        list-style: none;
+    }
+
+    ul ul {
+        margin-top: 0;
+        padding-left: 30px;
+    }
+    
+    li span {
+        padding-left: 0.5em;
+    }
+
+    li a {
+        text-decoration: none;
+        display: inline-block;
+        width: 100%;
+    }
+
+    li span {
+        display: inline-block;
+        width: 100%;
+    }
+
+    li span:hover {
+        background-color: var(--color-accent);
+        border-radius: 5px;
+    }
+</style>

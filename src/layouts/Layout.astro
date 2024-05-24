@@ -1,33 +1,49 @@
 ---
+import { ViewTransitions } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import '../styles/global.css';
+// import { Sprite } from 'astro-icon';
 
 export interface Props {
     title: string;
+    description: string;
     darkMode?: boolean;
 }
 
-const { title, darkMode = true} = Astro.props as Props;
+const { title, description, darkMode = true} = Astro.props as Props;
 
 ---
+
+<!-- 
+    Hello Fellow Developer!
+
+    If you have any suggestions for improvements, I'd love your feedback.
+
+    Also, if you're impressed by my work and are considering me for a project, feel free to reach out.  
+    I'm always on the lookout for interesting and reasonably priced projects, especially if my schedule allows.
+
+    You can contact me at:
+    Email: gnoxnahte.dev@gmail.com
+    Twitter: https://twitter.com/GnoxNahteDev
+    GitHub: https://github.com/GnoxNahte
+    LinkedIn (Profile in progress): https://www.linkedin.com/in/ethanongsg/
+ -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/1bcb5fedf2.js" crossorigin="anonymous"></script>    
+    <meta name="description" content={description} />
     <!-- <link rel="stylesheet" href="style.css" /> -->
     <title>{title}</title>
+    <ViewTransitions />
 </head>
 <body class = {darkMode ? 'dark' : 'light'}>
     <Header/>
-    <slot/> 
+    <!-- <Sprite.Provider>  For astro-icon package: https://github.com/natemoo-re/astro-icon#usage -->
+        <slot/> 
+    <!-- </Sprite.Provider> -->
 </body>
 </html>
 

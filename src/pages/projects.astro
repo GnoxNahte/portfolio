@@ -1,26 +1,591 @@
 ---
-import Layout from "../layouts/Layout.astro";
-
-import ProjectCard from "../components/ProjectCard.astro";
 import { getCollection } from "astro:content";
+import ProjectCard from "../components/ProjectCard.astro";
+import Tag, { GetTagTypeClass, PascalCaseToSpaceSeparated } from "../components/Tag.astro";
+import Layout from "../layouts/Layout.astro";
+import { Tags } from "../others/tags";
+import { Image } from "astro:assets";
 
-const cards = await getCollection("projects");
+import Icon, { Sprite } from "astro-icon";
+
+const cards = await getCollection("projects", ({data}) => {
+    return !data.isDraft;
+});
+
+let tagArray: Tags[] = []; // Contains all tags without the categories
+
+// Key - Every 100th element in the enum is the title of the category
+// Value - Array of all elements in the category
+let tagDictionary: { [key: string]: Array<Tags> } = {}
+
+// Separate Tags into their different categories
+// Example:
+//      Input:
+//      enum Tags {
+//          // Engine
+//          Engine = 0,
+//          Unity,
+//          Unreal,
+//          Astro, 
+
+//          // Project Type
+//          ProjectType = 100,
+//          School,
+//          GameJam,
+//          Personal,
+//          Client,
+
+//          // Platform
+//          Platform = 200,
+//          Windows,
+//          WebGL,
+//          Website,
+//      }
+//      Output:
+//      {
+//        Engine: [ 'Unity', 'Unreal', 'Astro' ],
+//        ProjectType: [ 'School', 'GameJam', 'Personal', 'Client' ],
+//        Platform: [ 'Windows', 'WebGL', 'Website' ]
+//      }
+function SeparateTags()
+{
+    const enumValues = Object.keys(Tags).filter(key => isNaN(Number(key)));
+    for (let i = 0; i < enumValues.length; ++i)
+    {
+        const value = Tags[enumValues[i] as keyof typeof Tags];
+        // If new category,
+        if (value % 100 == 0) {
+            tagDictionary[Tags[value]] = [];
+        }
+        // Else, add the enum value to the category
+        // Key - Every 100th element in the enum is the title of the category
+        // Value - Array of all elements in the category
+        else {
+            // Divide the value by 100, round it, * 100, to get the category
+            const category = (Math.floor(value / 100) * 100) as Tags;
+            tagDictionary[Tags[category]].push(value);
+            // Add all non-category tags
+            tagArray.push(value);
+        }
+    }
+}
+
+SeparateTags();
+
 ---
 
-<Layout title = "Projects">
-	<h1>Projects</h1>
+<Layout title = "Projects" description="Portfolio Projects">
     <section>
-        <div class="container">
-            {cards.map(card => (
-                card.data.ifShow &&
-                <ProjectCard 
-                    title={card.data.title} 
-                    description={card.data.shortDescription} 
-                    thumbnailPath={card.data.thumbnailPath}
-                    slug={card.slug}
-                    tags={card.data.tags}
-                />
-            ))}
-        </div> 
+        <div class="layout-container">
+            <div class="filterPanel">
+                <div class="searchBar card">
+                    <Icon name="ic:round-search" class="searchIcon"/>
+                    <input id="searchInput" type="search" placeholder="Search by Title"/>
+                    <button id="openFilterPanelBtn">
+                        <Icon name="ic:round-tune" class="filterIcon" />
+                        <span>Filter</span>
+                    </button>
+                </div> 
+                <div class="card filterTagCard">
+                    <div class="filterPanelHeader">
+                        <h2>Filter Tags</h2>
+                        <button id="clear-filter-btn">Clear Filter</button>
+                    </div>
+                    <div class="tag-container" id="filterTagPanel">
+                        <!-- TODO: Add sort options -->
+                        {
+                            // 1. Loop through each category in tagDictionary, 
+                            // 2.   Display Header for category
+                            // 3.   Loop through each tag in category
+                            // 4.       Display the tag
+                            Object.keys(tagDictionary).map((category) => {
+                                const categoryValue = Tags[category as keyof typeof Tags];
+                                
+                                return ( 
+                                    <div class="tag-container-filter-panel">
+                                        <h3 class={GetTagTypeClass(categoryValue)}>{PascalCaseToSpaceSeparated(category)}</h3> 
+                                        <ul>
+                                            {
+                                                tagDictionary[category].map((tag) => {
+                                                    return <Tag tag={tag} project="filter-btn" ifAddLink={false}/>
+                                                })
+                                            }
+                                        </ul>
+                                    </div>
+                                )})
+                        }
+                        
+                        <div id="includeTagSummary" style="display: none;">
+                            <h2>Include Tags: </h2>
+                            <ul>
+                                <!-- Toggle Visibility in <script> -->
+                                    {
+                                        tagArray.map((tag) => <Tag tag={tag} project="filter-summary" ifAddLink={false} additionalClasses={"includeTag"}/>)
+                                    }
+                            </ul>
+                        </div>
+                        <div id="excludeTagSummary" style="display: none;">
+                            <h2>Exclude Tags: </h2>
+                            <ul>
+                                <!-- Toggle Visibility in <script> -->
+                                {
+                                    tagArray.map((tag) => <Tag tag={tag} project="filter-summary" ifAddLink={false} additionalClasses={"excludeTag"}/>)
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="searchResult">
+                    <h1>Projects</h1>
+                    {cards.map(card => (
+                        // card.data.isDraft &&
+                        <ProjectCard 
+                            title={card.data.title} 
+                            startDate={card.data.startDate!}
+                            releaseDate={card.data.releaseDate}
+                            description={card.data.shortDescription} 
+                            thumbnailPath={card.data.thumbnailPath}
+                            slug={card.slug}
+                            tags={card.data.tags}
+                        />
+                    ))}
+                    <div class="card" id="noResultsFound">
+                        <h2>No Results Found</h2>
+                        <p>If the page should be here or want any projects with that specifications, please <a href="/about#contact">contact me</a></p>
+                    </div>
+            </div>
+        </div>
     </section>
-</Layout>   
+</Layout>
+
+<style>
+    .layout-container {
+        display: flex;
+        gap: 30px;
+        display: flex;
+        justify-content: center;
+        margin: 50px auto;
+        padding: 0px 30px;
+        max-width: 1500px;
+        
+        flex-direction: column;
+    }
+
+    .searchBar {
+        display: flex;
+        position: relative;
+    }
+
+    .searchBar input {
+        width: 100% ;
+        background-color: var(--color-background);
+        border-radius: 0.7rem;
+        border-color: #555555;
+        border-style: solid;
+        color: var(--color-text);
+        padding: 0.5rem 0.5rem 0.5rem 2rem;
+    }
+    
+    #openFilterPanelBtn {
+        display: flex;
+        margin-left: 20px;
+    }
+
+    #openFilterPanelBtn > span {
+        margin-left: 3px;
+    }
+
+    input[type="search"]::-webkit-search-cancel-button {
+        -webkit-appearance: none;
+        height: 1em;
+        width: 1em;
+        border-radius: 50%;
+        /* TODO: Change to google icon */
+        background: url(https://pro.fontawesome.com/releases/v5.10.0/svgs/solid/times-circle.svg) no-repeat 50% 50%;
+        background-size: contain;
+        background-color: white;
+    }
+
+    .filterIcon {
+        height: 1rem;
+        width: 1rem;
+    }
+
+    .searchIcon {
+        position: absolute;
+        height: 1.25rem;
+        width: 1.25rem;
+        z-index: 1;
+        top: 2rem;
+        left: 2.1rem;
+    }
+    
+    .filterPanel h2 {
+        display:inline;
+        margin: 0;
+    }
+
+    .filterPanel > div:last-child {
+        margin-bottom: 0;
+    }
+
+    .filterPanelHeader {
+        display: flex;
+        justify-content:space-between;
+        align-items: center;
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    .tag-container h3 {
+        padding: 5px 15px;
+        margin: 0;
+        border-radius: 50rem;
+    }
+
+    .tag-container-filter-panel ul {
+        margin: 10px 0px;
+    }
+
+    #searchResult h1 {
+        margin-top: 0;
+        margin-bottom: 50px;
+        font-size: 3rem;
+    }
+
+    #searchResult {
+        display: flex;
+        flex-direction: column;
+    }
+
+    @media screen and (min-width: 1250px) {
+        .layout-container {
+            flex-direction: row;
+        }
+        
+        .filterPanel {
+            height: 100vh;
+            position: -webkit-sticky;
+            position: sticky;
+            top: 30px;
+            min-width: 22.5rem;
+            overflow-y: auto;  /* Add vertical scroll when needed */
+        }
+
+        #openFilterPanelBtn {
+            display: none;
+        }
+    }
+
+</style>
+
+<script>
+    import { navigate } from "astro:transitions/client";
+
+    let includeTags: string[] = [];
+    let excludeTags: string[] = [];
+    
+    let searchText = "";
+
+    function Init() {
+        console.log("Init...");
+
+        // ===== Registering event listeners =====
+        const searchInput = document.getElementById("searchInput") as HTMLInputElement;
+        searchInput.addEventListener("input", OnSearchInputChanged); // Test
+
+        const filterPanelBtn = document.getElementById("openFilterPanelBtn") as HTMLButtonElement;
+        filterPanelBtn.addEventListener("click", ()=> ToggleDivVisibility("filterTagCard")); 
+
+        const clearFilterBtn = document.getElementById("clear-filter-btn") as HTMLButtonElement;
+        clearFilterBtn.addEventListener("click", ()=> ClearList());
+
+        const filterTagPanel = document.getElementById("filterTagPanel") as HTMLDivElement;
+        const tags = filterTagPanel.getElementsByClassName("tag");
+        for (let i = 0; i < tags.length; i++) {
+            tags[i].addEventListener("click", () => OnTagClicked(tags[i] as HTMLLIElement));
+        }
+
+        // Selecting space bar if user presses '/'
+        document.addEventListener('keydown', (event) => {
+            if (event.key == '/') {
+                searchInput.focus();
+                event.preventDefault();
+            }
+        });
+
+        // ===== Calling other functions =====
+        UpdateSearchResultsFromURL();
+    }
+
+    function UpdateSearchResultsFromURL() {
+        console.log("Update from url");
+        GetInfoFromUrl();
+        
+        const searchInput = document.getElementById("searchInput") as HTMLInputElement;
+        searchInput.value = searchText;
+        
+        UpdateMainTagsVisibility();
+        UpdateSearchResults();
+    }
+    
+    function UpdateSearchResults() {
+        UpdateTagSummaryVisibility("includeTagSummary", includeTags);
+        UpdateTagSummaryVisibility("excludeTagSummary", excludeTags);
+        UpdateProjectCardsVisibility();
+        
+        UpdateUrl();
+    }
+
+    function GetInfoFromUrl() {
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        
+        const urlSearchInput = params["searchText"];
+        if (urlSearchInput !== undefined) {
+            searchText = urlSearchInput;
+        }
+        
+        const urlIncludeTags = params["includeTags"];
+        if (urlIncludeTags !== undefined)
+            includeTags = JSON.parse(urlIncludeTags);
+        else
+            includeTags = []; // Reset if it never fully load
+
+        const urlExcludeTags = params["excludeTags"];
+        if (urlExcludeTags !== undefined)
+            excludeTags = JSON.parse(urlExcludeTags);
+        else
+            excludeTags = []; // Reset if it never fully load
+    }
+
+    function UpdateMainTagsVisibility() {
+        // Tags on main filter panel
+        includeTags.forEach(tagID => {
+            const tagElement = document.getElementById(tagID + "-filter-btn");
+            if (tagElement != null) {
+                tagElement.classList.add("includeTag");
+            } else {
+                console.error("Cannot find: [" + tagID + "-filter-btn]");
+            }
+        });
+        
+        excludeTags.forEach(tagID => {
+            const tagElement = document.getElementById(tagID + "-filter-btn");
+            if (tagElement != null) {
+                tagElement.classList.add("excludeTag");
+            } else {
+                console.error("Cannot find: [" + tagID + "-filter-btn]");
+            }
+        });
+
+        // console.log(`Include Tags: ${includeTags}\nExclude Tags: ${excludeTags}`);
+    }
+
+    function OnSearchInputChanged() {
+        const searchInput = document.getElementById("searchInput") as HTMLInputElement;
+        searchText = searchInput.value.toUpperCase();
+        UpdateSearchResults();
+    }
+
+    // Tag Summary (Exclude and Include part)
+    function UpdateTagSummaryVisibility(tagSummaryID: string, tagArray: string[]) {
+        const tagSummary = document.getElementById(tagSummaryID) as HTMLUListElement;
+
+        if (tagArray.length === 0) {
+            tagSummary.style.display = 'none';
+            return;
+        }
+        else {
+            tagSummary.style.display = "";
+        }
+        
+        const tagSummaryList = tagSummary.getElementsByTagName("ul")[0];
+        for (let i = 0; i < tagSummaryList.childElementCount; ++i) {
+            const listItem = tagSummaryList.children.item(i) as HTMLLIElement;
+            // Remove any characters after "-"
+            const tagName = listItem.id.split("-")[0];
+            listItem.style.display = tagArray.includes(tagName) ? '' : 'none';
+        }
+    }
+
+    function UpdateProjectCardsVisibility() {
+        // If has at least 1 project
+        let hasProject = false;
+
+        const searchResultContainer = document.getElementById("searchResult");
+        if (searchResultContainer === null) {
+            console.error("Can't find searchResult");
+            return;
+        }
+        const searchResults = searchResultContainer.getElementsByClassName("projectCard");
+
+        // Loop through all project cards list items, and hide those who don't match the search query
+        for (let i = 0; i < searchResults.length; ++i) {
+            const project = searchResults[i] as HTMLDivElement;
+            const card = project.parentElement as HTMLDivElement;
+            let ifShow = true;
+            // If doesn't include the search text
+            if (!card.id.toUpperCase().includes(searchText))
+                ifShow = false;
+            // Check the tags
+            else {
+                const projectTagsRaw= project.getAttribute("data-tags") as string;
+                const projectTags = projectTagsRaw.replaceAll(" ", "").split(',');
+
+                // TODO: Include tags "OR" instead of "AND" for tags that are in the same category
+                // E.g. when select UNITY, UNREAL, SCHOOL,
+                //      (UNITY OR UNREAL) AND (SCHOOL)
+                if (
+                    // If there are include tags and the project has all include tags
+                    includeTags.length > 0 && !includeTags.every(tag => projectTags.includes(tag)) || 
+                    // If there are exclude tags and the project doesn't have any exclude tags
+                    excludeTags.length > 0 && excludeTags.some(tag => projectTags.includes(tag)))
+                    ifShow = false;
+                else {
+                    ifShow = true;
+                    hasProject = true;
+                }
+            }
+
+            // // For debugging:
+            // console.log("================================")
+            // console.log("projectTags: ?" + projectTags);
+            // console.log("IncludeTags: " + includeTags);
+            // console.log("ExcludeTags: " + excludeTags);
+            
+            // Prevent multiple "hidden" strings
+            const hideClassName = "hideCard";
+            const showClassName = "showCard";
+
+            // Is the card hidden currently (before changing)
+            const isHidden = card.classList.contains(hideClassName);
+
+            // If it should be shown but its hidden
+            if (ifShow && isHidden) {
+                card.classList.remove(hideClassName);
+                card.classList.add(showClassName);
+            }
+            // If it should be hidden but its shown
+            else if (!ifShow && !isHidden) {
+                card.classList.add(hideClassName);
+                card.classList.remove(showClassName);
+            }
+        }
+
+        const noResultsFound = document.getElementById("noResultsFound") as HTMLDivElement;
+        noResultsFound.style.display = hasProject ? 'none' : '';
+    }
+
+    function UpdateUrl() {
+        const searchInput = document.getElementById("searchInput") as HTMLInputElement;
+        const newUrlSearchParams = new URLSearchParams();
+        if (searchInput.value !== "") 
+            newUrlSearchParams.append("searchText", searchInput.value);
+        
+        if (includeTags.length > 0)
+            newUrlSearchParams.append("includeTags", JSON.stringify(includeTags.map((tag)=> {
+                return tag;
+                // return Tags[tag as keyof typeof Tags];
+            })));
+
+        if (excludeTags.length > 0)
+            newUrlSearchParams.append("excludeTags", JSON.stringify(excludeTags.map((tag)=> {
+                return tag;
+                // return Tags[tag as keyof typeof Tags];
+            })));
+
+        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + newUrlSearchParams.toString();
+        window.history.pushState({path: newUrl}, '', newUrl);
+        // TODO: Try with Astro new navigate API? 
+        // https://astro.build/blog/astro-320/#javascript-navigation-api
+        // navigate(newUrl, {
+            // history: 'replace'
+        // });
+    }
+
+    // If displayValue == "", Toggle between "block" and "none"
+    // Else style.display = displayValue
+    function ToggleDivVisibility(className: string, displayValue ="")
+    {
+        const divElement = document.getElementsByClassName(className)[0] as HTMLDivElement;
+        if (displayValue === "") {
+            const currDisplay = divElement.style.display;
+            divElement.style.display = currDisplay === "none" ? "block" : "none";
+        }
+        else {
+            divElement.style.display = displayValue;
+        }
+    }
+
+    // ========== Tags ==========
+
+    function OnTagClicked(tag: HTMLLIElement) {
+        const includeTag = "includeTag";
+        const excludeTag = "excludeTag";
+        console.log("Tag clicked");
+
+        const hyphenIndex = tag.id.indexOf("-");
+        const tagValue = tag.id.substring(0, hyphenIndex);
+
+        // Select the filter btn tag
+        const clickedTagSummary = tag.id.includes("summary");
+        if (clickedTagSummary)
+            tag = document.getElementById(`${tagValue}-filter-btn`) as HTMLLIElement;
+
+        // Change from includeTag to excludeTag
+        if (tag.classList.contains(includeTag)) {
+            tag.classList.remove(includeTag);
+            tag.classList.add(excludeTag);
+
+            includeTags.splice(includeTags.indexOf(tagValue), 1);
+            excludeTags.push(tagValue);
+        }
+        // Change from excludeTag to unselect the whole tag
+        else if (tag.classList.contains(excludeTag)) {
+            tag.classList.remove(excludeTag);
+            
+            excludeTags.splice(excludeTags.indexOf(tagValue), 1);
+        }
+        // Change from not selecting the tag to includeTag
+        else {
+            tag.classList.add(includeTag);
+            
+            includeTags.push(tagValue);
+        }
+
+        UpdateSearchResults();
+    }
+
+    function ClearList() {
+        // TODO: Make it more efficient
+        // Do this way to avoid targeting the summary tags. Maybe have a separate div for tag-container-filter-panel so this only needs 1 loop
+        const tagContainers = document.getElementsByClassName("tag-container-filter-panel");
+        for (let i = 0; i < tagContainers.length; i++) {
+            // Remove include tag class
+            const includeTags = tagContainers[i].getElementsByClassName("includeTag");
+            for (let j = 0; j < includeTags.length; j++) {
+                includeTags[j].classList.remove("includeTag");
+                console.log("Tag: " + tagContainers[i].classList);
+            }
+
+            // Remove include tag class
+            const excludeTags = tagContainers[i].getElementsByClassName("excludeTag");
+            for (let j = 0; j < excludeTags.length; j++) {
+                excludeTags[j].classList.remove("excludeTag");
+            }
+        }
+
+        includeTags = [];
+        excludeTags = [];
+
+        UpdateSearchResults();
+    }
+    
+    // ========== Initialise this page ==========
+
+    // Init();
+    document.addEventListener('astro:page-load', Init);
+    
+</script>

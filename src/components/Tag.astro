@@ -5,9 +5,10 @@ export interface Props {
     tag: Tags,
     project: string, // To prevent duplicate ids
     ifAddLink?: boolean,
+    additionalClasses?: string,
 }
 
-const {tag, project, ifAddLink = true} = Astro.props as Props;
+const {tag, project, ifAddLink = true, additionalClasses=""} = Astro.props as Props;
 
 // Gets the CSS Tag class type
 // Example:
@@ -21,10 +22,10 @@ export function GetTagTypeClass(tag?: Tags, project?: string): string
     }
     
     if (tag % 100 == 0 && project!==undefined)
-        console.error("ERROR: Tag is the catergory name");
+        console.error("ERROR: Tag is the category name");
 
     // Round down to nearest 100 (e.g. 123 => 100, 564 => 500)
-    // Then get the catergory of the tag, e.g. ProjectType
+    // Then get the category of the tag, e.g. ProjectType
     const category = Tags[Math.floor(tag / 100) * 100]
 
     if (category === undefined)
@@ -41,38 +42,67 @@ export function GetTagTypeClass(tag?: Tags, project?: string): string
     return category.replace(/(?<!^)(?<![A-Z])[A-Z]/g, "-$&").toLowerCase() + "-tag";
 }
 
-export function PascalCaseToSpaceSeperated(input: string): string {
+export function PascalCaseToSpaceSeparated(input: string): string {
     return input.replace(/(?<![A-Z])([A-Z])/g, " $1");
 }
 
-
+const tagName = Tags[tag];
 const tagClass = GetTagTypeClass(tag, project);
-const tagResult = PascalCaseToSpaceSeperated(Tags[tag]) + (tagClass == "unknownTag" ? " - Unknown Tag, Report Pls" : "");
+const tagResult = PascalCaseToSpaceSeparated(tagName) + (tagClass == "unknownTag" ? " - Unknown Tag, Report Pls" : "");
 
 const urlSearchParams = new URLSearchParams();
-urlSearchParams.append("includeTags", JSON.stringify([ tag ]));
+urlSearchParams.append("includeTags", JSON.stringify([ tag.toString() ]));
+
+const isStatusTag = tag > Tags.Status;
 
 // - Explanation of tag.replace(/(?<![A-Z])([A-Z])/g, " $1"):
-//   Regex - Search for any uppercase letters but exclude it if the previous character is an uppercase (Exclude abbrevations, e.g. WebGL)
+//   Regex - Search for any uppercase letters but exclude it if the previous character is an uppercase (Exclude abbreviations, e.g. WebGL)
 //   Changes "pascal case" to "spaced separated" string
 //   E.g. PascalCaseExample -> Pascal Case Example
 // - If the tag class is unknown, add a phrase to tell the user to report
 ---
-<li class={tagClass + " tag"} id={tag + "-" + project}>
-    <i class="fa-solid fa-plus"></i>
-    <i class="fa-solid fa-minus"></i>
+<li class={tagClass + " tag " + additionalClasses} id={tag + "-" + project}>
         {ifAddLink ? 
-            <a href={"/search?" + urlSearchParams.toString()}>{tagResult}</a> :
-            <span>{tagResult}</span>
-            }
+            <a href={"/projects?" + urlSearchParams.toString()}>
+                {isStatusTag && <span class={`circle status-${tagName.toLowerCase()}`}></span>}
+                {tagResult} 
+            </a> 
+            :
+            <span>
+                {isStatusTag && <span class={`circle status-${tagName.toLowerCase()}`}></span>}
+                {tagResult}
+            </span>
+        }
 </li>
 
 <style>
-    .tag a {
+    .tag a, .tag > span {
         color: inherit;
         text-decoration: none;
-     display: block;
-     width: 100%;
-     height: 100%;
+        /* display: block;
+        width: 100%;
+        height: 100%; */
+        user-select: none;
     }
+    
+    .circle {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+    }
+
+    .status-ongoing {
+        background-color: #04d000;
+    }
+    .status-completed {
+        background-color: #00c9f4;
+    }
+    .status-onhold {
+        background-color: orange;
+    }
+    .status-dropped {
+        background-color: red;
+    }
+    
 </style>

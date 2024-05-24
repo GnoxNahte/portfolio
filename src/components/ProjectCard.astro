@@ -1,23 +1,185 @@
 ---
-import type { Tags } from '../others/tags';
+import { Tags } from '../others/tags';
 import TagDisplay from './TagDisplay.astro';
+import { Image } from "astro:assets";
+
+export interface ZodImageProps {
+    src: string;
+    height: number;
+    width: number;
+    format: "png" | "webp" | "jpeg" | "jpg" | "svg" | "tiff" | "gif" | "avif";
+}
 
 export interface Props {
     title: string;
     description: string;
-    thumbnailPath?: string;
+    startDate: Date;
+    releaseDate?: Date;
+    thumbnailPath: ZodImageProps;
     slug: string;
     tags: Tags[];
 };
 
-const {title, description, thumbnailPath = '', slug, tags} = Astro.props as Props;
+const {title, startDate, releaseDate, description, thumbnailPath, slug, tags} = Astro.props as Props;
 
+const dateOptions: Intl.DateTimeFormatOptions = { day: "numeric", month: "long", year: "numeric" };
+// TODO (LOW): Detect the user's location using window.navigator.language
+// But need to use <script></script>?
+const userLocale="en-UK";
 ---
 
-<div class='card projectCard' id={title} data-tags={tags}>
-    {thumbnailPath != '' && <img src = {thumbnailPath} alt={title + " thumbnail"}/>}
-    <h3>{title}</h3>
-    <p>{description}</p>
-    <TagDisplay tags={tags} project={title}/>
-    <a class="btn" href={`/${slug}`}>Read More</a>
+<div class="card" id={title}>
+    <div class="projectCard" data-tags={tags}>
+        <a href={`/${slug}`} class="thumbnail">
+            <Image src={thumbnailPath} alt={title + " thumbnail"} transition:name=`project-img-${title}`/>
+        </a>
+        <div class="details">
+            <h2>
+                <a href={`/${slug}`}>{title}</a>
+            </h2>
+            <TagDisplay tags={tags} project={title} isSmall={true}/>
+            <!-- TODO: Add date -->
+            {(tags.includes(Tags.Ongoing) || releaseDate === undefined) ?
+                <p>Date: <span class="date">{startDate.toLocaleDateString(userLocale, dateOptions)} - Ongoing</span></p>
+                :
+                <p>Date: <span class="date">{startDate.toLocaleDateString(userLocale, dateOptions)} - {releaseDate.toLocaleDateString(userLocale, dateOptions)}</span></p>
+            }
+            <p>{description}</p>
+        </div>
+    </div>
 </div> 
+
+<style>
+    .card {
+        /* Changes depending on the screen size */
+        --curr-max-height: 25rem; 
+        
+        --animation-time: 1000ms;
+        --animation-curve: cubic-bezier(0.15, 0.79, 0.2, 1);
+        
+        height: max-content;
+        overflow: hidden;
+        transition: 0.1s;
+    }
+    
+    .card:hover {
+        outline: rgba(255,255,255,0.9) solid 2px;
+        box-shadow: 0 0 10px 10px rgb(255, 255, 255, 0.15);
+    }
+    
+    .projectCard {
+        display: flex;
+        align-items: center;
+    }
+
+    .projectCard .thumbnail {
+        width: 30%;
+        min-width: 30%;
+        overflow: hidden;
+        border-radius: 10px;
+    }
+
+    .projectCard .thumbnail img {
+        height: unset;
+        width: 100%;
+        object-fit: contain;
+        transition: .25s;
+    }
+
+    .projectCard:hover .thumbnail img {
+        transform: scale(1.05);
+    }
+
+    .projectCard .details {
+        display: inline-block;
+        margin-left: 10px;
+        flex-grow: 1;
+    }
+
+    h2 {
+        margin-bottom: 0;
+    }
+
+    h2 a {
+        text-decoration: none;
+        color: var(--color-text);
+    }
+
+    h2 a:hover {
+        text-decoration: underline;
+    }
+
+    p {
+        margin-top: 0;
+        margin-bottom: 0;
+        width: 100%;
+    }
+
+    .hideCard {
+        /* max-height: 0; */
+        /* transition: max-height 2000ms; */
+        animation: var(--animation-time) var(--animation-curve) both hideCard;
+
+        /* position: absolute; */
+    }
+
+    @keyframes hideCard {
+        from {
+            max-height: var(--curr-max-height);
+            opacity: 1;
+        }
+        50% {
+            opacity: 0;
+        }
+        to {
+            padding: 0;
+            margin: 0;
+            max-height: 0;
+            opacity: 0;
+        }
+    }
+
+    .showCard {
+        /* max-height: 0; */
+        /* transition: max-height 2000ms; */
+        animation: calc(var(--animation-time) * 2) var(--animation-curve) both showCard;
+
+        /* position: absolute; */
+    }
+
+    @keyframes showCard {
+        from {
+            padding: 0;
+            margin: 0;
+            max-height: 0;
+            opacity: 0;
+        }
+        75% {
+            opacity: 1;
+        }
+        to {
+            max-height: var(--curr-max-height);
+            opacity: 1;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+    }
+
+    @media screen and (max-width: 750px) {
+        .card {
+            --curr-max-height: 50rem;
+        }
+
+        .projectCard {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        
+        .projectCard .thumbnail {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+    }
+
+</style>

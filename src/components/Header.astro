@@ -1,13 +1,11 @@
 <header class="header">
     <div class="container">
-            <a href="index.html">Ethan Ong</a>
+            <a href="/">Ethan Ong</a>
         <nav>
             <ul>
-                <li><a href="/">Home</a></li>
+                <li id="header-home"><a href="/">Home</a></li>
                 <li><a href="/projects">Projects</a></li>
-                <li><a href="/search">Search</a></li>
                 <li><a href="/about">About</a></li>
-                <li><a href="/contact">Contact</a></li>
                 <!-- <li><a href="index.html">
                     <img src="img/settings.svg" alt="" />
                 </a></li> -->
@@ -19,9 +17,11 @@
 <style>
     .header {
         height: 70px;
-        background: var(--color-secondary);
-        font-family: 'League Spartan', sans-serif;
-        font-size: 1.25rem;
+        background-color: var(--color-background);
+        font-family: 'Calibri', sans-serif;
+        font-size: 1.5rem;
+        font-weight: bold;
+        border-bottom: 1px solid;
     }
     
     .header .container {
@@ -29,8 +29,9 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin: 0 auto;
-        padding: 0 20px;
+        margin-top: 0;
+        padding: 0 30px;
+        max-width: 1500px;
     }
     
     .header nav ul {
@@ -43,6 +44,41 @@
     }
 
     .header a {
-        color: white;
+        text-decoration: none;
+        color: var(--color-text);
     }
+
+    .header a:hover {
+        text-decoration: underline;
+    }
+
+    @media screen and (max-width: 515px) {
+    /* .header {
+        height: 250px;
+    }
+
+    .header .container {
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+    }
+
+    .header nav ul {
+        flex-direction: column;
+        padding: 0;
+        align-items: center;
+        margin: 0;
+    } */
+
+    #header-home {
+        display: none;
+    }
+
+    ul {
+        padding-left: 20px;
+    }
+}
+
 </style>
+
+<!-- TODO: Highlight which page is the user at. Use typescript to check from the url? -->

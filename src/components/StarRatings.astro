@@ -1,0 +1,84 @@
+---
+export interface Props {
+    title: string,
+    starPosition: number,
+    activeStars: number,
+    maxStars?: number,
+}
+const {title, starPosition, activeStars, maxStars = 5} = Astro.props as Props;
+
+const filledStars = Math.trunc(activeStars);
+const partialStar = activeStars - filledStars;
+const unfilledStars = maxStars - Math.ceil(activeStars);
+
+// Not sure add HTML X number of times in astro so use this and map it instead
+const filledStarsArray = Array<number>(filledStars).fill(0);
+const unfilledStarsArray = Array<number>(unfilledStars).fill(0);
+
+---
+
+<div class="star-ratings-panel" style={`--star-position: ${starPosition}px`} title={`${title}: ${activeStars}/${maxStars} stars`}>
+    <p>{title + ": "}</p>
+    <div class="star-ratings"> 
+        {filledStarsArray.map(()=> <span class="star filled"></span>)}
+        {partialStar > 0 && <span class="star partial" style={`--partial-filled-amt: ${partialStar}`}></span>}
+        {unfilledStarsArray.map(()=> <span class={"star unfilled" + (partialStar > 0 ? " has-partial-star" : "")}></span>)}
+    </div>
+</div>
+
+<style>
+    .star-ratings-panel {
+        display: flex;
+        align-items: center;
+        background-color: var(--color-background);
+        border-color: #555555;
+        border-style: solid;
+        margin: 5px;
+        padding: 0px 10px;
+        border-radius: 10px;
+        width: auto;
+        --star-filled-color: #ffae1a;
+    }
+
+    .star-ratings-panel p {
+        text-align: right;
+        width: calc(var(--star-position) - 5px);
+        margin: 10px 0px;
+        font-size: 1rem;
+    }
+
+    .star-ratings {
+        position: absolute;
+        display: flex;
+        margin-left: var(--star-position);
+    }
+
+    .star {
+        font-size: x-large;
+        width: 25px;
+        display: inline-block;
+        color: gray;
+    }
+
+    .star:last-child {
+        margin-right: 10px;
+    }
+
+    .star:before {
+        content:'\2605';
+    }
+
+    .star.filled {
+        color: var(--star-filled-color);
+    }
+
+    .star.partial:after {
+        content:'\2605';
+        color: var(--star-filled-color);
+        position: absolute;
+        margin-left: -20px;
+        width: calc(var(--partial-filled-amt) * 20px);
+        overflow: hidden;
+    }
+
+</style>

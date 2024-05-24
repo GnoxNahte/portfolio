@@ -1,0 +1,80 @@
+---
+title: The Great Tuna Escape
+shortDescription: "Play as a rare Bluefin Tuna fish escaping from a diver who's trying to catch you."
+startDate: 2024-05-11 # format is YYYY-MM-DD
+releaseDate: 2024-05-20 # format is YYYY-MM-DD
+projectLink: https://itch.io/jam/-pixel-game-jam-2024/rate/2721035
+# githubLink: 
+thumbnailPath: "../../images/TheGreatTunaEscape/TheGreatTunaEscape_Thumbnail2.png"
+tags: [Unity, GameJam, Windows, WebGL, Completed]
+# isDraft:
+---
+
+## Introduction
+This game was my submission for [Pixel Game Jam - 2024](https://itch.io/jam/-pixel-game-jam-2024). I wasn't able to work on the game for the full duration as I was still in <abbr title="National Service">NS</abbr> and had some duties. 
+
+## Game Overview
+Player keeps escaping from a diver who's trying to catch them. By nearly missing plastic bags, the player gains boost that they can use to escape from the diver. If the diver nearly catches them, they'll gain even more boost, giving them a chance to run away from the diver.
+
+The boost comes from fish's adrenaline. 
+
+## Gameplay Loop
+Early game (lesser and spread out plastic bags, slower diver), lets the player get used to the controls:
+1. Player boost, running away from the diver
+    - If the player keeps nearly missing bags, they can keep the boost sustained for quite long
+2. Player runs out of boost, they will try to get close to the bags to gain more boost
+3. Diver gets close to them.
+4. Repeat to point 1
+
+Late game (closer bags, faster diver). Some parts are similar to Early game:
+1. Player boosts, running away from the diver
+    - Similar to start of game but since there are more plastic bags, the player has more chances of getting more boosts. However, there's also a higher chance for the player to hit a bag and slow down.
+2. Player runs out of boost
+    - Try to get boost from plastic bags
+3. Diver gets close to them
+    - Since the diver is very fast, if they don't have enough boost, they can "dance" with the diver (keep near missing the diver) and get a lot of boost at once.
+
+## Some design decisions
+The general format was inspired from [Jetpack Joyride](https://www.halfbrick.com/games/jetpack-joyride-classic).
+
+### Near misses
+The inspiration came from playing [YouTube's Fullspeed Racing](https://www.youtube.com/playables/UgkxbgLQk7KP4zQKHctwKY-XKtpJ_OBWL4aO) when I was bored. It was surprisingly fun so I wanted to implement a near miss mechanic in my game too.        
+
+For Plastic bags
+- Spawns at random heights and the number of bags increases the longer the player survives. This results in a higher chance for the player to hit the bags but they have more chances of getting boosts too.
+- Some bags are spawned around the same height so the player can quickly get a lot of boost.
+- Risk: Slowing down for 1 second
+- Reward: 1 boost
+
+For Diver
+- By nearly missing the diver, they can get 3 boost bars and speed away from the diver.
+- If the diver overshoots the, they can "dance" with the diver and gain a lot of boosts
+- Risk: Losing the game
+- Reward: 3 boost
+
+Here's a video of me dodging the diver.
+
+### Sound
+Added SFX in the last few minutes. Luckily found a [scuba diver breathing](https://pixabay.com/sound-effects/underwater-scuba-diver-28467/) and used it. He can only be heard when he's close to the player, scaring the player and warning them that the diver is close and to speed up or prepare to dodge.
+
+## Result
+--- As of time of writing, the results is still not released. ---
+
+## Things I would like to improve
+If I'm making it a real game, stuff I would want to add
+- Upgrades
+- Different fish types with different stats and abilities
+
+
+## Credits for Assets I used
+It's in [itch.io page](https://gnoxnahtedev.itch.io/the-great-tuna-escape) too.
+### Art
+- Background: https://ansimuz.itch.io/underwater-fantasy-pixel-art-environment
+- Diver: https://dkproductions.itch.io/pixel-art-diver
+- Font: https://www.dafont.com/retro-gaming.font?back=bitmap
+
+Did some simple assets myself, like the tuna, bubbles, plastic bag, and waves. I'm still learning pixel art.
+
+### Audio
+- Background: https://pixabay.com/sound-effects/indoor-nice-fish-tank-ambiance-75601/
+- Diver: https://pixabay.com/sound-effects/underwater-scuba-diver-28467/

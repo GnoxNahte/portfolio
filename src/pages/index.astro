@@ -1,8 +1,33 @@
 ---
+import ProjectCardFromCollection from "../components/ProjectCardFromCollection.astro";
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title = "Home">
-	<h1>Hello World</h1>
+<Layout title = "Home" description="Portfolio Home Page">
+	<div class="container">
+		<h1>Intro</h1>
+		<div class="card">
+			<p>Hi I'm Ethan, a Game / Web Developer based in Singapore <img src="https://flagsapi.com/SG/flat/32.png" style="display: inline; transform: translateY(0.5em)" alt="SG Flag">.</p>
+			<p>I'm passionate both game and web development and I'm looking for new projects that interest me and can contribute to!</p>
+			
+			<h2>Education</h2>
+			<ul>
+				<li>Game Developer. <a href="/projects?includeTags=%5B%22201%22%5D">Game Projects</a>
+					<ul>
+						<li>Graduated from Game Development and Technology from NYP (Nanyang Polytechnic)</li>
+					</ul>
+				</li>
+				<!-- TODO (HIGH): Add correct link -->
+				<li>Web Developer. <a href="/projects?includeTags=%5B%22203%22%5D">Web Projects</a>
+					<ul>
+						<li>Self taught during my free time</li>
+						<li>Mainly used to build this website. <a href="/portfolio-website">Blog on building process</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<h1>Featured Projects</h1>
+		<ProjectCardFromCollection title="spellbound-rollers"/>
+		<ProjectCardFromCollection title="portfolio-website"/>
+	</div>
 </Layout>
-    

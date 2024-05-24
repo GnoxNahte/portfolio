@@ -1,0 +1,17 @@
+{
+    "cSpell.words": [
+        "Astro",
+        "astrojs",
+        "Brite",
+        "Flaticon",
+        "HTMLLI",
+        "HTMLU",
+        "Nanyang",
+        "nowrap",
+        "onhold",
+        "qrcode"
+    ],
+    "files.associations": {
+        "*.mdx": "markdown"
+    }
+}

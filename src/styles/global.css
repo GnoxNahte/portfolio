@@ -1,39 +1,97 @@
 :root {
     font-size: 16px;
-    font-family: 'Roboto', sans-serif;
+    font-family: sans-serif;
+    scroll-behavior: smooth;
 
     /* Colors 
         - Background & text colors are in .light and .dark classes
         - Tag Colors are in TagDisplay
     */
-    --color-btn: #416EAF;
 }
 
 body {
     line-height: 1.5;
-    background: var(--color-primary);
+    background: var(--color-background);
     color: var(--color-text);
     margin: 0;
     padding: 0;
+    overflow-y: auto;
+    overflow-x: clip;
 }
 
-h1, h2 {
+h1 {
     line-height: 1.2;
     text-align: center;
 }
-
+h2 {
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    border-bottom: solid 2px #3c3c3ccc;
+}
+/* 
 h1 { font-size: 2rem; }
 h2 { font-size: 1.5rem; }
-h3 { font-size: 1.3rem; }
+h3 { font-size: 1.3rem; } */
 
 p, li {
     line-height: 1.75;
 }
 
 a {
-    text-decoration: none;
-    color: var(--color-btn);
+    text-decoration: underline;
+    color: var(--color-primary);
 }
+
+a:hover {
+    text-decoration: underline;
+}
+
+details summary {
+    cursor: pointer;
+}
+
+details summary > * {
+    display: inline;
+    padding-left: 5px;
+}
+
+a[target="_blank"]:after {
+    content: "";
+    width: 1em;
+    height: 1em;
+    margin: 0 0.05em 0 0.15em;
+    background: url("../images/General/NewTabIcon.png");
+    background-size: contain;
+    display: inline-block;
+    vertical-align: text-bottom;
+}
+
+.card p:last-child {
+    margin-bottom: 0px;
+}
+
+button {
+    background-color: var(--color-accent);
+    border-radius: 0.7rem;
+    border-color: var(--color-accent);
+    border-style: solid;
+    color: var(--color-text);
+    padding: 0.5rem;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+button:hover {
+    cursor: pointer;
+    background-color: #111;
+}
+
+button:active {
+    box-shadow: 0 0 5px 5px var(--color-accent);
+    transform: scale(1.075);
+}
+
+/* Scrollbar */
 
 ::-webkit-scrollbar {
     width: 15px;
@@ -54,17 +112,27 @@ a {
 
 /* Themes */
 .light {
-    --color-primary: #ffffff;
-    --color-secondary: #fafafa;
-    --color-tertiary: #f5f5f5;
-    --color-text: #212121;
+    
+    --color-background: #121212;
+    --color-primary: #476beb;
+    --color-secondary: #2b2b2b;
+    --color-accent: #303030;
+    --color-text: #ffffff;
+
+    --color-btn: #476beb;
+
+    --color-border: #FFFFFF;
 }
 
 .dark {
-    --color-primary: #424242;
-    --color-secondary: #212121;
-    --color-tertiary: #303030;
+    --color-background: #2b2b2b;
+    --color-primary: #7593FF;
+    --color-secondary: #121212;
+    --color-accent: #555;
     --color-text: #ffffff;
+
+    --color-btn: #476beb;
+
 }
 
 /* Card */
@@ -78,18 +146,23 @@ a {
 }
 
 .card img {
-    width: 100%;
-    max-width: 500px;
     display: block;
-    margin: 0 auto ;
     border-radius: 10px;
+}
+
+.card h2 {
+    margin-top: 0;
+}
+
+.card p:first-child {
+    margin-top: 0;
 }
 
 /* Other Classes */
 
 .container {
-    max-width: 1200px;
-    margin: 20px auto;
+    max-width: 900px;
+    margin: 30px auto;
     padding: 0 30px;
 }
 
@@ -106,10 +179,48 @@ a {
     justify-content: center;
 }
 
+/* Similar to .btn */
+.inlineBtn {
+    display: inline-block;
+    padding: 0.1rem 0.5rem;
+    border-radius: 5px;
+    background: var(--color-btn);
+    color: var(--color-text);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-align: center;
+    text-decoration: none;
+    transform: translateY(-0.1rem);
+}
+
+a[target="_blank"].inlineBtn:after
+ {
+    margin-left: .3rem;
+    transform: translateY(-1.5px);
+    filter: brightness(1000%);
+}
+
+.date {
+    font-style: italic;
+}
+
+/* YouTube Embed */
+iframe {
+    width: 100%;
+    min-width: 300px;
+    max-width: 50%;
+
+    display: block;
+    margin: 0 auto;
+
+    aspect-ratio: 16/9;
+}
+
 /* Tags */
 
 .tag-container.card {
-    background: var(--color-tertiary) ;
+    border: 2px solid var(--color-accent);
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -117,13 +228,24 @@ a {
     margin-bottom: 20px;
 }
 
-.tag-container p {
+.tag-container.tag-container-small.card {
+    border: none;
+    padding: 0;
+    /* padding-top: 0;
+    padding-bottom: 0; */
+    margin-bottom: 0px; 
+}
+
+.tag-container.card p {
+    margin-top: 10px;
     margin-right: 10px;
 }
 .tag-container ul {
     padding: 0;
     margin: 0;
     display: flex;
+    flex-wrap: wrap;
+
     align-items: center;
     list-style: none;
 }
@@ -136,46 +258,67 @@ a {
 }
 
 /* Tags Colors */
-.tool-tag {
+.software-tag {
     background-color: #008080;
-    border-color: #008080;;
+    border-color: #008080;
 }
 .project-type-tag {
     background-color: #B33333;
     border-color: #B33333;
 }
 .platform-tag {
-    background-color: #6B8E23;
-    border-color: #6B8E23;
+    background-color: #5f7e20;
+    border-color: #5f7e20;
+}
+.status-tag {
+    background-color: black;
+    border-color: grey;
+    border-style: solid;
 }
 /* Other colors for future tags: 
     #416EAF
     #228B22 (Forest Green)
-    #008080 (teal green)
-    #6B8E23 (olive drab)
 */
 .unknownTag {
     background-color: #000000;
     border-color: #000000;
 }
 
-.tag-container-filter-panel .tag {
+.filterPanel .tag {
     opacity: 0.5;
     cursor: pointer;
 }
-.fa-plus, .fa-minus {
-    display: none;
-}
+
 .tag.includeTag , .tag.excludeTag{
     opacity: 1;
-}
-.includeTag .fa-plus,
-.excludeTag .fa-minus {
-    display: inline;
 }
 
 .excludeTag {
     background-color: transparent;
     border-style: solid;
 }
+
+.includeTag::before {
+    font-weight: bold;
+    content: "+"
+}
+
+.excludeTag::before {
+    font-weight: bold;
+    content: "-"
+}
+
+/* Cross Component Styles */
+
+.tooltip-content p,
+.tooltip-content h3 {
+    margin: 0;
+}
+
+/* Utility */
+.inlineBlock {
+    display: inline-block;
+    width: 49%;
+}
+
 /* Media Queries */

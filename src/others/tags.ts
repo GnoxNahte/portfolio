@@ -7,11 +7,12 @@
 //      4. CSS classes, at "Tag Colors"
 export enum Tags {
     // Engine
-    Tool = 0,
+    Software = 0,
     Unity,
-    Unreal,
+    // Unreal,
     Astro, 
-    React,
+    SvelteKit,
+    Obsidian,
     
     // Project Type
     ProjectType = 100,
@@ -25,4 +26,11 @@ export enum Tags {
     Windows,
     WebGL,
     Website,
+
+    // Status
+    Status = 1000,
+    Ongoing,
+    Completed,
+    OnHold, 
+    Dropped,
 }

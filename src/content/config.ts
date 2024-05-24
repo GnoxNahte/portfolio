@@ -2,26 +2,43 @@
 import { z, defineCollection } from 'astro:content';
 import { Tags } from "../others/tags";
 
-const imagePathCheck = z.string().refine((val) => {
-    // Check if the file path has a valid image extension
-    const pattern = /\.(jpe?g|png|gif|bmp|tiff|webp)$/i;
-    return pattern.test(val);
-  }, {
-    message: "Invalid image file path",
-  });
-
 // 2. Define a schema for each collection you'd like to validate.
 const projects = defineCollection({
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     shortDescription: z.string(), 
-    releaseDate: z.date(),
+    startDate: z.date(),
+    releaseDate: z.date().optional(),
     projectLink: z.string().url().optional(),
     githubLink: z.string().url().optional(),
-    thumbnailPath: imagePathCheck,
+    // TODO(MEDIUM): Use astro's image() check. See astro 2.1 update https://astro.build/blog/astro-210/#built-in-image-support
+    thumbnailPath: image(),
     // tags: z.nativeEnum(Tags).array(),
     tags: z.string()
             .array()
+            .superRefine((tagsArray, ctx) => {
+              let statusTagCount = 0;
+              tagsArray.map((tag) => {
+                const tagResult = Tags[tag as keyof typeof Tags];
+                if (tagResult > Tags.Status && tagResult < (Tags.Status + 100))
+                  statusTagCount++;
+              })
+
+              if (statusTagCount === 0)
+              {
+                ctx.addIssue({
+                  code: z.ZodIssueCode.custom,
+                  message: "No status tag",
+                })
+              }
+              else if (statusTagCount > 1)
+              {
+                ctx.addIssue({
+                  code: z.ZodIssueCode.custom,
+                  message: "More than 1 status tag",
+                })
+              }
+            })
             .transform((tagsArray, ctx) => {
               return tagsArray.map((tag) => {
                 const tagResult = Tags[tag as keyof typeof Tags];
@@ -38,7 +55,7 @@ const projects = defineCollection({
                 return tagResult;
               })
             }),
-    ifShow: z.boolean().default(true),
+    isDraft: z.boolean().default(false),
   }),
 });
 

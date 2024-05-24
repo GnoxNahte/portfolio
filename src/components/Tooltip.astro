@@ -1,0 +1,47 @@
+---
+export interface Props {
+    text: string,
+}
+
+const {text} = Astro.props as Props;
+
+---
+
+<!-- TODO: Improve styling for Tooltip -->
+
+<div class="tooltip">
+    <p>{text}</p>
+    <div class="tooltip-content">
+        <slot />
+    </div>
+</div>
+
+<style>
+    .tooltip {
+        display: inline;
+        cursor: help;
+    }
+    
+    .tooltip p {
+        display: inline;
+        color: var(--color-btn);
+        text-decoration: underline;
+    }
+
+    .tooltip-content {
+        display: none;
+        background-color: var(--color-background);
+        text-align: center;
+        border-color: #555555;
+        border-style: solid;
+        border-radius: 10px;
+        padding: 10px;
+        z-index: 1;
+        position: absolute;
+    }
+    
+    .tooltip:hover .tooltip-content {
+        display: inline-block;
+    }
+
+</style>
