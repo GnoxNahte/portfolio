@@ -85,37 +85,29 @@ function generateTableOfContent(headings: MarkdownHeading[]) {
 
 ---
 
-<div class="table-of-content-wrapper">
-    <div class="table-of-content-container">
-        <div class="table-of-content">
-            <Image src={leftArrowSVG} alt="test" width="25" height="25" class:list={"expand-toc-arrow"}></Image>
-            <h2>Table of Contents</h2>
-            {tableOfContent && <TableOfContentElements headings={tableOfContent}/>}
-        </div>
+<div class="table-of-content-container">
+    <div class="table-of-content">
+        <!-- <Image src={leftArrowSVG} alt="expand-toc" width="25" height="25" class:list={"expand-toc-arrow"}></Image> -->
+        <h2>Table of Contents</h2>
+        {tableOfContent && <TableOfContentElements headings={tableOfContent}/>}
     </div>
 </div>
     
 <style>
-    .table-of-content-wrapper {
+    .table-of-content-container {
         /* position: relative; */
         min-width: 250px;
         max-width: 275px;
         transition: all 0.7s ease-in-out;
-    }
-
-    .table-of-content-container {
-        position: absolute;
-        height: 100vh;
-        /* position: relative; */
-        /* left: 0%; */
+        position: sticky;
+        top: 25px;
+        background-color: var(--color-secondary);
+        height: fit-content;
+        border-radius: 10px;
+        padding: 15px 20px 10px;
     }
     
     .table-of-content {
-        position: sticky;
-        top: 25px;
-        
-        padding: 15px 20px 10px;
-        border-radius: 10px;
         height: fit-content;
         background-color: var(--color-secondary);
     }
@@ -126,44 +118,23 @@ function generateTableOfContent(headings: MarkdownHeading[]) {
         border-bottom: none;
     }
     
-    .table-of-content ul {
-        margin: 0;
-        padding: 0;
-    }
-
-    .expand-toc-arrow {
+    /* .expand-toc-arrow {
         display: none;
-    }
+    } */
 
     @media screen and (max-width: 1200px) {
-        .table-of-content-wrapper {
-            min-width: 30px;
-            width: 30px;
-        }
-
         .table-of-content-container {
-            transform: translateX(calc(100% - 100px));
-        }
-
-        .table-of-content-container:hover {
-            transform: translateX(-180px);
-            min-width: 250px;
-            max-width: 275px;
+            min-width: 0;
+            width: 0;
+            padding: 0;
+            opacity: 0;
         }
         
-        .table-of-content-container:hover .table-of-content {
-            border: 1px solid white;
-        }
-        
-        .table-of-content {
-            overflow: visible;
-        }
-        
-        .expand-toc-arrow {
+        /* .expand-toc-arrow {
             display: block;
             position: absolute;
             transform: translate(-40px, 1.25rem);
-        }
+        } */
     }
 </style>
 

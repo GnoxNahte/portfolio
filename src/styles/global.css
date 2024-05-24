@@ -98,8 +98,9 @@ button:active {
 }
 
 ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px grey;
-    border-radius: 10px;
+    /* box-shadow: inset 0 0 5px grey; */
+    background-color: rgb(86, 86, 86);
+    /* border-radius: 10px; */
 }
 
 /* Handle */
