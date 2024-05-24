@@ -79,7 +79,6 @@ function dateDiff(startDate: Date, endDate: Date) : string {
     <article>
         <div class="layout-container">
             <div class="filler"></div>
-            <div class="container">
                 <div class="card">
                     <h1>{data.title}</h1>
                     <Image src={data.thumbnailPath} alt={data.title + " thumbnail"} transition:name=`project-img-${data.title}`/>
@@ -103,7 +102,6 @@ function dateDiff(startDate: Date, endDate: Date) : string {
                         <Content />
                     </div>
                 </div>
-            </div>
             <TableOfContent headings={headings} class:list={"test"}/>
         </div>
     </article>
@@ -118,7 +116,6 @@ function dateDiff(startDate: Date, endDate: Date) : string {
         /* width: max(250px, ); */
     }
     .layout-container {
-        display: grid;
         gap: 0px;
         display: flex;
         justify-content: center;
@@ -127,10 +124,6 @@ function dateDiff(startDate: Date, endDate: Date) : string {
         max-width: 1500px;
         
         flex-direction: row;
-    }
-
-    .container {
-        margin: 0;
     }
 
     .list-of-links {
