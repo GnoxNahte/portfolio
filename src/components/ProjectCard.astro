@@ -1,5 +1,6 @@
 ---
 import { Tags } from '../others/tags';
+import { getDuration } from '../styles/utilities';
 import TagDisplay from './TagDisplay.astro';
 import { Image } from "astro:assets";
 
@@ -38,11 +39,10 @@ const userLocale="en-UK";
                 <a href={`/${slug}`}>{title}</a>
             </h2>
             <TagDisplay tags={tags} project={title} isSmall={true}/>
-            <!-- TODO: Add date -->
             {(tags.includes(Tags.Ongoing) || releaseDate === undefined) ?
                 <p>Date: <span class="date">{startDate.toLocaleDateString(userLocale, dateOptions)} - Ongoing</span></p>
                 :
-                <p>Date: <span class="date">{startDate.toLocaleDateString(userLocale, dateOptions)} - {releaseDate.toLocaleDateString(userLocale, dateOptions)}</span></p>
+                <p>Date: <span class="date">{startDate.toLocaleDateString(userLocale, dateOptions)} - {releaseDate.toLocaleDateString(userLocale, dateOptions)} ({getDuration(startDate, releaseDate)})</span></p>
             }
             <p>{description}</p>
         </div>
