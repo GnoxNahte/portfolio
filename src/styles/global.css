@@ -129,6 +129,10 @@ button:active {
     --color-background: #2b2b2b;
     --color-primary: #7593FF;
     --color-secondary: #121212;
+/* 
+    --color-secondary: #2b2b2b;
+    --color-primary: #7593FF;
+    --color-background: #121212; */
     --color-accent: #555;
     --color-text: #ffffff;
 
@@ -207,7 +211,7 @@ a[target="_blank"].inlineBtn:after {
 }
 
 /* YouTube Embed */
-iframe {
+iframe[src*="youtube.com"] {
     width: 100%;
     min-width: 300px;
     max-width: 50%;
