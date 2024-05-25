@@ -1,37 +1,123 @@
 ---
+import Image from "astro/components/Image.astro";
 import ProjectCardFromCollection from "../components/ProjectCardFromCollection.astro";
 import Layout from "../layouts/Layout.astro";
+
+import GitHubIcon from "../images/General/Icons/Social/github-mark-white.svg";
+import EmailIcon from "../images/General/Icons/Social/google-icon-email.svg";
+import TwitterIcon from "../images/General/Icons/Social/x-twitter-icon.svg";
+import LinkedInIcon from "../images/General/Icons/Social/LinkedInIcon.png";
 ---
 
 <Layout title = "Home" description="Portfolio Home Page">
-	<div class="container">
-		<h1>Intro</h1>
-		<div class="card">
-			<p>Hi I'm Ethan, a Game / Web Developer based in Singapore <img src="https://flagsapi.com/SG/flat/32.png" style="display: inline; transform: translateY(0.5em)" alt="SG Flag">.</p>
-			<p>I'm passionate both game and web development and I'm looking for new projects that interest me and can contribute to!</p>
-			
-			<h2>Education</h2>
-			<h3>Game Developer. <a href="/projects?includeTags=%5B%22201%22%5D">Game Projects</a></h3>
-
-			<ul>
-				<li>Graduated from Game Development and Technology from NYP (Nanyang Polytechnic)</li>
-				<li>Certificates from the Diploma:
-					<ul>
-						<li>Director's List - Academic Year 2019/20 Semester 1</li>
-						<li>Director's List - Academic Year 2021/22 Semester 2</li>
-					</ul>
-				</li>
-			</ul>
-			<!-- TODO (HIGH): Add correct link -->
-			<h3>Web Developer. <a href="/projects?includeTags=%5B%22203%22%5D">Web Projects</a></h3>
-			<ul>
-				<li>Self taught during my free time</li>
-				<li>Mainly used to build this website. <a href="/portfolio-website">Blog on building process</a></li>
-			</ul>
+	<div class="layout-container">
+		<div class="container intro-container">
+			<h1>Intro</h1>
+			<div class="card">
+				<p>Hi I'm Ethan, a Game / Web Developer based in Singapore <img src="https://flagsapi.com/SG/flat/32.png" style="display: inline; transform: translateY(0.5em)" alt="SG Flag">.</p>
+				<p>I'm passionate in both game and web development and I'm looking for new projects that interest me and can contribute to!</p>
+				
+				<h2>Education</h2>
+				<h3>Game Developer - <a href="/projects?includeTags=%5B%22201%22%5D">Game Projects</a></h3>
+				
+				<ul>
+					<li>Graduated from Game Development and Technology from NYP (Nanyang Polytechnic)</li>
+					<li>Certificates from the Diploma:
+						<ul>
+							<li>Director's List - Academic Year 2019/20 Semester 1</li>
+							<li>Director's List - Academic Year 2021/22 Semester 2</li>
+						</ul>
+					</li>
+				</ul>
+				<!-- TODO (HIGH): Add correct link -->
+				<h3>Web Developer - <a href="/projects?includeTags=%5B%22203%22%5D">Web Projects</a></h3>
+				<ul>
+					<li>Self taught during my free time</li>
+					<li>Mainly used to build this website. <a href="/portfolio-website">Blog on building process</a></li>
+				</ul>
+			</div>
+			<!-- <div class="card">
+				<p class="social-icon-container">
+					<span class="contact-title">Contact: </span>
+					<a href="mailto:gnoxnahte.dev@gmail.com" target="_blank"><Image src={EmailIcon} alt="icon" class="social-icon email"></a>
+					<a href="https://github.com/GnoxNahte" target="_blank"><Image src={GitHubIcon} alt="icon" class="social-icon"></a>
+					<a href="https://twitter.com/GnoxNahteDev" target="_blank"><Image src={TwitterIcon} alt="icon" class="social-icon"></a>
+					<a href="https://www.linkedin.com/in/ethanongsg/" target="_blank"><Image src={LinkedInIcon} alt="icon" class="social-icon linked-in"></a>
+				</p>
+			</div> -->
 		</div>
-		<h1>Featured Projects</h1>
-		<ProjectCardFromCollection title="the-great-tuna-escape"/>
-		<ProjectCardFromCollection title="portfolio-website"/>
-		<ProjectCardFromCollection title="obsidian-auto-embed"/>
+		<div class="container">
+			<h1>Featured Projects</h1>
+			<ProjectCardFromCollection title="the-great-tuna-escape"/>
+			<ProjectCardFromCollection title="portfolio-website"/>
+			<ProjectCardFromCollection title="obsidian-auto-embed"/>
+		</div>
 	</div>
 </Layout>
+
+<style>
+	.layout-container {
+		margin: 30px auto;
+		display: flex;
+		max-width: fit-content;
+		width: fit-content;
+		flex-direction: row;
+		gap: 0;
+	}
+
+	.intro-container {
+		max-width: 705px;	
+	}
+	
+    /* .social-icon-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0
+    }
+
+	.contact-title {
+		font-size: large;
+	}
+
+    a {
+        transition: all 0.25s;
+    }
+
+    a:hover {
+        transform: translateY(-5px);
+    }
+
+    .social-icon  {
+        height: 1em;
+        width: auto;
+        margin: 10px;
+
+    }
+
+	a::after {
+		display: none;
+	}
+
+    .social-icon.email {
+        height: 1.4em;
+    }
+
+    .social-icon.linked-in {
+        filter: brightness(0) invert(1);
+    } */
+
+	@media screen and (max-width: 1520px) {
+		.layout-container {
+			flex-direction: column;
+		}
+
+		.intro-container {
+			max-width: unset;
+		}
+
+		.container {
+			margin: 0;
+		}
+	}
+</style>
