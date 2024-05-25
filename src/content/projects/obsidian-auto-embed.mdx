@@ -11,66 +11,115 @@ rank: 50
 # isDraft:
 ---
 
-## Introduction
-This post is just my progress on building the plugin. If you want to see the plugin, click the [link](https://obsidian.md/plugins?id=auto-embed). After writing this post, I realized it's very long and plan to shorten it in the future.
+## Background
+Started using Obsidian and wanted to embed various websites into it. Since I couldn't find any plugins that does it, I made my own and published it. Currently, it has 1.2k downloads. 
 
-I was exploring for new note taking apps and found [Obsidian](https://obsidian.md/). 
+The rest of this is the same thing as the GitHub page. Showing what features are in the plugin and how to use it.
 
-<details>
-    <summary>Not related but a list of reasons on why I like Obsidian:</summary>
-    - Gives the user full control of my notes
-        - Allows me to view my notes offline
-        - Even if Obsidian suddenly disappears, I'll still have my notes
-    - Gives access to users to make plugins and themes
-        - Since I know some web development, this really makes me use my skills and customize a lot of things. (Which lead to this plugin)
-    - Other great things like [Tags](https://help.obsidian.md/Editing+and+formatting/Tags), [Properties](https://help.obsidian.md/Editing+and+formatting/Properties) and many other features.
-</details>
+If you are curious on my process on building it, you can view the [development process](/obsidian-auto-embed-build-process).
 
-While exploring the app, found that they support embedding websites but it's only limited to YouTube and Twitter. The only way to embed unsupported websites is to use `<iframe>`. My main use case was trying to embed [CodePen](https://codepen.io/) links. I felt that it was troublesome to constantly use iframe to embed, and it was messy when seeing the raw markdown. 
+## Description
+[Obsidian](https://obsidian.md/) plugin to help embed links automatically instead of using iframes
+ 
+## Getting Started
+Assuming you have [Obsidian](https://obsidian.md/) downloaded, 
+Download the plugin: https://obsidian.md/plugins?id=auto-embed
 
-So I decided to build the plugin.
+### Embedding links
+1. Paste a link
+2. Select "Create Embed"
+3. (Optional) Add [Options](#custom-options)
+4. Done! Wait for the embed to load
 
-## My Progress building the plugin
-### Checking if there is an existing plugin
-Tried to search the web and didn't find anything that does it. 
-<details>
-<summary>Similar projects:</summary>
-- [Simple Embed](https://github.com/samwarnick/obsidian-simple-embeds) - Might have worked but repo is archived, isn't in Obsidian's plugin directory, and couldn't get it to work even after downloading it.
-- [Obsidian Link Embed](https://github.com/Seraphli/obsidian-link-embed) - Partly worked. It converts the link into title, thumbnail and description. Similar to Twitter/Discord. It also takes quite a while since it's using a third-party API to get the info. Might be more useful than my plugin if you want to view it offline but I want to embed the website's content. So this doesn't work for me.
-</details>
+![GIF showing example on how to embed links](../../images/ObsidianAutoEmbed/AutoEmbedGettingStarted.gif)
 
-### Starting to build the project
-Since this my first plugin I made, and I just started Obsidian, I had a lot to learn. Spend quite a long time just reading the documentation. 
+Uses the same syntax as Obsidian - [Embed Web pages](https://help.obsidian.md/Editing+and+formatting/Embed+web+pages). Syntax: `![options](link)`
 
-Then I created the GitHub repo on 5th March 2024. 
+## Features
+Auto embeds websites like: [Imgur](https://imgur.com/), [CodePen](https://codepen.io/), [Steam](https://store.steampowered.com/). Full list of [supported websites](#supported-websites)
 
-Surprisingly got the <abbr title="Minimum viable product">MVP</abbr> working pretty fast, mostly thanks to Obsidian's simple API on the docs and my previous experience in web development.
+### Supported websites:
+- [X](https://x.com) *
+- [Reddit](https://www.reddit.com/) *
+- [Imgur](https://imgur.com/)
+- [CodePen](https://codepen.io/)
+- [Steam](https://store.steampowered.com/)
+- [Spotify](https://open.spotify.com/) *
 
-### Replacing the url to embed
-Learnt that many of the popular websites like YouTube, Twitter, CodePen, has unique urls to indicate that it should be embedded. This removes other elements like header, footer and any other element that isn't the main content. I also learnt basic [Regex](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet) to identify which websites to embed and how to get the related info (like post id) from the url to transform the url to the embedded version.
+For a list with examples of how the websites look like [Supported Websites List](SupportedWebsiteList.md)
 
-### Problems with resizing 
+## Custom Options
+How to add options: 
+- In between the square brackets - `![add options here](https://example.com)`
+- If you aren't sure which options are available, refer to the table below
 
-Many websites either:
-- Change their own content layout based on the space their are given like YouTube and Spotify. 
-- Provide scripts to help to resize and do other processing. Example: [Twitter](https://publish.twitter.com/)
-- Put the size in the html the user copies. Example: [Reddit](https://publish.reddit.com/)
+### All options:
+| Option | Description | Example Markdown |
+|---|---|---|
+|noembed|Disables embedding for this link. If possible, try using `[](link)` instead. Same syntax, just without '!'|`![noembed](https://example.com)`
+|w:`value` / width:`value`|Sets embed's width|`![w:100%](https://example.com)`
+|h:`value` / height:`value`|Sets embed's height |`![h:500px](https://example.com)`
 
-Since none of these can be done in Obsidian for websites that need to be resized dynamically (Twitter and Reddit for example), I had to find another way. Tried searching and all solutions had the same problem: websites not allowing to get the size due to [<abbr title="Cross-Origin Resource Sharing">CORS</abbr>](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS). Some solutions required an external server to prerender the content and get the content, but I can't do it Obsidian. Or I can make my own server and make an API call to it, but it was a lot of work. 
+Uses [CSS Units](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units#lengths) where applicable.
 
-Eventually I was trying to various methods and one of them required sending messages and listening to them. To my surprise, I saw Twitter sending it's own message to resize, with the width, height and tweet id. I quickly used that info and it worked!
+## Custom styles
+TODO: Add a table that lists all the CSS classes users can override.
 
-Later found out that it doesn't work for Reddit when there are multiple posts since there isn't any id sent in the resize message. 
-To partly "fix" it:  
-- Embeds are [loaded lazily](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading)
-- Only set the size if it doesn't have a size.
 
-This doesn't really solve it when the embeds are close together but at least it solves when the embed don't appear together in the same viewport.
+## How the plugin works
+A brief overview with some steps on how the plugin works. *Not required to use the plugin*, just for those who are curious. Certain steps vary depending on whether you're in **Reading View** or **Live Preview**. However, the plugin doesn't have any impact when you're in source mode.
+1. Search where in the document the syntax is found.
+	- In **Reading View**: 
+		Searches for the `<img>` tag that's generated by Obsidian when you use this format: `![](link)`
+	- In **Live Preview**: 
+		Searches for `![](link)` and gets the [options](#custom-options) and URL from it.
+2. Get the URL from it, and convert it to the embed equivalent. Usually adds `/embed/` somewhere in the url. Results in the same website but focused only on the content. No headers, footer, etc
+	- Example: https://codepen.io/jh3y/pen/LYNZwGm converts to https://codepen.io/jh3y/embed/LYNZwGm?default-tab=result&editable=true
+3. Replace those tags with `<iframe>` and apply options (width, height, dark mode, etc)
+4. Some websites like Twitter, Reddit or Imgur, will send a resize message. The plugin uses the info to resize the embed.
 
-### Implementing Live Preview
-All the work done above only works on Reading Mode and not Live Preview - [Documentation](https://help.obsidian.md/Editing+and+formatting/Edit+and+preview+Markdown). Basically, Reading Mode shows the fully rendered HTML and the user can't edit while Live Preview shows the HTML but the user can edit. 
+## Roadmap
+- [ ] Add support for other websites (If you want other websites, create an issue or message me)
+	- [ ] Google Maps
+	- [ ] Google Docs
+	- [ ] Google Calendar
+	- [ ] Notion 
+	- [ ] Other websites. [Iframely](https://iframely.com/domains) has a list of websites that can be embedded.
+- [ ] Add tests
+- [ ] Updated README.md
+	- [ ] Improve readability. Open to suggestions, especially if something isn't clear.
+	- [ ]  Add images/gifs to show examples
+ 	- [ ]  Add installation instructions
 
-Obsidian uses a different system, [Editor Extensions](https://docs.obsidian.md/Plugins/Editor/Editor+extensions), for Live Preview. It uses [CodeMirror](https://docs.obsidian.md/Plugins/Editor/Editor+extensions) as a base. This results in the information I'm required to understand to greatly increase as I needed to learn CodeMirror too. Personally, I Obsidian's documentation on Editor Extensions is very little and the community devs using Editor Extensions is small. But I would eventually implement it through a lot of searching and asking the Discord.
+### Current Limitations & Known Bugs 
+#### General
+- **Live Preview**: It's still experimental which means it might have bugs. 
+- **Mobile**: Not tested yet
+#### Website specific
+- **Reddit**: Incorrect resizing of Reddit embeds when multiple Reddit embeds appear in the same view.
+    - Space out Reddit embeds such that there aren't multiple embeds in your view
+    - Manually set the height by using options: `![h:240px](Reddit link)`
+- **Spotify**: Only able to play 30 seconds of a song. Spotify only allows when the user is logged in to the browser, which isn't possible in Obsidian. 
+- **Twitter & YouTube**: Since [Obsidian supports it](https://help.obsidian.md/Editing+and+formatting/Embed+web+pages), I won't interfere with it. However, it means [options](#custom-options) isn't supported. I might be able to replace Obsidian's embeds with mine, but [options](#custom-options) will only work in *Live Preview*, but not *Reading Mode*. This makes an inconsistent user experience but if you want this feature, contact me / create a pull request.
+- **Twitter / X**: Obsidian supports https://twitter.com but not https://x.com. This plugin just helps to embed X. If you replace Twitter with x, or vice versa, it'll lead to the same tweet/post. Usually when copying from the mobile app, it's X. When copying from the web, it's Twitter.
 
-### Submitting to Obsidian plugin directory
-Not much to say but I got accepted! Here's the link: https://obsidian.md/plugins?id=auto-embed
+Please [send any issues](https://github.com/GnoxNahte/obsidian-auto-embed/issues) you found!
+
+## Frequently asked questions
+### The embed isn't appearing
+1. Have you [enabled the plugin](https://help.obsidian.md/Extending+Obsidian/Community+plugins#Enable+a+community+plugin)?
+2. Are you following this syntax? `![](link)`<br />
+	For example: `![](https://example.com)`
+3. If it still doesn't work, try contacting me or create an issue.
+
+## Contact Me
+I've just started Obsidian and this is my first plugin.<br />
+If you have any questions, feature requests or issues feel free to [create an issue](https://github.com/GnoxNahte/obsidian-auto-embed/issues/new) or contact me!<br />
+
+Email - gnoxnahte@gmail.com<br />
+Discord DM - https://discordapp.com/users/222261096738717696 <br />
+
+If this plugin helped you and want to support its development, consider supporting me at [Ko-fi](https://ko-fi.com/gnoxnahtedev)
+
+## Credits
+Inspired by Sam Warnick's [Simple Embed](https://github.com/samwarnick/obsidian-simple-embeds). Changed a lot of things from it though.
