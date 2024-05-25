@@ -11,6 +11,14 @@ import Icon, { Sprite } from "astro-icon";
 const cards = await getCollection("projects", ({data}) => {
     return !data.isDraft;
 });
+cards.sort((a, b) => {
+    if (a.data.rank < b.data.rank)
+        return -1;
+    else if (a.data.rank == b.data.rank)
+        return 0;
+    else
+        return 1;
+})
 
 let tagArray: Tags[] = []; // Contains all tags without the categories
 

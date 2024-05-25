@@ -11,6 +11,7 @@ const projects = defineCollection({
     releaseDate: z.date().optional(),
     projectLink: z.string().url().optional(),
     githubLink: z.string().url().optional(),
+    rank: z.number(),
     // TODO(MEDIUM): Use astro's image() check. See astro 2.1 update https://astro.build/blog/astro-210/#built-in-image-support
     thumbnailPath: image(),
     // tags: z.nativeEnum(Tags).array(),
