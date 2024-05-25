@@ -111,7 +111,7 @@ SeparateTags();
                                 
                                 return ( 
                                     <div class="tag-container-filter-panel">
-                                        <h3 class={GetTagTypeClass(categoryValue)}>{PascalCaseToSpaceSeparated(category)}</h3> 
+                                        <h3>{PascalCaseToSpaceSeparated(category)}</h3> 
                                         <ul>
                                             {
                                                 tagDictionary[category].map((tag) => {
@@ -232,6 +232,7 @@ SeparateTags();
     .filterPanel h2 {
         display:inline;
         margin: 0;
+        border-bottom: none;
     }
 
     .filterPanel > div:last-child {
@@ -243,17 +244,22 @@ SeparateTags();
         justify-content:space-between;
         align-items: center;
         height: auto;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
+    }
+
+    .tag-container-filter-panel:first-child {
+        border-top: none;
+    }
+    
+    .tag-container-filter-panel {
+        border-top: solid 2px var(--color-accent);
+        padding: 10px 0 3px;
     }
 
     .tag-container h3 {
-        padding: 5px 15px;
+        padding: 2px 5px;
         margin: 0;
         border-radius: 50rem;
-    }
-
-    .tag-container-filter-panel ul {
-        margin: 10px 0px;
     }
 
     #searchResult h1 {
