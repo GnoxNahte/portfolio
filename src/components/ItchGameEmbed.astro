@@ -14,7 +14,7 @@ if (itchRegexResult) {
 ---
 
 <div class="itch-game-embed" id={"itch-id-" + id}>
-    <iframe src="about:blank" data-src={itchLink}>{projectName}</a></iframe>
+    <iframe src="about:blank" data-src={itchLink} allowfullscreen>{projectName}</a></iframe>
     <button>Click to load game</button>
 </div>
 
@@ -77,7 +77,6 @@ if (itchRegexResult) {
         const btn = component.getElementsByTagName("button")[0];
         
         btn.onclick = () => loadIframe(component);
-        console.log("Btn text: " + btn.textContent);
     }
     
     function loadIframe(gameEmbedContainer: Element) {
