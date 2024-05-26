@@ -99,6 +99,19 @@ button:active {
     transform: scale(1.075);
 }
 
+/* YouTube Embed */
+iframe[src*="youtube.com"] {
+    width: 100%;
+    min-width: 300px;
+    max-width: 50%;
+    aspect-ratio: 16/9;
+
+    display: block;
+    margin: 0 auto;
+
+    border: none;
+}
+
 /* Scrollbar */
 
 ::-webkit-scrollbar {
@@ -216,18 +229,6 @@ a[target="_blank"].inlineBtn:after {
 
 .date {
     font-style: italic;
-}
-
-/* YouTube Embed */
-iframe[src*="youtube.com"] {
-    width: 100%;
-    min-width: 300px;
-    max-width: 50%;
-
-    display: block;
-    margin: 0 auto;
-
-    aspect-ratio: 16/9;
 }
 
 /* Tags */
