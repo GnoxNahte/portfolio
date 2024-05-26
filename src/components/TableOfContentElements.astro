@@ -32,6 +32,7 @@ const { headings } = Astro.props as Props;
     ul ul {
         margin-top: 0;
         padding-left: 2em;
+        position:relative;
     }
     
     li span {
@@ -53,5 +54,15 @@ const { headings } = Astro.props as Props;
     li span:hover {
         background-color: var(--color-accent);
         border-radius: 5px;
+    }
+
+    /* Puts vertical indent lines */
+    ul li::before {
+        content: "\200B";
+        position: absolute;
+        border-right: 1px solid grey;
+        top: 0;
+        bottom: 0;    
+        transform: translateX(-1.5em);
     }
 </style>
