@@ -32,7 +32,7 @@ const userLocale="en-UK";
 <div class="card" id={title}>
     <div class="projectCard" data-tags={tags}>
         <a href={`/${slug}/`} class="thumbnail">
-            <Image src={thumbnailPath} alt={title + " thumbnail"} transition:name=`project-img-${title}`/>
+            <Image src={thumbnailPath} alt={title + " thumbnail"} transition:name=`project-img-${title}` widths={[320, 500, thumbnailPath.width]}/>
         </a>
         <div class="details">
             <h2>

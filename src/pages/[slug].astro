@@ -50,7 +50,7 @@ if (data.startDate && data.releaseDate)
             <div class="filler"></div>
                 <div class="card">
                     <h1>{data.title}</h1>
-                    <Image src={data.thumbnailPath} alt={data.title + " thumbnail"} transition:name=`project-img-${data.title}` loading={"eager"}/>
+                    <Image src={data.thumbnailPath} alt={data.title + " thumbnail"} transition:name=`project-img-${data.title}` loading={"eager"} widths={[320, 500, data.thumbnailPath.width]}/>
                     <!-- TODO: display Tags and any other metadata beside the Image. Currently the thumbnail image has a lot of empty space on the sides. -->
                     <div style="height: 25px;"></div> <!-- Small block to separate img and tags -->
                     <TagDisplay tags={data.tags} project={data.title}/>
