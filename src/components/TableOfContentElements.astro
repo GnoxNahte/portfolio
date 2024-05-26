@@ -27,33 +27,51 @@ const { headings } = Astro.props as Props;
         margin-top: 8px;
         padding: 0;
         list-style: none;
-    }
-
-    ul ul {
-        margin-top: 0;
-        padding-left: 2em;
         position:relative;
     }
     
-    li span {
-        padding-left: 0.5em;
+    ul ul {
+        margin-top: 0;
+        padding-left: 2em;
     }
-
+    
+    li {
+        position:relative;
+    }
+    
     li a {
         text-decoration: none;
         display: inline-block;
         width: 100%;
         /* color: grey; */
+        opacity: 0.4;
+        color: white;
+        padding-left: 1em;
+
     }
 
+    li a.active-heading {
+        opacity: 1;
+    }
+    
+    /* li:has(.active-heading) a {
+        opacity: 1;
+    } */
+
+    li span:has(.active-heading) {
+        background-color: var(--color-primary);
+        background-color: #6d89efb7; /* Based from color-primary but slightly darker */
+        
+        opacity: 1;
+    }
+    
     li span {
         display: inline-block;
         width: 100%;
     }
 
     li span:hover {
-        background-color: var(--color-accent);
-        border-radius: 5px;
+        backdrop-filter: brightness(400%);
     }
 
     /* Puts vertical indent lines */
@@ -63,6 +81,5 @@ const { headings } = Astro.props as Props;
         border-right: 1px solid grey;
         top: 0;
         bottom: 0;    
-        transform: translateX(-1.5em);
     }
 </style>

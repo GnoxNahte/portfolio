@@ -1,8 +1,6 @@
 ---
 import type { MarkdownHeading } from 'astro'
 import TableOfContentElements from './TableOfContentElements.astro';
-import Image from 'astro/components/Image.astro';
-import leftArrowSVG from "../images/General/tab.svg"
 
 export interface Props {
     headings: MarkdownHeading[];
@@ -85,8 +83,8 @@ function generateTableOfContent(headings: MarkdownHeading[]) {
 
 ---
 
-<div class="table-of-content-container">
-    <div class="table-of-content">
+<div id="table-of-content-container">
+    <div id="table-of-content">
         <!-- <Image src={leftArrowSVG} alt="expand-toc" width="25" height="25" class:list={"expand-toc-arrow"}></Image> -->
         <h2>Table of Contents</h2>
         {tableOfContent && <TableOfContentElements headings={tableOfContent}/>}
@@ -94,7 +92,7 @@ function generateTableOfContent(headings: MarkdownHeading[]) {
 </div>
     
 <style>
-    .table-of-content-container {
+    #table-of-content-container {
         width: max-content;
         min-width: 205px;
         max-width: 275px;
@@ -111,19 +109,19 @@ function generateTableOfContent(headings: MarkdownHeading[]) {
         transition: all 0.7s ease-out, max-width 1.2s;
     }
     
-    .table-of-content {
+    #table-of-content {
         height: fit-content;
         background-color: var(--color-secondary);
     }
     
-    .table-of-content h2 {
+    #table-of-content h2 {
         margin: 0;
         padding: 0;
         border-bottom: none;
     }
-    
+
     @media screen and (max-width: 1200px) {
-        .table-of-content-container {
+        #table-of-content-container {
             min-width: 0;
             max-width: 0;
             width: 0;
@@ -134,9 +132,58 @@ function generateTableOfContent(headings: MarkdownHeading[]) {
             transition: all 0.7s ease-out, opacity 0.4s;
         }
     }
+
 </style>
 
 <!-- TODO: Highlight each heading as the user scrolls -->
-<!-- <script>
+<script>
+
+    const activeHeadingClass = "active-heading";
+
+    const toc = document.getElementById("table-of-content");
+    if (!toc) {
+        throw new Error("Cannot find Table of content");
+    }
+    // const tocHeadings = toc.querySelectorAll("li:not(:has(ul))");
+    const tocHeadings = toc.getElementsByTagName("a");
     
-</script> -->
+    const markdown = document.querySelector(".markdown");
+    if (!markdown)
+        throw new Error("Cannot find Markdown");
+
+    const markdownHeadings = markdown.querySelectorAll("h1,h2,h3,h4,h5,h6") as NodeListOf<HTMLHeadingElement>;
+    let activeHeading = tocHeadings[0];
+    activeHeading.classList.add(activeHeadingClass);
+    
+    function onScroll() {
+        let newActiveHeading: HTMLAnchorElement | null = null;
+        
+        if (scrollY <= markdownHeadings[0].offsetTop) {
+            newActiveHeading = tocHeadings[0];
+        }
+        else {
+            // Iterate backwards
+            // Find the heading that the user is on
+            for (let i = markdownHeadings.length - 1; i >= 0; --i) {
+                if (scrollY > markdownHeadings[i].offsetTop) {
+                    newActiveHeading = tocHeadings[i];
+                    break;
+                }
+            }
+            
+            if (!newActiveHeading) {
+                throw new Error("Cannot find Active Heading. ScrollY: " + scrollY + " | heading count: " + tocHeadings.length + " Test: " + markdownHeadings[0].offsetTop);
+            }
+        }
+
+        // Switch active class tags if the active heading changed
+        if (activeHeading != newActiveHeading) {
+            activeHeading.classList.remove(activeHeadingClass);
+            activeHeading = newActiveHeading;
+            newActiveHeading.classList.add(activeHeadingClass);
+        }
+    }
+    onScroll();
+    window.addEventListener("scroll", onScroll);
+    
+</script>
