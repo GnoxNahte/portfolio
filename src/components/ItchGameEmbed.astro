@@ -71,15 +71,19 @@ if (itchRegexResult) {
 </style>
 
 <script>
-    const itchComponents = document.getElementsByClassName("itch-game-embed");
-    for (const component of itchComponents) {
-        const itchId = component.id;
-        const btn = component.getElementsByTagName("button")[0];
-        
-        btn.onclick = () => loadIframe(component);
+    function Init() {
+        console.log("Init itch")
+
+        const itchComponents = document.getElementsByClassName("itch-game-embed");
+        for (const component of itchComponents) {
+            const itchId = component.id;
+            const btn = component.getElementsByTagName("button")[0];
+            
+            btn.onclick = () => LoadIframe(component);
+        }
     }
     
-    function loadIframe(gameEmbedContainer: Element) {
+    function LoadIframe(gameEmbedContainer: Element) {
         const iframe = gameEmbedContainer.getElementsByTagName("iframe")[0];
         
         if (iframe.dataset.src)
@@ -88,4 +92,6 @@ if (itchRegexResult) {
         const btn = gameEmbedContainer.getElementsByTagName("button")[0];
         btn.classList.add("fade-out-button");
     }
+
+    document.addEventListener('astro:page-load', Init);
 </script>

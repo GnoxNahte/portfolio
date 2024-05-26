@@ -139,23 +139,30 @@ function generateTableOfContent(headings: MarkdownHeading[]) {
 <script>
 
     const activeHeadingClass = "active-heading";
+    let tocHeadings: HTMLCollectionOf<HTMLAnchorElement>;
+    let markdownHeadings: NodeListOf<HTMLHeadingElement>;
+    let activeHeading: HTMLAnchorElement;
 
-    const toc = document.getElementById("table-of-content");
-    if (!toc) {
-        throw new Error("Cannot find Table of content");
+    function Init() {
+        const toc = document.getElementById("table-of-content");
+        if (!toc) {
+            throw new Error("Cannot find Table of content");
+        }
+        // const tocHeadings = toc.querySelectorAll("li:not(:has(ul))");
+        tocHeadings = toc.getElementsByTagName("a");
+        activeHeading = tocHeadings[0];
+        activeHeading.classList.add(activeHeadingClass);
+        
+        const markdown = document.querySelector(".markdown");
+        if (!markdown)
+            throw new Error("Cannot find Markdown");
+
+        markdownHeadings = markdown.querySelectorAll("h1,h2,h3,h4,h5,h6") as NodeListOf<HTMLHeadingElement>;
+        
+        window.addEventListener("scroll", OnScroll);
     }
-    // const tocHeadings = toc.querySelectorAll("li:not(:has(ul))");
-    const tocHeadings = toc.getElementsByTagName("a");
-    
-    const markdown = document.querySelector(".markdown");
-    if (!markdown)
-        throw new Error("Cannot find Markdown");
 
-    const markdownHeadings = markdown.querySelectorAll("h1,h2,h3,h4,h5,h6") as NodeListOf<HTMLHeadingElement>;
-    let activeHeading = tocHeadings[0];
-    activeHeading.classList.add(activeHeadingClass);
-    
-    function onScroll() {
+    function OnScroll() {
         let newActiveHeading: HTMLAnchorElement | null = null;
         
         if (scrollY <= markdownHeadings[0].offsetTop) {
@@ -183,7 +190,6 @@ function generateTableOfContent(headings: MarkdownHeading[]) {
             newActiveHeading.classList.add(activeHeadingClass);
         }
     }
-    onScroll();
-    window.addEventListener("scroll", onScroll);
-    
+
+    document.addEventListener('astro:page-load', Init);
 </script>
