@@ -31,12 +31,12 @@ const userLocale="en-UK";
 
 <div class="card" id={title}>
     <div class="projectCard" data-tags={tags}>
-        <a href={`/${slug}`} class="thumbnail">
+        <a href={`/${slug}/`} class="thumbnail">
             <Image src={thumbnailPath} alt={title + " thumbnail"} transition:name=`project-img-${title}`/>
         </a>
         <div class="details">
             <h2>
-                <a href={`/${slug}`}>{title}</a>
+                <a href={`/${slug}/`}>{title}</a>
             </h2>
             <TagDisplay tags={tags} project={title} isSmall={true}/>
             {(tags.includes(Tags.Ongoing) || releaseDate === undefined) ?

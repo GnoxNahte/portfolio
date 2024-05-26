@@ -8,6 +8,7 @@ import TableOfContent from "../components/TableOfContent.astro";
 import { Image } from "astro:assets";
 import { getDuration } from "../styles/utilities";
 
+
 export async function getStaticPaths() {
     const projects = await getCollection("projects");
     
@@ -49,7 +50,7 @@ if (data.startDate && data.releaseDate)
             <div class="filler"></div>
                 <div class="card">
                     <h1>{data.title}</h1>
-                    <Image src={data.thumbnailPath} alt={data.title + " thumbnail"} transition:name=`project-img-${data.title}`/>
+                    <Image src={data.thumbnailPath} alt={data.title + " thumbnail"} transition:name=`project-img-${data.title}` loading={"eager"}/>
                     <!-- TODO: display Tags and any other metadata beside the Image. Currently the thumbnail image has a lot of empty space on the sides. -->
                     <div style="height: 25px;"></div> <!-- Small block to separate img and tags -->
                     <TagDisplay tags={data.tags} project={data.title}/>
@@ -142,14 +143,6 @@ if (data.startDate && data.releaseDate)
     .markdown h2 {
         margin-bottom: 0.5em;
         /* font-size: 1.75em; */
-    }
-
-    iframe[src*="itch.io/embed-upload"] {
-        width: 100%;
-        aspect-ratio: 16/9;
-        margin: 0;
-        margin-bottom: 1rem;
-        height: 100%;
     }
 
     table, th, td {
