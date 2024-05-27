@@ -13,6 +13,7 @@ export enum Tags {
     Astro, 
     SvelteKit,
     Obsidian,
+    Others,
     
     // Project Type
     ProjectType = 100,
