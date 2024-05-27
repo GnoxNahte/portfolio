@@ -42,12 +42,11 @@ const { headings } = Astro.props as Props;
     li a {
         text-decoration: none;
         display: inline-block;
-        width: 100%;
+        width: calc(100% - 1em);
         /* color: grey; */
         opacity: 0.4;
         color: white;
         padding-left: 1em;
-
     }
 
     li a.active-heading {

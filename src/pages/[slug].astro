@@ -145,22 +145,40 @@ if (data.startDate && data.releaseDate)
         /* font-size: 1.75em; */
     }
 
-    table, th, td {
+    .markdown table, th, td {
         border: 2px solid #333;
     }
 
-    table {
+    .markdown table {
         border-collapse: collapse;
     }
 
-    td {
+    .markdown td {
         padding: 6px 12px;
     }
 
-    code {
+    .markdown code {
         background-color: #444;
         padding: 0.2em 0.4em;
         border-radius: 7px;
+    }
+
+    .markdown .person-a {
+        background-color: #6a2fca;
+    }
+    
+    .markdown .person-b {
+        background-color: #2366c4;
+    }
+    
+    .markdown .person-a,
+    .markdown .person-b {
+        border-radius: 5px;
+        padding: 0 .4em;
+        display: inline-block;
+        margin: 5px 0;
+        /* width: 2.75em; */
+        text-align: center;
     }
 
 </style>
