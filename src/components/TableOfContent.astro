@@ -172,7 +172,9 @@ function generateTableOfContent(headings: MarkdownHeading[]) {
             // Iterate backwards
             // Find the heading that the user is on
             for (let i = markdownHeadings.length - 1; i >= 0; --i) {
-                if (scrollY > markdownHeadings[i].offsetTop) {
+                // scrollY + 3 becuase when the user clicks on a link leading to a heading, e.g. project/#heading1,
+                // the browser will scroll to the heading but not exactly there. so just use + 3 as a buffer
+                if (scrollY + 3 > markdownHeadings[i].offsetTop) {
                     newActiveHeading = tocHeadings[i];
                     break;
                 }
