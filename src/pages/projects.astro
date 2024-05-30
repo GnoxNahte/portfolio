@@ -438,7 +438,7 @@ SeparateTags();
         // Loop through all project cards list items, and hide those who don't match the search query
         for (let i = 0; i < searchResults.length; ++i) {
             const project = searchResults[i] as HTMLDivElement;
-            const card = project.parentElement as HTMLDivElement;
+            const card = project as HTMLDivElement;
             let ifShow = true;
             // If doesn't include the search text
             if (!card.id.toUpperCase().includes(searchText))

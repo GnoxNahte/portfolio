@@ -6,16 +6,17 @@ export interface Props {
     tags: Tags[],
     project: string, // To prevent duplicate ids
     isSmall?: boolean,
+    ifAddLink?: boolean,
 }
 
-const {tags, project, isSmall} = Astro.props as Props;
+const {tags, project, isSmall, ifAddLink = true} = Astro.props as Props;
 ---
 
 <div class= {(isSmall && "tag-container-small") + " tag-container card"}>
     <p>Tags:</p>
     <ul>
         {tags.map(tag => (
-            <Tag tag={tag} project={project}/>
+            <Tag tag={tag} project={project} ifAddLink={ifAddLink}/>
           ))}
     </ul>
 </div>
