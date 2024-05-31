@@ -101,9 +101,7 @@ button:active {
 
 /* YouTube Embed */
 iframe[src*="youtube.com"] {
-    width: 100%;
-    min-width: 300px;
-    max-width: 50%;
+    width: max(100%, 300px);
     aspect-ratio: 16/9;
 
     display: block;
